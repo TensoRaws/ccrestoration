@@ -72,7 +72,6 @@ skip-magic-trailing-comma = false
 
 [tool.ruff.isort]
 combine-as-imports = true
-known-first-party = ["pdm"]
 
 [tool.ruff.mccabe]
 max-complexity = 10
