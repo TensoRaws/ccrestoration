@@ -1,0 +1,313 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+env:
+  GITHUB_ACTIONS: true
+  DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      DATE: ${{ steps.get_date.outputs.DATE }}
+    steps:
+      - name: Get current date
+        id: get_date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+  macos:
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "14.2.0"
+
+      - uses: pdm-project/setup-pdm@v3
+        name: Setup PDM
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+          version: 2.11.1
+          prerelease: false
+          enable-pep582: false
+          allow-python-prereleases: false
+          update-python: true
+
+      - name: Check Python version
+        run: |
+          python --version
+
+      - name: cache-vulkansdk
+        id: cache-vulkansdk
+        uses: actions/cache@v3.2.4
+        with:
+          path: "src/vulkansdk-macos-1.2.162.1"
+          key: vulkansdk-macos-1.2.162.1
+
+      - name: vulkansdk
+        if: steps.cache-vulkansdk.outputs.cache-hit != 'true'
+        run: |
+          cd src
+          wget https://github.com/Tohrusky/realcugan-ncnn-vulkan-build-macOS/releases/download/v0.0.1/vulkansdk-macos-1.2.162.1.dmg -O vulkansdk-macos-1.2.162.1.dmg
+          hdiutil attach vulkansdk-macos-1.2.162.1.dmg
+          cp -r /Volumes/vulkansdk-macos-1.2.162.1 .
+          rm -rf vulkansdk-macos-1.2.162.1/Applications
+          find vulkansdk-macos-1.2.162.1 -type f | grep -v -E 'vulkan|glslang|MoltenVK' | xargs rm
+          hdiutil detach /Volumes/vulkansdk-macos-1.2.162.1
+
+      - name: build-arm64
+        run: |
+          cd src
+          export VULKAN_SDK=`pwd`/vulkansdk-macos-1.2.162.1/macOS
+          mkdir build-arm64 && cd build-arm64
+          cmake -DUSE_STATIC_MOLTENVK=ON -DCMAKE_OSX_ARCHITECTURES="arm64" \
+              -DCMAKE_CROSSCOMPILING=ON -DCMAKE_SYSTEM_PROCESSOR=arm64 \
+              -DVulkan_INCLUDE_DIR=`pwd`/../vulkansdk-macos-1.2.162.1/MoltenVK/include \
+              -DVulkan_LIBRARY=`pwd`/../vulkansdk-macos-1.2.162.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64/libMoltenVK.a \
+              ..
+          cmake --build . -j 4
+
+      - name: build-x86_64
+        run: |
+          cd src
+          export VULKAN_SDK=`pwd`/vulkansdk-macos-1.2.162.1/macOS
+          mkdir build-x86_64 && cd build-x86_64
+          cmake -DUSE_STATIC_MOLTENVK=ON -DCMAKE_OSX_ARCHITECTURES="x86_64" \
+              -DCMAKE_CROSSCOMPILING=ON -DCMAKE_SYSTEM_PROCESSOR=x86_64 \
+              -DVulkan_INCLUDE_DIR=`pwd`/../vulkansdk-macos-1.2.162.1/MoltenVK/include \
+              -DVulkan_LIBRARY=`pwd`/../vulkansdk-macos-1.2.162.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64/libMoltenVK.a \
+              ..
+          cmake --build . -j 4
+
+      - name: build python 3.8 wheel
+        if: matrix.python-version == '3.8'
+        run: |
+          lipo -create src/build-arm64/realesrgan_ncnn_vulkan_wrapper.cpython-38-darwin.so src/build-x86_64/realesrgan_ncnn_vulkan_wrapper.cpython-38-darwin.so -o src/realesrgan_ncnn_py/realesrgan_ncnn_vulkan_wrapper.cpython-38-darwin.so
+          pdm build --no-sdist --config-setting="--python-tag=cp38" --config-setting="--plat-name=macosx_10_15_x86_64"
+
+      - name: build python 3.9 wheel
+        if: matrix.python-version == '3.9'
+        run: |
+          lipo -create src/build-arm64/realesrgan_ncnn_vulkan_wrapper.cpython-39-darwin.so src/build-x86_64/realesrgan_ncnn_vulkan_wrapper.cpython-39-darwin.so -o src/realesrgan_ncnn_py/realesrgan_ncnn_vulkan_wrapper.cpython-39-darwin.so
+          pdm build --no-sdist --config-setting="--python-tag=cp39" --config-setting="--plat-name=macosx_11_0_universal2"
+
+      - name: build python 3.10 wheel
+        if: matrix.python-version == '3.10'
+        run: |
+          lipo -create src/build-arm64/realesrgan_ncnn_vulkan_wrapper.cpython-310-darwin.so src/build-x86_64/realesrgan_ncnn_vulkan_wrapper.cpython-310-darwin.so -o src/realesrgan_ncnn_py/realesrgan_ncnn_vulkan_wrapper.cpython-310-darwin.so
+          pdm build --no-sdist --config-setting="--python-tag=cp310" --config-setting="--plat-name=macosx_11_0_universal2"
+
+      - name: build python 3.11 wheel
+        if: matrix.python-version == '3.11'
+        run: |
+          lipo -create src/build-arm64/realesrgan_ncnn_vulkan_wrapper.cpython-311-darwin.so src/build-x86_64/realesrgan_ncnn_vulkan_wrapper.cpython-311-darwin.so -o src/realesrgan_ncnn_py/realesrgan_ncnn_vulkan_wrapper.cpython-311-darwin.so
+          pdm build --no-sdist --config-setting="--python-tag=cp311" --config-setting="--plat-name=macosx_11_0_universal2"
+
+      - name: build python 3.12 wheel
+        if: matrix.python-version == '3.12'
+        run: |
+          lipo -create src/build-arm64/realesrgan_ncnn_vulkan_wrapper.cpython-312-darwin.so src/build-x86_64/realesrgan_ncnn_vulkan_wrapper.cpython-312-darwin.so -o src/realesrgan_ncnn_py/realesrgan_ncnn_vulkan_wrapper.cpython-312-darwin.so
+          pdm build --no-sdist --config-setting="--python-tag=cp312" --config-setting="--plat-name=macosx_11_0_universal2"
+
+      - name: upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: dist
+
+  windows:
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: pdm-project/setup-pdm@v3
+        name: Setup PDM
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+          version: 2.11.1
+          prerelease: false
+          enable-pep582: false
+          allow-python-prereleases: false
+          update-python: true
+
+      - name: Check Python version
+        run: |
+          python --version
+
+      - name: cache-vulkansdk
+        id: cache-vulkansdk
+        uses: actions/cache@v3
+        with:
+          path: "VulkanSDK"
+          key: VulkanSDK-1.2.162.1-Installer
+
+      - name: vulkansdk
+        if: steps.cache-vulkansdk.outputs.cache-hit != 'true'
+        run: |
+          Invoke-WebRequest -Uri https://github.com/Tohrusky/realcugan-ncnn-vulkan-build-macOS/releases/download/v0.0.1/VulkanSDK-1.2.162.1-Installer.exe -OutFile VulkanSDK-1.2.162.1-Installer.exe
+          7z x -aoa ./VulkanSDK-1.2.162.1-Installer.exe -oVulkanSDK
+          Remove-Item .\VulkanSDK\Demos, .\VulkanSDK\Samples, .\VulkanSDK\Third-Party, .\VulkanSDK\Tools, .\VulkanSDK\Tools32, .\VulkanSDK\Bin32, .\VulkanSDK\Lib32 -Recurse
+
+      - name: Build
+        run: |
+          $env:VULKAN_SDK="$(pwd)\VulkanSDK"
+          $env:CMAKE_FLAGS="-DPY_VERSION=${{ matrix.python-version }}"
+          cd src
+          mkdir build && cd build
+          cmake -A x64 -DCMAKE_CXX_FLAGS="-frtti -fexceptions" ..
+          cmake --build . --config Release -j 4
+
+      - name: pre build wheel
+        run: |
+          echo F | xcopy .\src\build\Release\realesrgan_ncnn_vulkan_wrapper.*.pyd .\src\realesrgan_ncnn_py
+
+      - name: build python 3.8 wheel
+        if: matrix.python-version == '3.8'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp38" --config-setting="--plat-name=win_amd64"
+
+      - name: build python 3.9 wheel
+        if: matrix.python-version == '3.9'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp39" --config-setting="--plat-name=win_amd64"
+
+      - name: build python 3.10 wheel
+        if: matrix.python-version == '3.10'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp310" --config-setting="--plat-name=win_amd64"
+
+      - name: build python 3.11 wheel
+        if: matrix.python-version == '3.11'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp311" --config-setting="--plat-name=win_amd64"
+
+      - name: build python 3.12 wheel
+        if: matrix.python-version == '3.12'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp312" --config-setting="--plat-name=win_amd64"
+
+      - name: upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: dist
+
+  linux:
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: pdm-project/setup-pdm@v3
+        name: Setup PDM
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+          version: 2.11.1
+          prerelease: false
+          enable-pep582: false
+          allow-python-prereleases: false
+          update-python: true
+
+      - name: Check Python version
+        run: |
+          python --version
+
+      - name: cache-vulkansdk
+        id: cache-vulkansdk
+        uses: actions/cache@v3.2.4
+        with:
+          path: "1.2.162.1"
+          key: vulkansdk-linux-x86_64-1.2.162.1
+
+      - name: vulkansdk
+        if: steps.cache-vulkansdk.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/Tohrusky/realcugan-ncnn-vulkan-build-macOS/releases/download/v0.0.1/vulkansdk-linux-x86_64-1.2.162.1.tar.gz -O vulkansdk-linux-x86_64-1.2.162.1.tar.gz
+          tar -xf vulkansdk-linux-x86_64-1.2.162.1.tar.gz
+          rm -rf 1.2.162.1/source 1.2.162.1/samples
+          find 1.2.162.1 -type f | grep -v -E 'vulkan|glslang' | xargs rm
+
+      - name: build
+        env:
+          CC: clang
+          CXX: clang++
+        run: |
+          export VULKAN_SDK=`pwd`/1.2.162.1/x86_64
+          cd src
+          mkdir build && cd build
+          cmake -DOpenMP_CXX_FLAGS="-fexceptions -frtti" ..
+          cmake --build . -j 4
+
+      - name: pre build wheel
+        run: |
+          cp src/build/realesrgan_ncnn_vulkan_wrapper.*.so src/realesrgan_ncnn_py
+
+      - name: build python 3.8 wheel
+        if: matrix.python-version == '3.8'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp38" --config-setting="--plat-name=manylinux1_x86_64"
+
+      - name: build python 3.9 wheel
+        if: matrix.python-version == '3.9'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp39" --config-setting="--plat-name=manylinux1_x86_64"
+
+      - name: build python 3.10 wheel
+        if: matrix.python-version == '3.10'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp310" --config-setting="--plat-name=manylinux1_x86_64"
+
+      - name: build python 3.11 wheel
+        if: matrix.python-version == '3.11'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp311" --config-setting="--plat-name=manylinux1_x86_64"
+
+      - name: build python 3.12 wheel
+        if: matrix.python-version == '3.12'
+        run: pdm build --no-sdist --config-setting="--python-tag=cp312" --config-setting="--plat-name=manylinux1_x86_64"
+
+      - name: upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: dist
+
+  Release:
+    needs: [setup, macos, windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: asset
+
+      - name: dist
+        run: |
+          mkdir dist
+          cp asset/artifact/* dist
+          cd dist && ls
+
+      - name: Publish a Python distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API }}
+
+      - name: Create Release and Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ needs.setup.outputs.DATE }}
+          tag_name: ${{ needs.setup.outputs.DATE }}
+          body: Auto Release.
+          draft: false
+          prerelease: false
+          files: dist/*

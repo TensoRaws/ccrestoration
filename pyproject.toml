@@ -1,0 +1,78 @@
+[build-system]
+build-backend = "poetry-core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.coverage.run]
+omit = ["ccrestoration"]
+
+[tool.mypy]
+disable_error_code = "attr-defined"
+disallow_any_generics = false
+ignore_missing_imports = true
+strict = true
+warn_return_any = false
+
+[tool.poetry]
+authors = ["SRVFI-Raws"]
+classifiers = [
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+description = "A library for image restoration with VapourSynth support."
+homepage = "https://github.com/SRVFI-Raws/ccrestoration"
+license = "MIT"
+name = "ccrestoration"
+readme = "README.md"
+repository = "https://github.com/SRVFI-Raws/ccrestoration"
+version = "0.0.1"
+
+# Requirements
+[tool.poetry.dependencies]
+numpy = "*"
+opencv-python = "*"
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+scikit-image = "^0.22.0"
+torch = "^2.2.1"
+torchvision = "^0.17.1"
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7.2.0"
+pytest = "^8.0"
+pytest-cov = "^4.0"
+
+[tool.poetry.group.typing.dependencies]
+mypy = "^1.8.0"
+ruff = "^0.3.7"
+types-requests = "^2.28.8"
+
+[tool.ruff]
+extend-ignore = ["B018", "B019"]
+extend-select = [
+  "I",  # isort
+  "B",  # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "PGH",  # pygrep-hooks
+  "RUF",  # ruff
+  "W",  # pycodestyle
+  "YTT"  # flake8-2020
+]
+fixable = ["ALL"]
+line-length = 120
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "auto"
+quote-style = "double"
+skip-magic-trailing-comma = false
+
+[tool.ruff.isort]
+combine-as-imports = true
+known-first-party = ["pdm"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
