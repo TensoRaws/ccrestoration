@@ -2,8 +2,6 @@
 build-backend = "poetry-core.masonry.api"
 requires = ["poetry-core"]
 
-[tool.coverage.run]
-
 [tool.coverage.report]
 exclude_also = [
   "raise AssertionError",
@@ -12,6 +10,8 @@ exclude_also = [
   "if TYPE_CHECKING:",
   "except Exception as e"
 ]
+
+[tool.coverage.run]
 
 [tool.mypy]
 disable_error_code = "attr-defined"
