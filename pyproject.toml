@@ -3,17 +3,26 @@ build-backend = "poetry-core.masonry.api"
 requires = ["poetry-core"]
 
 [tool.coverage.run]
-omit = ["ccrestoration"]
+
+[tool.coverage.report]
+exclude_also = [
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "except Exception as e"
+]
 
 [tool.mypy]
 disable_error_code = "attr-defined"
 disallow_any_generics = false
 ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
 strict = true
 warn_return_any = false
 
 [tool.poetry]
-authors = ["SRVFI-Raws"]
+authors = ["Tohrusky"]
 classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -21,24 +30,25 @@ classifiers = [
   "Programming Language :: Python :: 3.12"
 ]
 description = "A library for image restoration with VapourSynth support."
-homepage = "https://github.com/SRVFI-Raws/ccrestoration"
+homepage = "https://github.com/TensoRaws/ccrestoration"
 license = "MIT"
 name = "ccrestoration"
 readme = "README.md"
-repository = "https://github.com/SRVFI-Raws/ccrestoration"
+repository = "https://github.com/TensoRaws/ccrestoration"
 version = "0.0.1"
 
 # Requirements
 [tool.poetry.dependencies]
 numpy = "*"
 opencv-python = "*"
+pydantic = "*"
 python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
-scikit-image = "^0.22.0"
-torch = "^2.2.1"
-torchvision = "^0.17.1"
+scikit-image = "*"
+torch = "*"
+torchvision = "*"
 
 [tool.poetry.group.test.dependencies]
 coverage = "^7.2.0"
@@ -51,7 +61,7 @@ ruff = "^0.3.7"
 types-requests = "^2.28.8"
 
 [tool.ruff]
-extend-ignore = ["B018", "B019"]
+extend-ignore = ["B018", "B019", "RUF001"]
 extend-select = [
   "I",  # isort
   "B",  # flake8-bugbear
