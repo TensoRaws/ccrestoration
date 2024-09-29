@@ -1,2 +1,7 @@
 def test_sample() -> None:
-    assert True
+    import torch
+
+    print(torch.backends.mps.is_available())
+    print(torch.cuda.is_available())
+
+    assert torch.backends.mps.is_available()

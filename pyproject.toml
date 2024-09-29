@@ -61,7 +61,7 @@ ruff = "^0.3.7"
 types-requests = "^2.28.8"
 
 [tool.ruff]
-extend-ignore = ["B018", "B019", "RUF001"]
+extend-ignore = ["B018", "B019", "RUF001", "PGH003"]
 extend-select = [
   "I",  # isort
   "B",  # flake8-bugbear

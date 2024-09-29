@@ -73,7 +73,7 @@ class Registry(Iterable[Tuple[str, Any]]):
         return name in self._obj_map
 
     def __repr__(self) -> str:
-        return "Registry of {}:\n".format(self._name)
+        return "Registry of {}\n".format(self._name)
 
     def __iter__(self) -> Iterator[Tuple[str, Any]]:
         return iter(self._obj_map.items())
