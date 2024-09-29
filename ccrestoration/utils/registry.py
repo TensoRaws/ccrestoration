@@ -2,7 +2,7 @@
 
 # pyre-strict
 # pyre-ignore-all-errors[2,3]
-from typing import Any, Dict, Iterable, Iterator, Tuple
+from typing import Any, Dict, Iterable, Iterator, Optional, Tuple
 
 
 class Registry(Iterable[Tuple[str, Any]]):
@@ -45,22 +45,25 @@ class Registry(Iterable[Tuple[str, Any]]):
         )
         self._obj_map[name] = obj
 
-    def register(self, obj: Any = None) -> Any:
+    def register(self, obj: Any = None, name: Optional[str] = None) -> Any:
         """
-        Register the given object under the the name `obj.__name__`.
+        Register the given object under the the name `obj.__name__` or the given name.
         Can be used as either a decorator or not. See docstring of this class for usage.
         """
         if obj is None:
             # used as a decorator
             def deco(func_or_class: Any) -> Any:
-                name = func_or_class.__name__
-                self._do_register(name, func_or_class)
+                _name = name
+                if _name is None:
+                    _name = func_or_class.__name__
+                self._do_register(_name, func_or_class)
                 return func_or_class
 
             return deco
 
         # used as a function call
-        name = obj.__name__
+        if name is None:
+            name = obj.__name__
         self._do_register(name, obj)
 
     def get(self, name: str) -> Any:

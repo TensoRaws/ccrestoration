@@ -4,7 +4,7 @@ from os import path as osp
 from ccrestoration.utils.misc import scandir
 from ccrestoration.utils.registry import Registry
 
-SISR_ARCH_REGISTRY = Registry("SISR_ARCH")
+ARCH_REGISTRY = Registry("ARCH")
 
 # automatically scan and import arch modules for registry
 # scan all the files under the 'archs' folder and collect files ending with '_arch.py'
