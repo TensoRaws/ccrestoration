@@ -11,4 +11,4 @@ SISR_ARCH_REGISTRY = Registry("SISR_ARCH")
 arch_folder: str = osp.dirname(osp.abspath(__file__))
 arch_filenames = [osp.splitext(osp.basename(v))[0] for v in scandir(dir_path=arch_folder, suffix="_arch.py")]
 # import all the arch modules
-_arch_modules_ = [importlib.import_module(f"ccrestoration.core.sisr.arch.{file_name}") for file_name in arch_filenames]
+_arch_modules_ = [importlib.import_module(f"ccrestoration.core.arch.{file_name}") for file_name in arch_filenames]

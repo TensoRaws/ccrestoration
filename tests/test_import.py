@@ -1,7 +1,7 @@
-from ccrestoration.core.sisr.arch import SISR_ARCH_REGISTRY
+from ccrestoration.core.arch import SISR_ARCH_REGISTRY
 
 
-def test_import() -> None:
+def test_auto_import() -> None:
     @SISR_ARCH_REGISTRY.register()
     class A:
         pass

@@ -3,7 +3,7 @@
 from torch import nn as nn
 from torch.nn import functional as F
 
-from ccrestoration.core.sisr.arch import SISR_ARCH_REGISTRY
+from ccrestoration.core.arch import SISR_ARCH_REGISTRY
 
 
 @SISR_ARCH_REGISTRY.register()
