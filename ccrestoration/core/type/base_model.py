@@ -2,14 +2,14 @@ from typing import Any, Optional
 
 import torch
 
-from ccrestoration.utils.device import default_device
+from ccrestoration.utils.device import DEFAULT_DEVICE
 
 
 class BaseModelInterface:
     def __init__(self, config: Any, device: Optional[torch.device] = None):
         self.config = config
         if device is None:
-            device = default_device()
+            device = DEFAULT_DEVICE
         self.device: torch.device = device
         self.model: torch.nn.Module = self.load_model()
 

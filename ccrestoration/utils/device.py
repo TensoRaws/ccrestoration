@@ -12,3 +12,6 @@ def default_device() -> torch.device:
         except Exception as e:
             print(f"Err: {e}, MPS is not available, use CPU instead.")
             return torch.device("cpu")
+
+
+DEFAULT_DEVICE = default_device()
