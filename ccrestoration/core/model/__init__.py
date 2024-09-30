@@ -1,10 +1,5 @@
-from enum import Enum
-
 from ccrestoration.utils.registry import Registry
 
+MOEDL_REGISTRY: Registry = Registry("MODEL")
 
-class ModelType(str, Enum):
-    RealESRGAN = "RealESRGAN"
-
-
-MOEDL_REGISTRY = Registry("MODEL")
+from ccrestoration.core.model.realesrgan_model import RealESRGANModel  # noqa

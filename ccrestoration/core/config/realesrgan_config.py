@@ -1,12 +1,24 @@
-from ccrestoration.core.arch import ArchType
-from ccrestoration.core.config import CONFIG_REGISTRY, ConfigType
-from ccrestoration.core.config.base_config import BaseConfig
-from ccrestoration.core.model import ModelType
+from pydantic import field_validator
+
+from ccrestoration.core.config import CONFIG_REGISTRY
+from ccrestoration.core.type import ArchType, BaseConfig, ConfigType, ModelType
 
 
 class RealESRGANConfig(BaseConfig):
-    scale: int
-    denoise_strength: float
+    scale: int = 2
+    num_in_ch: int = 3
+    num_out_ch: int = 3
+    num_feat: int = 64
+    num_block: int = 23
+    num_grow_ch: int = 32
+    num_conv: int = 16
+    act_type: str = "prelu"
+
+    @field_validator("act_type")
+    def passwords_match(cls, v: str) -> str:
+        if v not in ["relu", "prelu", "leakyrelu"]:
+            raise ValueError("act_type must be either 'prelu' or 'lrelu'")
+        return v
 
 
 for cfg in [
@@ -14,17 +26,16 @@ for cfg in [
         name=ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
         url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/AnimeJaNai_HD_V3_Compact_2x.pth",
         hash="af7307eee19e5982a8014dd0e4650d3bde2e25aa78d2105a4bdfd947636e4c8f",
-        scale=2,
-        denoise_strength=0.1,
         arch=ArchType.SRVGG,
         model=ModelType.RealESRGAN,
+        scale=2,
     ),
     RealESRGANConfig(
-        name="1111",
-        scale=2,
-        denoise_strength=0.1,
+        name=ConfigType.RealESRGAN_realesr_animevideov3_4x,
+        url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/realesr_animevideov3.pth",
         arch=ArchType.SRVGG,
         model=ModelType.RealESRGAN,
+        scale=4,
     ),
 ]:
     CONFIG_REGISTRY.register(cfg)

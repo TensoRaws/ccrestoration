@@ -2,8 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, FileUrl, HttpUrl
 
-from ccrestoration.core.arch import ArchType
-from ccrestoration.core.model import ModelType
+from ccrestoration.core.type import ArchType, ModelType
 
 
 class BaseConfig(BaseModel):

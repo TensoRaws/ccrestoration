@@ -9,8 +9,11 @@
 # # clip = AutoModel.from_pretrained_url(url, key, model, **args).InferenceVideo(clip)
 # # clip = AutoModel.from_pretrained_path(path, model, **args).InferenceVideo(clip)
 # clip.set_output()
-
-
 # 设计 autoconfig 模块，用于自动配置不同模型，如animejanai 对应 {arch: rrdb, scale: 4, noise: 0.1}
 # config = AutoConfig.from_pretrained("animejanai")
 # AutoModel.from_config(config).InferenceVideo(clip)
+
+from pathlib import Path
+
+ASSETS_PATH = Path(__file__).resolve().parent.parent.absolute() / "assets"
+TEST_IMG_PATH = ASSETS_PATH / "test.jpg"
