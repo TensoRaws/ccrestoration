@@ -1,5 +1,4 @@
 # type: ignore
-
 from torch import nn as nn
 from torch.nn import functional as F
 
