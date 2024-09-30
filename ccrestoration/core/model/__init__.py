@@ -1,9 +1,9 @@
-from enum import StrEnum
+from enum import Enum
 
 from ccrestoration.utils.registry import Registry
 
 
-class ModelType(StrEnum):
+class ModelType(str, Enum):
     RealESRGAN = "RealESRGAN"
 
 

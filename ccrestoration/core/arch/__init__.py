@@ -1,9 +1,9 @@
-from enum import StrEnum
+from enum import Enum
 
 from ccrestoration.utils.registry import Registry
 
 
-class ArchType(StrEnum):
+class ArchType(str, Enum):
     RRDB = "RRDB"
     SRVGG = "SRVGG"
 

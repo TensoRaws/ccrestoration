@@ -1,9 +1,9 @@
-from enum import StrEnum
+from enum import Enum
 
 from ccrestoration.utils.registry import RegistryConfigInstance
 
 
-class ConfigType(StrEnum):
+class ConfigType(str, Enum):
     RealESRGAN_AnimeJaNai_HD_V3_Compact_2x = "RealESRGAN_AnimeJaNai_HD_V3_Compact_2x.pth"
 
 
