@@ -23,12 +23,12 @@ class RealESRGANConfig(BaseConfig):
 
 for cfg in [
     RealESRGANConfig(
-        name=ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
-        url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/AnimeJaNai_HD_V3_Compact_2x.pth",
-        hash="af7307eee19e5982a8014dd0e4650d3bde2e25aa78d2105a4bdfd947636e4c8f",
-        arch=ArchType.SRVGG,
+        name=ConfigType.RealESRGAN_RealESRGAN_x4plus_anime_6B_2x,
+        url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/RealESRGAN_x4plus_anime_6B.pth",
+        arch=ArchType.RRDB,
         model=ModelType.RealESRGAN,
-        scale=2,
+        scale=4,
+        num_block=6,
     ),
     RealESRGANConfig(
         name=ConfigType.RealESRGAN_realesr_animevideov3_4x,
@@ -36,6 +36,14 @@ for cfg in [
         arch=ArchType.SRVGG,
         model=ModelType.RealESRGAN,
         scale=4,
+    ),
+    RealESRGANConfig(
+        name=ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
+        url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/AnimeJaNai_HD_V3_Compact_2x.pth",
+        hash="af7307eee19e5982a8014dd0e4650d3bde2e25aa78d2105a4bdfd947636e4c8f",
+        arch=ArchType.SRVGG,
+        model=ModelType.RealESRGAN,
+        scale=2,
     ),
 ]:
     CONFIG_REGISTRY.register(cfg)
