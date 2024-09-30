@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
+from tenacity import retry, stop_after_attempt, stop_after_delay, wait_random
 from torch.hub import download_url_to_file
 
 from ccrestoration.core.config import BaseConfig
@@ -43,7 +44,16 @@ def load_file_from_url(
 
     if not os.path.exists(cached_file_path) or force_download:
         print(f"Downloading: {config.url} to {cached_file_path}\n")
-        download_url_to_file(str(config.url), cached_file_path, hash_prefix=None, progress=progress)
+
+        @retry(wait=wait_random(min=3, max=5), stop=stop_after_delay(10) | stop_after_attempt(30))
+        def _download() -> None:
+            try:
+                download_url_to_file(str(config.url), cached_file_path, hash_prefix=None, progress=progress)
+            except Exception as e:
+                print(f"Download failed: {e}, retrying...")
+                raise e
+
+        _download()
 
     if config.hash is not None:
         get_hash = get_file_sha256(cached_file_path)

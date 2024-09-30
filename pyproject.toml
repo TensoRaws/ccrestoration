@@ -44,6 +44,7 @@ numpy = "*"
 opencv-python = "*"
 pydantic = "*"
 python = "^3.9"
+tenacity = "*"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
