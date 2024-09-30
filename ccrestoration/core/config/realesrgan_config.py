@@ -14,14 +14,20 @@ class RealESRGANConfig(BaseConfig):
     num_conv: int = 16
     act_type: str = "prelu"
 
+    @field_validator("arch")
+    def arch_match(cls, v: str) -> str:
+        if v not in [ArchType.RRDB, ArchType.SRVGG]:
+            raise ValueError("real esrgan arch must be one of 'RRDB', 'SRVGG'")
+        return v
+
     @field_validator("act_type")
-    def passwords_match(cls, v: str) -> str:
+    def act_type_match(cls, v: str) -> str:
         if v not in ["relu", "prelu", "leakyrelu"]:
             raise ValueError("act_type must be one of 'relu', 'prelu', 'leakyrelu'")
         return v
 
 
-for cfg in [
+RealESRGANConfigs = [
     RealESRGANConfig(
         name=ConfigType.RealESRGAN_RealESRGAN_x4plus_anime_6B_2x,
         url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/RealESRGAN_x4plus_anime_6B.pth",
@@ -47,5 +53,7 @@ for cfg in [
         model=ModelType.RealESRGAN,
         scale=2,
     ),
-]:
+]
+
+for cfg in RealESRGANConfigs:
     CONFIG_REGISTRY.register(cfg)

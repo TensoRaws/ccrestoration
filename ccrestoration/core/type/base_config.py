@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel, FileUrl, HttpUrl
 
@@ -11,5 +11,5 @@ class BaseConfig(BaseModel):
     url: Optional[HttpUrl] = None
     path: Optional[FileUrl] = None
     hash: Optional[str] = None
-    arch: ArchType
-    model: ModelType
+    arch: Union[ArchType, str]
+    model: Union[ModelType, str]
