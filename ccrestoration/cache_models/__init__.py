@@ -42,7 +42,7 @@ def load_file_from_url(
     cached_file_path = os.path.abspath(os.path.join(model_dir, config.name))
 
     if not os.path.exists(cached_file_path) or force_download:
-        print(f'Downloading: "{config.url}" to {cached_file_path}\n')
+        print(f"Downloading: {config.url} to {cached_file_path}\n")
         download_url_to_file(str(config.url), cached_file_path, hash_prefix=None, progress=progress)
 
     if config.hash is not None:
