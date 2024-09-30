@@ -25,6 +25,7 @@ for cfg in [
     RealESRGANConfig(
         name=ConfigType.RealESRGAN_RealESRGAN_x4plus_anime_6B_2x,
         url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/RealESRGAN_x4plus_anime_6B.pth",
+        hash="f872d837d3c90ed2e05227bed711af5671a6fd1c9f7d7e91c911a61f155e99da",
         arch=ArchType.RRDB,
         model=ModelType.RealESRGAN,
         scale=4,
@@ -33,6 +34,7 @@ for cfg in [
     RealESRGANConfig(
         name=ConfigType.RealESRGAN_realesr_animevideov3_4x,
         url="https://github.com/HolyWu/vs-realesrgan/releases/download/model/realesr_animevideov3.pth",
+        hash="b8a8376811077954d82ca3fcf476f1ac3da3e8a68a4f4d71363008000a18b75d",
         arch=ArchType.SRVGG,
         model=ModelType.RealESRGAN,
         scale=4,

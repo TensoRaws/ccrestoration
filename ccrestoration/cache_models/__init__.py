@@ -63,3 +63,14 @@ def load_file_from_url(
             )
 
     return cached_file_path
+
+
+if __name__ == "__main__":
+    # get all model files sha256
+    for root, _, files in os.walk(CACHE_PATH):
+        for file in files:
+            if not file.endswith(".pth") and not file.endswith(".pt"):
+                continue
+            file_path = os.path.join(root, file)
+            name = os.path.basename(file_path)
+            print(f"{name}: {get_file_sha256(file_path)}")
