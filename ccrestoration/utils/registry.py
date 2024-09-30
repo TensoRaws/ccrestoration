@@ -40,14 +40,14 @@ class Registry(Iterable[Tuple[str, Any]]):
         self._obj_map: Dict[str, Any] = {}
 
     def _do_register(self, name: str, obj: Any) -> None:
-        assert name not in self._obj_map, "An object named '{}' was already registered in '{}' registry!".format(
-            name, self._name
-        )
-        self._obj_map[name] = obj
+        if name in self._obj_map:
+            print("An object named '{}' was already registered in '{}' registry!".format(name, self._name))
+        else:
+            self._obj_map[name] = obj
 
     def register(self, obj: Any = None, name: Optional[str] = None) -> Any:
         """
-        Register the given object under the the name `obj.__name__` or the given name.
+        Register the given object under the name `obj.__name__` or the given name.
         Can be used as either a decorator or not. See docstring of this class for usage.
         """
         if obj is None:
@@ -83,3 +83,15 @@ class Registry(Iterable[Tuple[str, Any]]):
 
     # pyre-fixme[4]: Attribute must be annotated.
     __str__ = __repr__
+
+
+class RegistryConfigInstance(Registry):
+    def register(self, obj: Any = None, name: Optional[str] = None) -> Any:
+        """
+        Register the given config class instance under the name BaseConfig.name or the given name.
+        Can be used as a function call. See docstring of this class for usage.
+        """
+        # used as a function call
+        if name is None:
+            name = obj.name
+        self._do_register(name, obj)

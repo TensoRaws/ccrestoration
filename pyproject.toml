@@ -16,6 +16,7 @@ exclude_also = [
 [tool.mypy]
 disable_error_code = "attr-defined"
 disallow_any_generics = false
+disallow_subclassing_any = false
 ignore_missing_imports = true
 plugins = ["pydantic.mypy"]
 strict = true
@@ -61,7 +62,7 @@ ruff = "^0.3.7"
 types-requests = "^2.28.8"
 
 [tool.ruff]
-extend-ignore = ["B018", "B019", "RUF001", "PGH003"]
+extend-ignore = ["B018", "B019", "RUF001", "PGH003", "PGH004", "RUF003"]
 extend-select = [
   "I",  # isort
   "B",  # flake8-bugbear

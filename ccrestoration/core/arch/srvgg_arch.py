@@ -3,10 +3,10 @@
 from torch import nn as nn
 from torch.nn import functional as F
 
-from ccrestoration.core.arch import ARCH_REGISTRY
+from ccrestoration.core.arch import ARCH_REGISTRY, ArchType
 
 
-@ARCH_REGISTRY.register(name="SRVGG")
+@ARCH_REGISTRY.register(name=ArchType.SRVGG)
 class SRVGGNetCompact(nn.Module):
     """A compact VGG-style network structure for super-resolution.
 

@@ -160,3 +160,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 /.ruff_cache/
+
+/ccrestoration/cache_models/*.pth
+/ccrestoration/cache_models/*.pt
+/ccrestoration/cache_models/*.pkl

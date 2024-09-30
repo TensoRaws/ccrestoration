@@ -3,12 +3,12 @@ import torch
 from torch import nn as nn
 from torch.nn import functional as F
 
-from ccrestoration.core.arch import ARCH_REGISTRY
+from ccrestoration.core.arch import ARCH_REGISTRY, ArchType
 
 from .arch_util import default_init_weights, make_layer, pixel_unshuffle
 
 
-@ARCH_REGISTRY.register(name="RRDB")
+@ARCH_REGISTRY.register(name=ArchType.RRDB)
 class RRDBNet(nn.Module):
     """Networks consisting of Residual in Residual Dense Block, which is used
     in ESRGAN.
