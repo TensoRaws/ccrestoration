@@ -10,12 +10,18 @@ from . import ASSETS_PATH, TEST_IMG_PATH
 
 def test_sr() -> None:
     for k, _ in CONFIG_REGISTRY:
+        print(f"Testing {k}")
         cfg: BaseConfig = CONFIG_REGISTRY.get(k)
         model = MOEDL_REGISTRY.get(cfg.model)
-        img = cv2.imread(TEST_IMG_PATH)
+        model = model(cfg)
+
+        img = cv2.imread(str(TEST_IMG_PATH))
+
         img = transforms.ToTensor()(img).unsqueeze(0).to(model.device)
+
         img = model.inference(img)
+
         img = img.squeeze(0).permute(1, 2, 0).cpu().numpy()
         img = (img * 255).clip(0, 255).astype("uint8")
 
-        cv2.imwrite(ASSETS_PATH / f"test_{k}_out.jpg", img)
+        cv2.imwrite(str(ASSETS_PATH / f"test_{k}_out.jpg"), img)
