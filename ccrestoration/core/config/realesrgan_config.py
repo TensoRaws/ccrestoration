@@ -17,7 +17,7 @@ class RealESRGANConfig(BaseConfig):
     @field_validator("act_type")
     def passwords_match(cls, v: str) -> str:
         if v not in ["relu", "prelu", "leakyrelu"]:
-            raise ValueError("act_type must be either 'prelu' or 'lrelu'")
+            raise ValueError("act_type must be one of 'relu', 'prelu', 'leakyrelu'")
         return v
 
 
