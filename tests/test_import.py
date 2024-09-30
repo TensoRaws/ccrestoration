@@ -1,5 +1,6 @@
 from ccrestoration.core.arch import ARCH_REGISTRY
-from ccrestoration.core.config import CONFIG_REGISTRY, ConfigType, RealESRGANConfig
+from ccrestoration.core.config import CONFIG_REGISTRY, RealESRGANConfig
+from ccrestoration.core.type import ConfigType
 
 
 def test_import() -> None:
