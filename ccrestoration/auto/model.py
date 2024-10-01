@@ -45,5 +45,23 @@ class AutoModel:
         return model
 
     @staticmethod
-    def register(obj: Any, name: str) -> None:
+    def register(obj: Optional[Any] = None, name: Optional[str] = None) -> Any:
+        """
+        Register the given object under the name `obj.__name__` or the given name.
+        Can be used as either a decorator or not. See docstring of this class for usage.
+        """
+        if obj is None:
+            # used as a decorator
+            def deco(func_or_class: Any) -> Any:
+                _name = name
+                if _name is None:
+                    _name = func_or_class.__name__
+                MODEL_REGISTRY.register(obj=func_or_class, name=_name)
+                return func_or_class
+
+            return deco
+
+        # used as a function call
+        if name is None:
+            name = obj.__name__
         MODEL_REGISTRY.register(obj=obj, name=name)

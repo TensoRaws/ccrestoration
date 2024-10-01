@@ -1,6 +1,6 @@
-from enum import Enum
+from ccrestoration.utils.enum import MyStrEnum
 
 
-class ArchType(str, Enum):
+class ArchType(MyStrEnum):
     RRDB = "RRDB"
     SRVGG = "SRVGG"
