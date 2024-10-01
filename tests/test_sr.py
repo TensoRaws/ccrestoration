@@ -2,11 +2,24 @@ import sys
 
 import cv2
 import pytest
+import torch
 
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.core.model import SRBaseModel
 
 from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
+
+
+def test_inference() -> None:
+    tensor1 = torch.rand(1, 3, 256, 256).to(get_device())
+
+    k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
+
+    model: SRBaseModel = AutoModel.from_pretrained(pretrained_model_name=k, fp16=False, device=get_device())
+
+    t2 = model(tensor1)
+    t3 = model.inference(tensor1)
+    assert t2.equal(t3)
 
 
 def test_sr() -> None:

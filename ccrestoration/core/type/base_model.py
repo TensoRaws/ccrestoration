@@ -1,4 +1,5 @@
 import sys
+from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 import torch
@@ -6,7 +7,7 @@ import torch
 from ccrestoration.utils.device import DEFAULT_DEVICE
 
 
-class BaseModelInterface:
+class BaseModelInterface(ABC):
     """
     Base model interface
 
@@ -63,6 +64,7 @@ class BaseModelInterface:
     def load_model(self) -> Any:
         raise NotImplementedError
 
+    @abstractmethod
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
@@ -70,3 +72,6 @@ class BaseModelInterface:
     @torch.inference_mode()  # type: ignore
     def inference_video(self, clip: Any) -> Any:
         raise NotImplementedError
+
+    def __call__(self, img: torch.Tensor) -> torch.Tensor:
+        return self.inference(img)
