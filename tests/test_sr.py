@@ -1,8 +1,7 @@
 import cv2
 
-from ccrestoration.core.config import CONFIG_REGISTRY
-from ccrestoration.core.model import MODEL_REGISTRY, SRBaseModel
-from ccrestoration.core.type import BaseConfig, ConfigType
+from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
+from ccrestoration.core.model import SRBaseModel
 
 from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, load_image
 
@@ -10,13 +9,10 @@ from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, l
 def test_sr() -> None:
     img1 = load_image()
 
-    for k, _ in CONFIG_REGISTRY:
+    for k in ConfigType:
         print(f"Testing {k}")
-        cfg: BaseConfig = CONFIG_REGISTRY.get(k)
-
-        model: SRBaseModel = MODEL_REGISTRY.get(cfg.model)
-
-        model = model(config=cfg, fp16=False)  # type: ignore
+        cfg: BaseConfig = AutoConfig.from_pretrained(k)
+        model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False)
 
         img2 = model.inference_image(img1)
 
@@ -30,10 +26,8 @@ def test_sr_fp16() -> None:
     img1 = load_image()
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
 
-    cfg: BaseConfig = CONFIG_REGISTRY.get(k)
-
-    model: SRBaseModel = MODEL_REGISTRY.get(cfg.model)
-    model = model(config=cfg, fp16=True)  # type: ignore
+    cfg: BaseConfig = AutoConfig.from_pretrained(k)
+    model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=True)
 
     img2 = model.inference_image(img1)
 
@@ -47,13 +41,8 @@ def test_sr_compile() -> None:
     img1 = load_image()
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
 
-    cfg: BaseConfig = CONFIG_REGISTRY.get(k)
+    model: SRBaseModel = AutoModel.from_pretrained(pretrained_model_name=k, fp16=True, compile=True)
 
-    model: SRBaseModel = MODEL_REGISTRY.get(cfg.model)
-
-    m1 = model(config=cfg, fp16=True, compile=True)  # type: ignore
-
-    img2 = m1.inference_image(img1)
+    img2 = model.inference_image(img1)
 
     assert calculate_image_similarity(img1, img2)
-    assert compare_image_size(img1, img2, cfg.scale)

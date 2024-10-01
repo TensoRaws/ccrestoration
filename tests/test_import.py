@@ -1,6 +1,4 @@
-from ccrestoration.core.arch import ARCH_REGISTRY
-from ccrestoration.core.config import CONFIG_REGISTRY, RealESRGANConfig
-from ccrestoration.core.type import ConfigType
+from ccrestoration import ARCH_REGISTRY, CONFIG_REGISTRY, BaseConfig, ConfigType
 
 
 def test_import() -> None:
@@ -17,5 +15,5 @@ def test_import() -> None:
     for k, v in CONFIG_REGISTRY:
         print(k, v)
 
-    cfg: RealESRGANConfig = CONFIG_REGISTRY.get(ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x)
+    cfg: BaseConfig = CONFIG_REGISTRY.get(ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x)
     print(cfg.arch)

@@ -1,6 +1,5 @@
+from ccrestoration import CONFIG_REGISTRY, ConfigType
 from ccrestoration.cache_models import load_file_from_url
-from ccrestoration.core.config import CONFIG_REGISTRY
-from ccrestoration.core.type import ConfigType
 
 
 def test_cache_models() -> None:

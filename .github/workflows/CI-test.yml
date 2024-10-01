@@ -22,7 +22,7 @@ jobs:
   CI:
     strategy:
       matrix:
-        os-version: ["ubuntu-20.04", "macos-13", "windows-latest"]
+        os-version: ["ubuntu-20.04", "macos-14", "windows-latest"]
         python-version: ["3.9"]
         poetry-version: ["1.8.3"]
 
