@@ -42,7 +42,10 @@ jobs:
 
       - name: Test
         run: |
-          poetry install
+          pip install numpy pydantic tenacity opencv-python
+          pip install pre-commit torch torchvision scikit-image
+          pip install pytest pytest-cov coverage
+          pip install mypy ruff types-requests
 
           make lint
           make test
