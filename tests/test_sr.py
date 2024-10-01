@@ -1,4 +1,5 @@
 import cv2
+import torch
 
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.core.model import SRBaseModel
@@ -12,7 +13,7 @@ def test_sr() -> None:
     for k in ConfigType:
         print(f"Testing {k}")
         cfg: BaseConfig = AutoConfig.from_pretrained(k)
-        model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False)
+        model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=torch.device("cpu"))
         print(model.device)
 
         img2 = model.inference_image(img1)
@@ -28,7 +29,7 @@ def test_sr_fp16() -> None:
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
 
     cfg: BaseConfig = AutoConfig.from_pretrained(k)
-    model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=True)
+    model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=True, device=torch.device("cpu"))
 
     img2 = model.inference_image(img1)
 
@@ -42,7 +43,9 @@ def test_sr_compile() -> None:
     img1 = load_image()
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
 
-    model: SRBaseModel = AutoModel.from_pretrained(pretrained_model_name=k, fp16=True, compile=True)
+    model: SRBaseModel = AutoModel.from_pretrained(
+        pretrained_model_name=k, fp16=True, compile=True, device=torch.device("cpu")
+    )
 
     img2 = model.inference_image(img1)
 
