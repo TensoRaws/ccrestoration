@@ -1,5 +1,5 @@
-from ccrestoration.utils.enum import MyStrEnum
+from enum import Enum
 
 
-class ModelType(MyStrEnum):
+class ModelType(str, Enum):
     RealESRGAN = "RealESRGAN"
