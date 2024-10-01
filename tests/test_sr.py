@@ -13,6 +13,7 @@ def test_sr() -> None:
         print(f"Testing {k}")
         cfg: BaseConfig = AutoConfig.from_pretrained(k)
         model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False)
+        print(model.device)
 
         img2 = model.inference_image(img1)
 
