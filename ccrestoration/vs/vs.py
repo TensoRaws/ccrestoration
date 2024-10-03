@@ -18,7 +18,6 @@ def tensor_to_frame(tensor: torch.Tensor, frame: vs.VideoFrame) -> vs.VideoFrame
     return frame
 
 
-@torch.inference_mode()  # type: ignore
 def inference_sr(
     inference: Callable[[torch.Tensor], torch.Tensor],
     clip: vs.VideoNode,
@@ -41,7 +40,6 @@ def inference_sr(
     if clip.format.id not in [vs.RGBH, vs.RGBS]:
         raise vs.Error("Only vs.RGBH and vs.RGBS formats are supported")
 
-    @torch.inference_mode()  # type: ignore
     def _inference(n: int, f: list[vs.VideoFrame]) -> vs.VideoFrame:
         img = frame_to_tensor(f[0], device).unsqueeze(0)
 
