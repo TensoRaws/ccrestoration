@@ -4,9 +4,8 @@ from torch import nn as nn
 from torch.nn import functional as F
 
 from ccrestoration.core.arch import ARCH_REGISTRY
+from ccrestoration.core.arch.arch_util import default_init_weights, make_layer, pixel_unshuffle
 from ccrestoration.core.type import ArchType
-
-from .arch_util import default_init_weights, make_layer, pixel_unshuffle
 
 
 @ARCH_REGISTRY.register(name=ArchType.RRDB)

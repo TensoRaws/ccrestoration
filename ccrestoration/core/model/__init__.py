@@ -4,3 +4,4 @@ MODEL_REGISTRY: Registry = Registry("MODEL")
 
 from ccrestoration.core.model.sr_model import SRBaseModel  # noqa
 from ccrestoration.core.model.realesrgan_model import RealESRGANModel  # noqa
+from ccrestoration.core.model.realcugan_model import RealCUGANModel  # noqa

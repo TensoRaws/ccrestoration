@@ -4,3 +4,4 @@ ARCH_REGISTRY: Registry = Registry("ARCH")
 
 from ccrestoration.core.arch.rrdb_arch import RRDBNet  # noqa
 from ccrestoration.core.arch.srvgg_arch import SRVGGNetCompact  # noqa
+from ccrestoration.core.arch.upcunet_arch import UpCunet  # noqa
