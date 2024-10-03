@@ -36,17 +36,17 @@ license = "MIT"
 name = "ccrestoration"
 readme = "README.md"
 repository = "https://github.com/TensoRaws/ccrestoration"
-version = "0.0.1"
+version = "0.0.2"
 
 # Requirements
 [tool.poetry.dependencies]
-numpy = "*"
 opencv-python = "*"
 pydantic = "*"
 python = "^3.9"
 tenacity = "*"
 
 [tool.poetry.group.dev.dependencies]
+numpy = "*"
 pre-commit = "^3.7.0"
 scikit-image = "*"
 torch = "*"

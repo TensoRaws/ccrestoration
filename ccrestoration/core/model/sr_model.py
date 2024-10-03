@@ -59,12 +59,18 @@ class SRBaseModel(BaseModelInterface):
         """
         Inference the video with the model, the clip should be a vapoursynth clip
 
-        :param clip:
+        :param clip: vs.VideoNode
         :return:
         """
         import vapoursynth as vs
 
         from ccrestoration.utils.vs import frame_to_tensor, tensor_to_frame
+
+        if not isinstance(clip, vs.VideoNode):
+            raise vs.Error("Only vapoursynth clip is supported")
+
+        if clip.format.id not in [vs.RGBH, vs.RGBS]:
+            raise vs.Error("Only vs.RGBH and vs.RGBS formats are supported")
 
         scale = self.config.scale
 
