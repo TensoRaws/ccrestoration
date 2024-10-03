@@ -70,6 +70,22 @@ RealESRGANConfigs = [
         model=ModelType.RealESRGAN,
         scale=2,
     ),
+    RealESRGANConfig(
+        name=ConfigType.RealESRGAN_AniScale_2_Compact_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealESRGAN_AniScale_2_Compact_2x.pth",
+        hash="916ddf99eac77008834a8aeb3dc74b64b17eee02932c18bca93cfa093106e85d",
+        arch=ArchType.SRVGG,
+        model=ModelType.RealESRGAN,
+        scale=2,
+    ),
+    RealESRGANConfig(
+        name=ConfigType.RealESRGAN_Ani4Kv2_Compact_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealESRGAN_Ani4Kv2_Compact_2x.pth",
+        hash="fe99290e9e4f95424219566dbe159184a123587622cc00bc632b1eecbd07d7a4",
+        arch=ArchType.SRVGG,
+        model=ModelType.RealESRGAN,
+        scale=2,
+    ),
 ]
 
 for cfg in RealESRGANConfigs:

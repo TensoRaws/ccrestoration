@@ -31,6 +31,8 @@ class Test_RealESRGAN:
 
         for k in [
             ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
+            ConfigType.RealESRGAN_AniScale_2_Compact_2x,
+            ConfigType.RealESRGAN_Ani4Kv2_Compact_2x,
         ]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
