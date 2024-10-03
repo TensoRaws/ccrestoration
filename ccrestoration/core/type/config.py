@@ -13,5 +13,6 @@ class ConfigType(str, Enum):
     RealESRGAN_Ani4Kv2_Compact_2x = "RealESRGAN_Ani4Kv2_Compact_2x.pth"
 
     # RealCUGAN
-    RealCUGAN_Pro_Conservative_2x = "RealCUGAN_Pro_Conservative_2x.pth"
     RealCUGAN_Conservative_2x = "RealCUGAN_Conservative_2x.pth"
+
+    RealCUGAN_Pro_Conservative_2x = "RealCUGAN_Pro_Conservative_2x.pth"

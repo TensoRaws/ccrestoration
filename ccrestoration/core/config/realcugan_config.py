@@ -1,3 +1,5 @@
+from typing import Union
+
 from pydantic import field_validator
 
 from ccrestoration.core.config import CONFIG_REGISTRY
@@ -5,8 +7,8 @@ from ccrestoration.core.type import ArchType, BaseConfig, ConfigType, ModelType
 
 
 class RealCUGANConfig(BaseConfig):
-    arch: ArchType = ArchType.UPCUNET
-    model: ModelType = ModelType.RealCUGAN
+    arch: Union[ArchType, str] = ArchType.UPCUNET
+    model: Union[ModelType, str] = ModelType.RealCUGAN
     scale: int = 2
     in_channels: int = 3
     out_channels: int = 3

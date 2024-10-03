@@ -12,7 +12,19 @@ from ccrestoration.core.type import ArchType
 @ARCH_REGISTRY.register(name=ArchType.UPCUNET)
 class UpCunet(nn.Module):
     """
-    UpCunet model
+    UpCunet model, which output is the normalized RGB image. (original output is the 0-255 RGB image)
+    :: 输出修改为归一化的RGB图像，原始实现为输出为0-255的RGB图像
+
+    增加了一层unet键，需要手动修改state_dict的键，添加"unet."前缀，如下：
+    if cfg.pro:
+        del state_dict["pro"]
+
+    new_state_dict = {}
+    for key, value in state_dict.items():
+        # 修改键，添加"unet."前缀
+        new_key = "unet." + key
+        new_state_dict[new_key] = value
+
 
     cache_mode:
     0: 默认使用cache缓存必要参数

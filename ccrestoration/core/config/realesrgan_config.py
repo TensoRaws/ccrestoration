@@ -1,3 +1,5 @@
+from typing import Union
+
 from pydantic import field_validator
 
 from ccrestoration.core.config import CONFIG_REGISTRY
@@ -5,7 +7,7 @@ from ccrestoration.core.type import ArchType, BaseConfig, ConfigType, ModelType
 
 
 class RealESRGANConfig(BaseConfig):
-    model: ModelType = ModelType.RealESRGAN
+    model: Union[ModelType, str] = ModelType.RealESRGAN
     scale: int = 2
     num_in_ch: int = 3
     num_out_ch: int = 3
