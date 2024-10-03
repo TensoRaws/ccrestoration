@@ -1,0 +1,58 @@
+name: CI-test
+
+env:
+  GITHUB_ACTIONS: true
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+
+  pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+
+  workflow_dispatch:
+
+jobs:
+  CI:
+    strategy:
+      matrix:
+        os-version: ["ubuntu-20.04", "macos-14", "windows-latest"]
+        python-version: ["3.9"]
+        poetry-version: ["1.8.3"]
+
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+
+      - name: Test
+        run: |
+          pip install numpy==1.26.4
+          pip install pydantic tenacity opencv-python
+          pip install pre-commit torch torchvision scikit-image
+          pip install pytest pytest-cov coverage
+          pip install mypy ruff types-requests
+
+          make lint
+          make test
+
+      - name: Codecov
+        if: matrix.os-version == 'ubuntu-20.04'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
