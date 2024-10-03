@@ -7,7 +7,7 @@ from vapoursynth import core
 
 from ccrestoration import AutoModel, BaseModelInterface, ConfigType
 
-model: BaseModelInterface = AutoModel.from_pretrained(ConfigType.RealCUGAN_Conservative_2x)
+model: BaseModelInterface = AutoModel.from_pretrained(ConfigType.RealCUGAN_Pro_Conservative_2x)
 
 clip = core.bs.VideoSource(source="s.mp4")
 clip = core.resize.Bicubic(clip=clip, format=vs.RGBH)

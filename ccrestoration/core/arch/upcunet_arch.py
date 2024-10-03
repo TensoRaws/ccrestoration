@@ -55,6 +55,9 @@ class UpCunet(nn.Module):
         self.pro = pro
 
     def forward(self, x):
+        if self.pro:
+            x = x * 0.7 + 0.15
+
         if self.cache_mode == 3:
             return self.unet.forward_gap_sync(x=x, tile_mode=0, alpha=self.alpha, pro=self.pro)
         elif self.cache_mode == 2:
@@ -345,9 +348,9 @@ class UpCunet2x(nn.Module):
             if w0 != pw or h0 != ph:
                 x = x[:, :, : h0 * 2, : w0 * 2]
             if pro:
-                return ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
+                return (x - 0.15) / 0.7
             else:
-                return (x * 255).round().clamp_(0, 255).byte()
+                return x
         elif tile_mode == 1:  # 对长边减半
             if w0 >= h0:
                 crop_size_w = ((w0 - 1) // 4 * 4 + 4) // 2  # 减半后能被2整除，所以要先被4整除
@@ -469,13 +472,9 @@ class UpCunet2x(nn.Module):
                 del tmp_dict[i][j]
                 x = torch.add(x0, x)  # x0是unet2的最终输出
                 if pro:
-                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (
-                        ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (x - 0.15) / 0.7
                 else:
-                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (
-                        (x * 255).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = x
         del tmp_dict
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
@@ -499,9 +498,9 @@ class UpCunet2x(nn.Module):
             if w0 != pw or h0 != ph:
                 x = x[:, :, : h0 * 2, : w0 * 2]
             if pro:
-                return ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
+                return (x - 0.15) / 0.7
             else:
-                return (x * 255).round().clamp_(0, 255).byte()
+                return x
         elif tile_mode == 1:  # 对长边减半
             if w0 >= h0:
                 crop_size_w = ((w0 - 1) // 4 * 4 + 4) // 2  # 减半后能被2整除，所以要先被4整除
@@ -614,13 +613,9 @@ class UpCunet2x(nn.Module):
                 x0 = self.unet2.forward_d(tmp_x1, tmp_x4)
                 x_crop = torch.add(x0, x_crop)
                 if pro:
-                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (
-                        ((x_crop - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (x_crop - 0.15) / 0.7
                 else:
-                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (
-                        (x_crop * 255.0).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = x_crop
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
             res = res[:, :, : h0 * 2, : w0 * 2]
@@ -712,13 +707,9 @@ class UpCunet2x(nn.Module):
                 x0 = self.unet2.forward_d(tmp_x1, tmp_x4)
                 x_crop = torch.add(x0, x_crop)
                 if pro:
-                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (
-                        ((x_crop - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (x_crop - 0.15) / 0.7
                 else:
-                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = (
-                        (x_crop * 255.0).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 2 : i * 2 + h1 * 2 - 72, j * 2 : j * 2 + w1 * 2 - 72] = x_crop
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
             res = res[:, :, : h0 * 2, : w0 * 2]
@@ -748,9 +739,9 @@ class UpCunet3x(nn.Module):
             if w0 != pw or h0 != ph:
                 x = x[:, :, : h0 * 3, : w0 * 3]
             if pro:
-                return ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
+                return (x - 0.15) / 0.7
             else:
-                return (x * 255).round().clamp_(0, 255).byte()
+                return x
         elif tile_mode == 1:  # 对长边减半
             if w0 >= h0:
                 crop_size_w = ((w0 - 1) // 8 * 8 + 8) // 2  # 减半后能被2整除，所以要先被4整除
@@ -871,13 +862,9 @@ class UpCunet3x(nn.Module):
                 del tmp_dict[i][j]
                 x = torch.add(x0, x)  # x0是unet2的最终输出
                 if pro:
-                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (
-                        ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (x - 0.15) / 0.7
                 else:
-                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (
-                        (x * 255).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = x
         del tmp_dict
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
@@ -901,9 +888,9 @@ class UpCunet3x(nn.Module):
             if w0 != pw or h0 != ph:
                 x = x[:, :, : h0 * 3, : w0 * 3]
             if pro:
-                return ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
+                return (x - 0.15) / 0.7
             else:
-                return (x * 255).round().clamp_(0, 255).byte()
+                return x
         elif tile_mode == 1:  # 对长边减半
             if w0 >= h0:
                 crop_size_w = ((w0 - 1) // 8 * 8 + 8) // 2  # 减半后能被2整除，所以要先被4整除
@@ -1014,13 +1001,9 @@ class UpCunet3x(nn.Module):
                 x0 = self.unet2.forward_d(tmp_x1, tmp_x4)
                 x_crop = torch.add(x0, x_crop)
                 if pro:
-                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (
-                        ((x_crop - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (x_crop - 0.15) / 0.7
                 else:
-                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (
-                        (x_crop * 255.0).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = x_crop
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
             res = res[:, :, : h0 * 3, : w0 * 3]
@@ -1112,13 +1095,9 @@ class UpCunet3x(nn.Module):
                 x0 = self.unet2.forward_d(tmp_x1, tmp_x4)
                 x_crop = torch.add(x0, x_crop)
                 if pro:
-                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (
-                        ((x_crop - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (x_crop - 0.15) / 0.7
                 else:
-                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = (
-                        (x_crop * 255.0).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 3 : i * 3 + h1 * 3 - 84, j * 3 : j * 3 + w1 * 3 - 84] = x_crop
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
             res = res[:, :, : h0 * 3, : w0 * 3]
@@ -1155,9 +1134,9 @@ class UpCunet4x(nn.Module):
                 x = x[:, :, : h0 * 4, : w0 * 4]
             x += F.interpolate(x00, scale_factor=4, mode="nearest")
             if pro:
-                return ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
+                return (x - 0.15) / 0.7
             else:
-                return (x * 255).round().clamp_(0, 255).byte()
+                return x
         elif tile_mode == 1:  # 对长边减半
             if w0 >= h0:
                 crop_size_w = ((w0 - 1) // 4 * 4 + 4) // 2  # 减半后能被2整除，所以要先被4整除
@@ -1285,13 +1264,9 @@ class UpCunet4x(nn.Module):
                 _, _, h2, w2 = x00_crop.shape
                 x[:, :, : h2 * 4, : w2 * 4] += F.interpolate(x00_crop, scale_factor=4, mode="nearest")
                 if pro:
-                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (
-                        ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (x - 0.15) / 0.7
                 else:
-                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (
-                        (x * 255).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = x
         del tmp_dict
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
@@ -1320,9 +1295,9 @@ class UpCunet4x(nn.Module):
                 x = x[:, :, : h0 * 4, : w0 * 4]
             x += F.interpolate(x00, scale_factor=4, mode="nearest")
             if pro:
-                return ((x - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
+                return (x - 0.15) / 0.7
             else:
-                return (x * 255).round().clamp_(0, 255).byte()
+                return x
         elif tile_mode == 1:  # 对长边减半
             if w0 >= h0:
                 crop_size_w = ((w0 - 1) // 4 * 4 + 4) // 2  # 减半后能被2整除，所以要先被4整除
@@ -1439,13 +1414,9 @@ class UpCunet4x(nn.Module):
                 _, _, h2, w2 = x00_crop.shape
                 x_crop[:, :, : h2 * 4, : w2 * 4] += F.interpolate(x00_crop, scale_factor=4, mode="nearest")
                 if pro:
-                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (
-                        ((x_crop - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (x_crop - 0.15) / 0.7
                 else:
-                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (
-                        (x_crop * 255).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = x_crop
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
             res = res[:, :, : h0 * 4, : w0 * 4]
@@ -1544,13 +1515,9 @@ class UpCunet4x(nn.Module):
                 _, _, h2, w2 = x00_crop.shape
                 x_crop[:, :, : h2 * 4, : w2 * 4] += F.interpolate(x00_crop, scale_factor=4, mode="nearest")
                 if pro:
-                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (
-                        ((x_crop - 0.15) * (255 / 0.7)).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (x_crop - 0.15) / 0.7
                 else:
-                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = (
-                        (x_crop * 255).round().clamp_(0, 255).byte()
-                    )
+                    res[:, :, i * 4 : i * 4 + h1 * 4 - 152, j * 4 : j * 4 + w1 * 4 - 152] = x_crop
         # torch.cuda.empty_cache()
         if w0 != pw or h0 != ph:
             res = res[:, :, : h0 * 4, : w0 * 4]
