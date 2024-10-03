@@ -71,6 +71,12 @@ class BaseModelInterface(ABC):
 
     @torch.inference_mode()  # type: ignore
     def inference_video(self, clip: Any) -> Any:
+        """
+        Inference the video with the model, the clip should be a vapoursynth clip
+
+        :param clip: vs.VideoNode
+        :return:
+        """
         raise NotImplementedError
 
     def __call__(self, img: torch.Tensor) -> torch.Tensor:

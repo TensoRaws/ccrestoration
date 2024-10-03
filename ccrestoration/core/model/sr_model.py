@@ -62,27 +62,7 @@ class SRBaseModel(BaseModelInterface):
         :param clip: vs.VideoNode
         :return:
         """
-        import vapoursynth as vs
 
-        from ccrestoration.utils.vs import frame_to_tensor, tensor_to_frame
+        from ccrestoration.vs import inference_sr
 
-        if not isinstance(clip, vs.VideoNode):
-            raise vs.Error("Only vapoursynth clip is supported")
-
-        if clip.format.id not in [vs.RGBH, vs.RGBS]:
-            raise vs.Error("Only vs.RGBH and vs.RGBS formats are supported")
-
-        scale = self.config.scale
-
-        @torch.inference_mode()  # type: ignore
-        def _inference(n: int, f: list[vs.VideoFrame]) -> vs.VideoFrame:
-            img = frame_to_tensor(f[0], self.device).unsqueeze(0)
-
-            output = self.inference(img)
-
-            return tensor_to_frame(output, f[1].copy())
-
-        new_clip = clip.std.BlankClip(width=clip.width * scale, height=clip.height * scale, keep=True)
-        return new_clip.std.FrameEval(
-            lambda n: new_clip.std.ModifyFrame([clip, new_clip], _inference), clip_src=[clip, new_clip]
-        )
+        return inference_sr(self.inference, clip, self.config.scale, self.device)
