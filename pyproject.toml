@@ -12,6 +12,9 @@ exclude_also = [
 ]
 
 [tool.coverage.run]
+omit = [
+  "ccrestoration/core/arch/*"
+]
 
 [tool.mypy]
 disable_error_code = "attr-defined"
