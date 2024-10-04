@@ -16,3 +16,8 @@ class ConfigType(str, Enum):
     RealCUGAN_Conservative_2x = "RealCUGAN_Conservative_2x.pth"
 
     RealCUGAN_Pro_Conservative_2x = "RealCUGAN_Pro_Conservative_2x.pth"
+    RealCUGAN_Pro_Conservative_3x = "RealCUGAN_Pro_Conservative_3x.pth"
+    RealCUGAN_Pro_Denoise3x_2x = "RealCUGAN_Pro_Denoise3x_2x.pth"
+    RealCUGAN_Pro_Denoise3x_3x = "RealCUGAN_Pro_Denoise3x_3x.pth"
+    RealCUGAN_Pro_No_Denoise_2x = "RealCUGAN_Pro_No_Denoise_2x.pth"
+    RealCUGAN_Pro_No_Denoise_3x = "RealCUGAN_Pro_No_Denoise_3x.pth"

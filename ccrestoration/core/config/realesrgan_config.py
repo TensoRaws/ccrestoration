@@ -31,6 +31,7 @@ class RealESRGANConfig(BaseConfig):
 
 
 RealESRGANConfigs = [
+    # RealESRGAN official
     RealESRGANConfig(
         name=ConfigType.RealESRGAN_RealESRGAN_x4plus_4x,
         url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealESRGAN_RealESRGAN_x4plus_4x.pth",
@@ -61,6 +62,7 @@ RealESRGANConfigs = [
         arch=ArchType.SRVGG,
         scale=4,
     ),
+    # RealESRGAN community
     RealESRGANConfig(
         name=ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
         url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealESRGAN_AnimeJaNai_HD_V3_Compact_2x.pth",

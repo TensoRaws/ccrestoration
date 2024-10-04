@@ -11,7 +11,14 @@ class Test_RealCUGAN:
     def test_pro(self) -> None:
         img1 = load_image()
 
-        for k in [ConfigType.RealCUGAN_Pro_Conservative_2x]:
+        for k in [
+            ConfigType.RealCUGAN_Pro_Conservative_2x,
+            ConfigType.RealCUGAN_Pro_Conservative_3x,
+            ConfigType.RealCUGAN_Pro_Denoise3x_2x,
+            ConfigType.RealCUGAN_Pro_Denoise3x_3x,
+            ConfigType.RealCUGAN_Pro_No_Denoise_2x,
+            ConfigType.RealCUGAN_Pro_No_Denoise_3x,
+        ]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
             model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=get_device())

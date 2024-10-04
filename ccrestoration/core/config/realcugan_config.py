@@ -36,6 +36,14 @@ class RealCUGANConfig(BaseConfig):
 
 
 RealCUGANConfigs = [
+    # RealCUGAN
+    RealCUGANConfig(
+        name=ConfigType.RealCUGAN_Conservative_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Conservative_2x.pth",
+        hash="6cfe3b23687915d08ba96010f25198d9cfe8a683aa4131f1acf7eaa58ee1de93",
+        scale=2,
+    ),
+    # RealCUGAN Pro
     RealCUGANConfig(
         name=ConfigType.RealCUGAN_Pro_Conservative_2x,
         url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Pro_Conservative_2x.pth",
@@ -44,10 +52,39 @@ RealCUGANConfigs = [
         pro=True,
     ),
     RealCUGANConfig(
-        name=ConfigType.RealCUGAN_Conservative_2x,
-        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Conservative_2x.pth",
-        hash="6cfe3b23687915d08ba96010f25198d9cfe8a683aa4131f1acf7eaa58ee1de93",
+        name=ConfigType.RealCUGAN_Pro_Conservative_3x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Pro_Conservative_3x.pth",
+        hash="a9f3c783a04b15c793b95e332bfdac524cfa30ba186cb829c1290593e28ad9e7",
+        scale=3,
+        pro=True,
+    ),
+    RealCUGANConfig(
+        name=ConfigType.RealCUGAN_Pro_Denoise3x_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Pro_Denoise3x_2x.pth",
+        hash="e80ca8fc7c261e3dc8f4c0ce0656ac5501d71a476543071615c43392dbeb4c0d",
         scale=2,
+        pro=True,
+    ),
+    RealCUGANConfig(
+        name=ConfigType.RealCUGAN_Pro_Denoise3x_3x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Pro_Denoise3x_3x.pth",
+        hash="4ddd14e2430db0d75d186c6dda934db34929c50da8a88a0c6f4accb871fe4b70",
+        scale=3,
+        pro=True,
+    ),
+    RealCUGANConfig(
+        name=ConfigType.RealCUGAN_Pro_No_Denoise_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Pro_No_Denoise_2x.pth",
+        hash="ccce1f535d94c50ce38e268a53687bc7e68ef7215e3c5e6b3bfd1bfc1dacf0fa",
+        scale=2,
+        pro=True,
+    ),
+    RealCUGANConfig(
+        name=ConfigType.RealCUGAN_Pro_No_Denoise_3x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealCUGAN_Pro_No_Denoise_3x.pth",
+        hash="c14d693a6d3316b8a3eba362e7576f178aea3407e1d89ca0bcb34e1c61269b0f",
+        scale=3,
+        pro=True,
     ),
 ]
 
