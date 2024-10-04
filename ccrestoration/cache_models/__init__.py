@@ -6,7 +6,7 @@ from typing import Optional
 from tenacity import retry, stop_after_attempt, stop_after_delay, wait_random
 from torch.hub import download_url_to_file
 
-from ccrestoration.core.type import BaseConfig
+from ccrestoration.type import BaseConfig
 
 CACHE_PATH = Path(__file__).resolve().parent.absolute()
 

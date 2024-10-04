@@ -1,8 +1,8 @@
 from typing import Any
 
 from ccrestoration import AutoConfig, AutoModel
-from ccrestoration.core.config import RealESRGANConfig
-from ccrestoration.core.model import RealESRGANModel
+from ccrestoration.config import RealESRGANConfig
+from ccrestoration.model import RealESRGANModel
 
 
 def test_auto_class_register() -> None:

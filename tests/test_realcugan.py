@@ -1,8 +1,8 @@
 import cv2
 
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
-from ccrestoration.core.config import RealCUGANConfig
-from ccrestoration.core.model import SRBaseModel
+from ccrestoration.config import RealCUGANConfig
+from ccrestoration.model import SRBaseModel
 
 from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
 

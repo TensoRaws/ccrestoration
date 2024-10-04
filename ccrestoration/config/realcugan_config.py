@@ -2,8 +2,8 @@ from typing import Union
 
 from pydantic import field_validator
 
-from ccrestoration.core.config import CONFIG_REGISTRY
-from ccrestoration.core.type import ArchType, BaseConfig, ConfigType, ModelType
+from ccrestoration.config import CONFIG_REGISTRY
+from ccrestoration.type import ArchType, BaseConfig, ConfigType, ModelType
 
 
 class RealCUGANConfig(BaseConfig):

@@ -2,8 +2,8 @@
 from torch import nn as nn
 from torch.nn import functional as F
 
-from ccrestoration.core.arch import ARCH_REGISTRY
-from ccrestoration.core.type import ArchType
+from ccrestoration.arch import ARCH_REGISTRY
+from ccrestoration.type import ArchType
 
 
 @ARCH_REGISTRY.register(name=ArchType.SRVGG)

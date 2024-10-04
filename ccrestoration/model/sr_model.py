@@ -6,7 +6,7 @@ import torch
 from torchvision import transforms
 
 from ccrestoration.cache_models import load_file_from_url
-from ccrestoration.core.type import BaseConfig, BaseModelInterface
+from ccrestoration.type import BaseConfig, BaseModelInterface
 
 
 class SRBaseModel(BaseModelInterface):
