@@ -14,10 +14,19 @@ class ConfigType(str, Enum):
 
     # RealCUGAN
     RealCUGAN_Conservative_2x = "RealCUGAN_Conservative_2x.pth"
-
+    RealCUGAN_Denoise1x_2x = "RealCUGAN_Denoise1x_2x.pth"
+    RealCUGAN_Denoise2x_2x = "RealCUGAN_Denoise2x_2x.pth"
+    RealCUGAN_Denoise3x_2x = "RealCUGAN_Denoise3x_2x.pth"
+    RealCUGAN_No_Denoise_2x = "RealCUGAN_No_Denoise_2x.pth"
+    RealCUGAN_Conservative_3x = "RealCUGAN_Conservative_3x.pth"
+    RealCUGAN_Denoise3x_3x = "RealCUGAN_Denoise3x_3x.pth"
+    RealCUGAN_No_Denoise_3x = "RealCUGAN_No_Denoise_3x.pth"
+    RealCUGAN_Conservative_4x = "RealCUGAN_Conservative_4x.pth"
+    RealCUGAN_Denoise3x_4x = "RealCUGAN_Denoise3x_4x.pth"
+    RealCUGAN_No_Denoise_4x = "RealCUGAN_No_Denoise_4x.pth"
     RealCUGAN_Pro_Conservative_2x = "RealCUGAN_Pro_Conservative_2x.pth"
-    RealCUGAN_Pro_Conservative_3x = "RealCUGAN_Pro_Conservative_3x.pth"
     RealCUGAN_Pro_Denoise3x_2x = "RealCUGAN_Pro_Denoise3x_2x.pth"
-    RealCUGAN_Pro_Denoise3x_3x = "RealCUGAN_Pro_Denoise3x_3x.pth"
     RealCUGAN_Pro_No_Denoise_2x = "RealCUGAN_Pro_No_Denoise_2x.pth"
+    RealCUGAN_Pro_Conservative_3x = "RealCUGAN_Pro_Conservative_3x.pth"
+    RealCUGAN_Pro_Denoise3x_3x = "RealCUGAN_Pro_Denoise3x_3x.pth"
     RealCUGAN_Pro_No_Denoise_3x = "RealCUGAN_Pro_No_Denoise_3x.pth"
