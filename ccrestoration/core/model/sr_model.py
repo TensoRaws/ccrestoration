@@ -65,4 +65,4 @@ class SRBaseModel(BaseModelInterface):
 
         from ccrestoration.vs import inference_sr
 
-        return inference_sr(self.inference, clip, self.config.scale, self.device)
+        return inference_sr(inference=self.inference, clip=clip, scale=self.config.scale, device=self.device)
