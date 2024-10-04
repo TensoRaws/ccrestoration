@@ -2,9 +2,9 @@ from typing import Any, Optional, Union
 
 import torch
 
-from ccrestoration.core.config import CONFIG_REGISTRY
-from ccrestoration.core.model import MODEL_REGISTRY
-from ccrestoration.core.type import BaseConfig, ConfigType
+from ccrestoration.config import CONFIG_REGISTRY
+from ccrestoration.model import MODEL_REGISTRY
+from ccrestoration.type import BaseConfig, ConfigType
 
 
 class AutoModel:

@@ -1,10 +1,10 @@
 from typing import Any
 
-from ccrestoration.core.arch import UpCunet
-from ccrestoration.core.config import RealCUGANConfig
-from ccrestoration.core.model import MODEL_REGISTRY
-from ccrestoration.core.model.sr_model import SRBaseModel
-from ccrestoration.core.type import ModelType
+from ccrestoration.arch import UpCunet
+from ccrestoration.config import RealCUGANConfig
+from ccrestoration.model import MODEL_REGISTRY
+from ccrestoration.model.sr_model import SRBaseModel
+from ccrestoration.type import ModelType
 
 
 @MODEL_REGISTRY.register(name=ModelType.RealCUGAN)

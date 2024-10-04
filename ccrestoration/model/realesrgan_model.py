@@ -1,10 +1,10 @@
 from typing import Any
 
-from ccrestoration.core.arch import RRDBNet, SRVGGNetCompact
-from ccrestoration.core.config import RealESRGANConfig
-from ccrestoration.core.model import MODEL_REGISTRY
-from ccrestoration.core.model.sr_model import SRBaseModel
-from ccrestoration.core.type import ArchType, ModelType
+from ccrestoration.arch import RRDBNet, SRVGGNetCompact
+from ccrestoration.config import RealESRGANConfig
+from ccrestoration.model import MODEL_REGISTRY
+from ccrestoration.model.sr_model import SRBaseModel
+from ccrestoration.type import ArchType, ModelType
 
 
 @MODEL_REGISTRY.register(name=ModelType.RealESRGAN)
