@@ -14,7 +14,7 @@ class Test_RealCUGAN:
         for k in [ConfigType.RealCUGAN_Pro_Conservative_2x]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
-            model: SRBaseModel = AutoModel.from_config(config=cfg, device=get_device())
+            model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=get_device())
             print(model.device)
 
             img2 = model.inference_image(img1)
@@ -30,7 +30,7 @@ class Test_RealCUGAN:
         for k in [ConfigType.RealCUGAN_Conservative_2x]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
-            model: SRBaseModel = AutoModel.from_config(config=cfg, device=get_device())
+            model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=get_device())
             print(model.device)
 
             img2 = model.inference_image(img1)
@@ -48,7 +48,7 @@ class Test_RealCUGAN:
             print(f"Testing alpha={alpha}")
             cfg: RealCUGANConfig = AutoConfig.from_pretrained(k)
             cfg.alpha = alpha
-            model: SRBaseModel = AutoModel.from_config(config=cfg, device=get_device())
+            model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=get_device())
             print(model.device)
 
             img2 = model.inference_image(img1)
@@ -64,7 +64,7 @@ class Test_RealCUGAN:
             print(f"Testing cache_mode={c}")
             cfg: RealCUGANConfig = AutoConfig.from_pretrained(k)
             cfg.cache_mode = c
-            model: SRBaseModel = AutoModel.from_config(config=cfg, device=get_device())
+            model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=get_device())
             print(model.device)
 
             img2 = model.inference_image(img1)
