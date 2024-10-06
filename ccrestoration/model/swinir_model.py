@@ -1,7 +1,5 @@
 from typing import Any
 
-import torch
-
 from ccrestoration.arch import SwinIR
 from ccrestoration.config import SwinIRConfig
 from ccrestoration.model import MODEL_REGISTRY
@@ -48,18 +46,19 @@ class SwimIRModel(SRBaseModel):
         model.eval().to(self.device)
         return model
 
-    @torch.inference_mode()  # type: ignore
-    def inference(self, img: torch.Tensor) -> torch.Tensor:
-        cfg: SwinIRConfig = self.config
-
-        _, _, h_old, w_old = img.size()
-        window_size = cfg.window_size
-        h_pad = (h_old // window_size + 1) * window_size - h_old
-        w_pad = (w_old // window_size + 1) * window_size - w_old
-        img = torch.cat([img, torch.flip(img, [2])], 2)[:, :, : h_old + h_pad, :]
-        img = torch.cat([img, torch.flip(img, [3])], 3)[:, :, :, : w_old + w_pad]
-
-        img = self.model(img)
-
-        img = img[..., : h_old * cfg.scale, : w_old * cfg.scale]
-        return img
+    # the latest version of SwinIR has auto padding, so we don't need to pad the image
+    # @torch.inference_mode()  # type: ignore
+    # def inference(self, img: torch.Tensor) -> torch.Tensor:
+    #     cfg: SwinIRConfig = self.config
+    #
+    #     _, _, h_old, w_old = img.size()
+    #     window_size = cfg.window_size
+    #     h_pad = (h_old // window_size + 1) * window_size - h_old
+    #     w_pad = (w_old // window_size + 1) * window_size - w_old
+    #     img = torch.cat([img, torch.flip(img, [2])], 2)[:, :, : h_old + h_pad, :]
+    #     img = torch.cat([img, torch.flip(img, [3])], 3)[:, :, :, : w_old + w_pad]
+    #
+    #     img = self.model(img)
+    #
+    #     img = img[..., : h_old * cfg.scale, : w_old * cfg.scale]
+    #     return img
