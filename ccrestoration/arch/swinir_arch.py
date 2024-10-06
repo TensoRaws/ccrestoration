@@ -2,7 +2,6 @@
 # Modified from https://github.com/JingyunLiang/SwinIR
 # SwinIR: Image Restoration Using Swin Transformer, https://arxiv.org/abs/2108.10257
 # Originally Written by Ze Liu, Modified by Jingyun Liang.
-
 import math
 
 import torch
@@ -10,9 +9,8 @@ import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 
 from ccrestoration.arch import ARCH_REGISTRY
+from ccrestoration.arch.arch_util import to_2tuple, trunc_normal_
 from ccrestoration.type import ArchType
-
-from .arch_util import to_2tuple, trunc_normal_
 
 
 @ARCH_REGISTRY.register(name=ArchType.SWINIR)
@@ -25,8 +23,8 @@ class SwinIR(nn.Module):
         patch_size (int | tuple(int)): Patch size. Default: 1
         in_chans (int): Number of input image channels. Default: 3
         embed_dim (int): Patch embedding dimension. Default: 96
-        depths (List(int)): Depth of each Swin Transformer layer.
-        num_heads (List(int)): Number of attention heads in different layers.
+        depths (tuple(int)): Depth of each Swin Transformer layer.
+        num_heads (tuple(int)): Number of attention heads in different layers.
         window_size (int): Window size. Default: 7
         mlp_ratio (float): Ratio of mlp hidden dim to embedding dim. Default: 4
         qkv_bias (bool): If True, add a learnable bias to query, key, value. Default: True
@@ -50,8 +48,8 @@ class SwinIR(nn.Module):
         patch_size=1,
         in_chans=3,
         embed_dim=96,
-        depths=[6, 6, 6, 6],  # noqa
-        num_heads=[6, 6, 6, 6],  # noqa
+        depths=(6, 6, 6, 6),
+        num_heads=(6, 6, 6, 6),
         window_size=7,
         mlp_ratio=4.0,
         qkv_bias=True,
@@ -168,12 +166,12 @@ class SwinIR(nn.Module):
             self.conv_before_upsample = nn.Sequential(
                 nn.Conv2d(embed_dim, num_feat, 3, 1, 1), nn.LeakyReLU(inplace=True)
             )
-            self.upsample = Upsample(upscale, num_feat)
+            self.upsample = Upsample(self.upscale, num_feat)
             self.conv_last = nn.Conv2d(num_feat, num_out_ch, 3, 1, 1)
         elif self.upsampler == "pixelshuffledirect":
             # for lightweight SR (to save parameters)
             self.upsample = UpsampleOneStep(
-                upscale, embed_dim, num_out_ch, (patches_resolution[0], patches_resolution[1])
+                self.upscale, embed_dim, num_out_ch, (patches_resolution[0], patches_resolution[1])
             )
         elif self.upsampler == "nearest+conv":
             # for real-world SR (less artifacts)
