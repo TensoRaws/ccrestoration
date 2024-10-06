@@ -4,3 +4,4 @@ CONFIG_REGISTRY: RegistryConfigInstance = RegistryConfigInstance("CONFIG")
 
 from ccrestoration.config.realesrgan_config import RealESRGANConfig  # noqa
 from ccrestoration.config.realcugan_config import RealCUGANConfig  # noqa
+from ccrestoration.config.edsr_config import EDSRConfig  # noqa

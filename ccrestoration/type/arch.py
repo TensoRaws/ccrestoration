@@ -5,3 +5,4 @@ class ArchType(str, Enum):
     RRDB = "RRDB"
     SRVGG = "SRVGG"
     UPCUNET = "UPCUNET"
+    EDSR = "EDSR"

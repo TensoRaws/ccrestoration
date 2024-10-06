@@ -25,7 +25,6 @@ class Test_RealCUGAN:
             print(model.device)
 
             img2 = model.inference_image(img1)
-
             cv2.imwrite(str(ASSETS_PATH / f"test_{k}_out.jpg"), img2)
 
             assert calculate_image_similarity(img1, img2)
@@ -53,7 +52,6 @@ class Test_RealCUGAN:
             print(model.device)
 
             img2 = model.inference_image(img1)
-
             cv2.imwrite(str(ASSETS_PATH / f"test_{k}_out.jpg"), img2)
 
             assert calculate_image_similarity(img1, img2)
