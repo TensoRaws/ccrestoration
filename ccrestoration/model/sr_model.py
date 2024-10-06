@@ -31,7 +31,7 @@ class SRBaseModel(BaseModelInterface):
 
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
-        return img
+        return self.model(img)
 
     @torch.inference_mode()  # type: ignore
     def inference_image(self, img: np.ndarray) -> np.ndarray:
