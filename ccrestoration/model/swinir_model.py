@@ -1,9 +1,6 @@
 from typing import Any
 
-import cv2
-import numpy as np
 import torch
-from torchvision import transforms
 
 from ccrestoration.arch import SwinIR
 from ccrestoration.config import SwinIRConfig
@@ -52,20 +49,8 @@ class SwimIRModel(SRBaseModel):
         return model
 
     @torch.inference_mode()  # type: ignore
-    def inference_image(self, img: np.ndarray) -> np.ndarray:
-        """
-        Inference the image(BGR) with the model
-
-        :param img: The input image(BGR), can use cv2 to read the image
-        :return:
-        """
+    def inference(self, img: torch.Tensor) -> torch.Tensor:
         cfg: SwinIRConfig = self.config
-
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-        img = transforms.ToTensor()(img).unsqueeze(0).to(self.device)
-        if self.fp16:
-            img = img.half()
 
         _, _, h_old, w_old = img.size()
         window_size = cfg.window_size
@@ -74,14 +59,7 @@ class SwimIRModel(SRBaseModel):
         img = torch.cat([img, torch.flip(img, [2])], 2)[:, :, : h_old + h_pad, :]
         img = torch.cat([img, torch.flip(img, [3])], 3)[:, :, :, : w_old + w_pad]
 
-        print(img.size())
-        img = self.inference(img)
-        print(img.size())
+        img = self.model(img)
 
         img = img[..., : h_old * cfg.scale, : w_old * cfg.scale]
-
-        img = img.squeeze(0).permute(1, 2, 0).cpu().numpy()
-        img = (img * 255).clip(0, 255).astype("uint8")
-
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         return img

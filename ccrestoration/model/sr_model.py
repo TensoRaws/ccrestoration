@@ -29,20 +29,9 @@ class SRBaseModel(BaseModelInterface):
 
         return torch.load(model_path, map_location=self.device, weights_only=True)
 
-    # @torch.inference_mode()  # type: ignore
-    # def pre_inference(self, img: torch.Tensor, cfg: Any) -> torch.Tensor:
-    #     return img
-
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
-        # img = self.pre_inference(img, self.config)
-        self.model(img)
-        # img = self.post_inference(img, self.config)
         return img
-
-    # @torch.inference_mode()  # type: ignore
-    # def post_inference(self, img: torch.Tensor, cfg: Any) -> torch.Tensor:
-    #     return img
 
     @torch.inference_mode()  # type: ignore
     def inference_image(self, img: np.ndarray) -> np.ndarray:
