@@ -2,9 +2,12 @@
 import torch
 from torch import nn as nn
 
+from ccrestoration.arch import ARCH_REGISTRY
 from ccrestoration.arch.arch_util import ResidualBlockNoBN, Upsample, make_layer
+from ccrestoration.type import ArchType
 
 
+@ARCH_REGISTRY.register(name=ArchType.EDSR)
 class EDSR(nn.Module):
     """EDSR network structure.
 
@@ -28,8 +31,8 @@ class EDSR(nn.Module):
 
     def __init__(
         self,
-        num_in_ch,
-        num_out_ch,
+        num_in_ch=3,
+        num_out_ch=3,
         num_feat=64,
         num_block=16,
         upscale=4,
