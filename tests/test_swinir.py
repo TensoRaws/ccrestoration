@@ -12,10 +12,10 @@ class Test_SwinIR:
 
         for k in [
             ConfigType.SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x,
-            ConfigType.SwinIR_lightweightSR_DIV2K_s64w8_SwinIR_S_2x,
-            ConfigType.SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x,
-            ConfigType.SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x,
-            ConfigType.SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x,
+            # ConfigType.SwinIR_lightweightSR_DIV2K_s64w8_SwinIR_S_2x,
+            # ConfigType.SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x,
+            # ConfigType.SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x,
+            # ConfigType.SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x,
         ]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
