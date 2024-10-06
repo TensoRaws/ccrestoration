@@ -39,6 +39,6 @@ class RealESRGANModel(SRBaseModel):
         else:
             raise NotImplementedError(f"Arch {cfg.arch} is not implemented.")
 
-        model.load_state_dict(state_dict, assign=True)
+        model.load_state_dict(state_dict)
         model.eval().to(self.device)
         return model

@@ -31,6 +31,6 @@ class RealCUGANModel(SRBaseModel):
             pro=cfg.pro,
         )
 
-        model.load_state_dict(new_state_dict, assign=True)
+        model.load_state_dict(new_state_dict)
         model.eval().to(self.device)
         return model
