@@ -8,7 +8,7 @@ from ccrestoration.type import ModelType
 
 
 @MODEL_REGISTRY.register(name=ModelType.SwinIR)
-class SwimIRModel(SRBaseModel):
+class SwinIRModel(SRBaseModel):
     def load_model(self) -> Any:
         cfg: SwinIRConfig = self.config
         state_dict = self.get_state_dict()
