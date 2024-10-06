@@ -1,6 +1,7 @@
 from enum import Enum
 
 
+# Enum for config type, {ModelType.model}_{config_name}_{scale}x.pth
 class ConfigType(str, Enum):
     # RealESRGAN
     RealESRGAN_RealESRGAN_x4plus_4x = "RealESRGAN_RealESRGAN_x4plus_4x.pth"
@@ -38,3 +39,12 @@ class ConfigType(str, Enum):
     EDSR_Lx2_f256b32_DIV2K_official_2x = "EDSR_Lx2_f256b32_DIV2K_official_2x.pth"
     EDSR_Lx3_f256b32_DIV2K_official_3x = "EDSR_Lx3_f256b32_DIV2K_official_3x.pth"
     EDSR_Lx4_f256b32_DIV2K_official_4x = "EDSR_Lx4_f256b32_DIV2K_official_4x.pth"
+
+    # SwinIR
+    SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x = "SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x.pth"
+    SwinIR_classicalSR_DIV2K_s48w8_SwinIR_M_2x = "SwinIR_classicalSR_DIV2K_s48w8_SwinIR_M_2x.pth"
+    SwinIR_lightweightSR_DIV2K_s64w8_SwinIR_S_2x = "SwinIR_lightweightSR_DIV2K_s64w8_SwinIR_S_2x.pth"
+    SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x = "SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x.pth"
+    SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x = "SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x.pth"
+    SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x = "SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x.pth"
+    SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x = "SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x.pth"

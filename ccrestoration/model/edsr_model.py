@@ -13,7 +13,9 @@ class EDSRModel(SRBaseModel):
         cfg: EDSRConfig = self.config
         state_dict = self.get_state_dict()
 
-        if "params" in state_dict:
+        if "params_ema" in state_dict:
+            state_dict = state_dict["params_ema"]
+        elif "params" in state_dict:
             state_dict = state_dict["params"]
 
         model = EDSR(
