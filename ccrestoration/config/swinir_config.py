@@ -1,4 +1,4 @@
-from typing import Any, Optional, Tuple, Union
+from typing import Any, ClassVar, List, Optional, Tuple, Union
 
 from pydantic import field_validator
 from torch import nn
@@ -15,8 +15,8 @@ class SwinIRConfig(BaseConfig):
     patch_size: Union[int, Tuple[int, ...]] = 1
     in_chans: int = 3
     embed_dim: int = 96
-    depths: Tuple[int, ...] = (6, 6, 6, 6)
-    num_heads: Tuple[int, ...] = (6, 6, 6, 6)
+    depths: ClassVar[List[int]] = [6, 6, 6, 6]
+    num_heads: ClassVar[List[int]] = [6, 6, 6, 6]
     window_size: int = 7
     mlp_ratio: float = 4.0
     qkv_bias: bool = True
@@ -55,19 +55,81 @@ SwinIRConfigs = [
     # official models
     SwinIRConfig(
         name=ConfigType.SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x,
-        path="/Users/tohru/Downloads/SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x.pth",
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x.pth",
+        hash="2032ebf8f401dd3ce2fae5f3852117cb72101ec6ed8358faa64c2a3fa09ed4ac",
         scale=2,
         window_size=8,
-        depths=(6, 6, 6, 6, 6, 6),
-        num_heads=(6, 6, 6, 6, 6, 6),
+        depths=[6, 6, 6, 6, 6, 6],
+        num_heads=[6, 6, 6, 6, 6, 6],
         embed_dim=180,
         mlp_ratio=2,
         upsampler="pixelshuffle",
     ),
+    SwinIRConfig(
+        name=ConfigType.SwinIR_classicalSR_DIV2K_s48w8_SwinIR_M_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_classicalSR_DIV2K_s48w8_SwinIR_M_2x.pth",
+        hash="ac6d4895f73aa1b3d563937e29dcedcfdff4d401280e248f23db3c6f68e8343b",
+        scale=2,
+        img_size=48,
+        window_size=8,
+        depths=[6, 6, 6, 6, 6, 6],
+        num_heads=[6, 6, 6, 6, 6, 6],
+        embed_dim=180,
+        mlp_ratio=2,
+        upsampler="pixelshuffle",
+    ),
+    SwinIRConfig(
+        name=ConfigType.SwinIR_lightweightSR_DIV2K_s64w8_SwinIR_S_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_lightweightSR_DIV2K_s64w8_SwinIR_S_2x.pth",
+        hash="193b229909ca89cd8b55de9c9e7fce146ae759d59dfcd78d8feb9dd1d6fa0fd7",
+        scale=2,
+        window_size=8,
+        embed_dim=60,
+        mlp_ratio=2,
+        upsampler="pixelshuffledirect",
+    ),
+    SwinIRConfig(
+        name=ConfigType.SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x.pth",
+        hash="99adfa91350a84c99e946c1eb3d8fce34bc28f57d807b09dc8fe40a316328c0a",
+        scale=4,
+        window_size=8,
+        depths=[6, 6, 6, 6, 6, 6, 6, 6, 6],
+        num_heads=[8, 8, 8, 8, 8, 8, 8, 8, 8],
+        embed_dim=240,
+        mlp_ratio=2,
+        upsampler="nearest+conv",
+        resi_connection="3conv",
+    ),
+    SwinIRConfig(
+        name=ConfigType.SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x.pth",
+        hash="f397408977a3e07eb06afb7238d453a12ef35ebab7328a54241f307860dbe342",
+        scale=2,
+        window_size=8,
+        depths=[6, 6, 6, 6, 6, 6],
+        num_heads=[6, 6, 6, 6, 6, 6],
+        embed_dim=180,
+        mlp_ratio=2,
+        upsampler="nearest+conv",
+    ),
+    SwinIRConfig(
+        name=ConfigType.SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x.pth",
+        hash="b9afb61e65e04eb7f8aba5095d070bbe9af28df76acd0c9405aeb33b814bcfc6",
+        scale=4,
+        window_size=8,
+        depths=[6, 6, 6, 6, 6, 6],
+        num_heads=[6, 6, 6, 6, 6, 6],
+        embed_dim=180,
+        mlp_ratio=2,
+        upsampler="nearest+conv",
+    ),
     # community models
     SwinIRConfig(
         name=ConfigType.SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x,
-        path="/Users/tohru/Downloads/SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x.pth",
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x.pth",
+        hash="aea80c061b41e1cbc5b0c0f9bb2603a82c7d00d2451bfd5b98a495244dd5fb2f",
         scale=2,
         img_size=32,
         window_size=8,
