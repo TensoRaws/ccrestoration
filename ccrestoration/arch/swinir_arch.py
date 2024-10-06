@@ -26,8 +26,8 @@ class SwinIR(nn.Module):
         patch_size (int | tuple(int)): Patch size. Default: 1
         in_chans (int): Number of input image channels. Default: 3
         embed_dim (int): Patch embedding dimension. Default: 96
-        depths (tuple(int)): Depth of each Swin Transformer layer.
-        num_heads (tuple(int)): Number of attention heads in different layers.
+        depths (tuple(int) | list(int): Depth of each Swin Transformer layer.
+        num_heads (tuple(int) | list(int)): Number of attention heads in different layers.
         window_size (int): Window size. Default: 7
         mlp_ratio (float): Ratio of mlp hidden dim to embedding dim. Default: 4
         qkv_bias (bool): If True, add a learnable bias to query, key, value. Default: True
@@ -51,8 +51,8 @@ class SwinIR(nn.Module):
         patch_size=1,
         in_chans=3,
         embed_dim=96,
-        depths=(6, 6, 6, 6),
-        num_heads=(6, 6, 6, 6),
+        depths=[6, 6, 6, 6],  # noqa
+        num_heads=[6, 6, 6, 6],  # noqa
         window_size=7,
         mlp_ratio=4.0,
         qkv_bias=True,
@@ -259,9 +259,9 @@ class SwinIR(nn.Module):
             x = self.conv_first(x)
             x = self.conv_after_body(self.forward_features(x)) + x
             x = self.conv_before_upsample(x)
-            x = self.lrelu(self.conv_up1(torch.nn.functional.interpolate(x, scale_factor=2, mode="nearest")))
+            x = self.lrelu(self.conv_up1(F.interpolate(x, scale_factor=2, mode="nearest")))
             if self.upscale == 4:
-                x = self.lrelu(self.conv_up2(torch.nn.functional.interpolate(x, scale_factor=2, mode="nearest")))
+                x = self.lrelu(self.conv_up2(F.interpolate(x, scale_factor=2, mode="nearest")))
             x = self.conv_last(self.lrelu(self.conv_hr(x)))
         else:
             # for image denoising and JPEG compression artifact reduction
