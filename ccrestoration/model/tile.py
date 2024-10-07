@@ -15,8 +15,8 @@ def calculate_pad_img_size(width: int, height: int, tile: Tuple[int, int], tile_
     :param tile_pad: The padding size for each tile
     :return: The size of the padded image as a tuple (padded_width, padded_height)
     """
-    pad_w = math.ceil(min(tile[0] + 2 * tile_pad, width) / 8) * 8
-    pad_h = math.ceil(min(tile[1] + 2 * tile_pad, height) / 8) * 8
+    pad_w = math.ceil(min(tile[0] + 2 * tile_pad, width) / tile_pad) * tile_pad
+    pad_h = math.ceil(min(tile[1] + 2 * tile_pad, height) / tile_pad) * tile_pad
 
     return pad_w, pad_h
 
