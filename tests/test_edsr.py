@@ -1,5 +1,4 @@
 import cv2
-import pytest
 
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.model import SRBaseModel
@@ -15,26 +14,6 @@ class Test_EDSR:
             ConfigType.EDSR_Mx2_f64b16_DIV2K_official_2x,
             ConfigType.EDSR_Mx3_f64b16_DIV2K_official_3x,
             ConfigType.EDSR_Mx4_f64b16_DIV2K_official_4x,
-        ]:
-            print(f"Testing {k}")
-            cfg: BaseConfig = AutoConfig.from_pretrained(k)
-            model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=get_device())
-            print(model.device)
-
-            img2 = model.inference_image(img1)
-            cv2.imwrite(str(ASSETS_PATH / f"test_{k}_out.jpg"), img2)
-
-            assert calculate_image_similarity(img1, img2)
-            assert compare_image_size(img1, img2, cfg.scale)
-
-    @pytest.mark.skip("Skip because it's too large")
-    def test_official_L(self) -> None:
-        img1 = load_image()
-
-        for k in [
-            ConfigType.EDSR_Lx2_f256b32_DIV2K_official_2x,
-            ConfigType.EDSR_Lx3_f256b32_DIV2K_official_3x,
-            ConfigType.EDSR_Lx4_f256b32_DIV2K_official_4x,
         ]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)

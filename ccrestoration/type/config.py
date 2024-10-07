@@ -38,9 +38,6 @@ class ConfigType(str, Enum):
     EDSR_Mx2_f64b16_DIV2K_official_2x = "EDSR_Mx2_f64b16_DIV2K_official_2x.pth"
     EDSR_Mx3_f64b16_DIV2K_official_3x = "EDSR_Mx3_f64b16_DIV2K_official_3x.pth"
     EDSR_Mx4_f64b16_DIV2K_official_4x = "EDSR_Mx4_f64b16_DIV2K_official_4x.pth"
-    EDSR_Lx2_f256b32_DIV2K_official_2x = "EDSR_Lx2_f256b32_DIV2K_official_2x.pth"
-    EDSR_Lx3_f256b32_DIV2K_official_3x = "EDSR_Lx3_f256b32_DIV2K_official_3x.pth"
-    EDSR_Lx4_f256b32_DIV2K_official_4x = "EDSR_Lx4_f256b32_DIV2K_official_4x.pth"
 
     # SwinIR
     SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x = "SwinIR_classicalSR_DF2K_s64w8_SwinIR_M_2x.pth"

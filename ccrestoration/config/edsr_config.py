@@ -38,30 +38,30 @@ EDSRConfigs = [
         scale=4,
     ),
     # Official Large size models
-    EDSRConfig(
-        name=ConfigType.EDSR_Lx2_f256b32_DIV2K_official_2x,
-        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDSR_Lx2_f256b32_DIV2K_official_2x.pth",
-        hash="be38e77dcff9ec95225cea6326b5a616d57869824688674da317df37f3d87d1b",
-        scale=2,
-        num_feat=256,
-        num_block=32,
-    ),
-    EDSRConfig(
-        name=ConfigType.EDSR_Lx3_f256b32_DIV2K_official_3x,
-        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDSR_Lx3_f256b32_DIV2K_official_3x.pth",
-        hash="3660f70d306481ef4867731500c4e3d901a1b8547996cf4245a09ffbc151b70b",
-        scale=3,
-        num_feat=256,
-        num_block=32,
-    ),
-    EDSRConfig(
-        name=ConfigType.EDSR_Lx4_f256b32_DIV2K_official_4x,
-        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDSR_Lx4_f256b32_DIV2K_official_4x.pth",
-        hash="76ee1c8f48813f46024bee8d2700f417f6b2db070e899954ff1552fbae343e93",
-        scale=4,
-        num_feat=256,
-        num_block=32,
-    ),
+    # EDSRConfig(
+    #     name=ConfigType.EDSR_Lx2_f256b32_DIV2K_official_2x,
+    #     url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDSR_Lx2_f256b32_DIV2K_official_2x.pth",
+    #     hash="be38e77dcff9ec95225cea6326b5a616d57869824688674da317df37f3d87d1b",
+    #     scale=2,
+    #     num_feat=256,
+    #     num_block=32,
+    # ),
+    # EDSRConfig(
+    #     name=ConfigType.EDSR_Lx3_f256b32_DIV2K_official_3x,
+    #     url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDSR_Lx3_f256b32_DIV2K_official_3x.pth",
+    #     hash="3660f70d306481ef4867731500c4e3d901a1b8547996cf4245a09ffbc151b70b",
+    #     scale=3,
+    #     num_feat=256,
+    #     num_block=32,
+    # ),
+    # EDSRConfig(
+    #     name=ConfigType.EDSR_Lx4_f256b32_DIV2K_official_4x,
+    #     url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDSR_Lx4_f256b32_DIV2K_official_4x.pth",
+    #     hash="76ee1c8f48813f46024bee8d2700f417f6b2db070e899954ff1552fbae343e93",
+    #     scale=4,
+    #     num_feat=256,
+    #     num_block=32,
+    # ),
 ]
 
 for cfg in EDSRConfigs:
