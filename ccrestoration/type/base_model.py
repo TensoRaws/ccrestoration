@@ -13,7 +13,7 @@ class BaseModelInterface(ABC):
 
     :param config: config of the model
     :param device: inference device
-    :param fp16: use fp16 or not
+    :param fp16: use fp16 precision or not
     :param compile: use torch.compile or not
     :param compile_backend: backend of torch.compile
     :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable

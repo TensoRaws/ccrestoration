@@ -4,7 +4,8 @@ import torch.nn.functional as F
 from torch import nn
 from torchvision import transforms
 
-from ccrestoration.model import tile_sr
+from ccrestoration import AutoModel, ConfigType
+from ccrestoration.model import SRBaseModel, tile_sr
 
 from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
 
@@ -34,3 +35,17 @@ def test_tile_sr() -> None:
 
     assert calculate_image_similarity(img0, img2)
     assert compare_image_size(img0, img2, 2)
+
+
+def test_auto_model() -> None:
+    k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
+    model: SRBaseModel = AutoModel.from_pretrained(pretrained_model_name=k, fp16=False, device=get_device())
+    assert model.tile == (64, 64)
+    assert model.tile_pad == 8
+    assert model.pad_img is None
+
+
+def test_auto_model_no_tile() -> None:
+    k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
+    model: SRBaseModel = AutoModel.from_pretrained(pretrained_model_name=k, fp16=False, device=get_device(), tile=None)
+    assert model.tile is None
