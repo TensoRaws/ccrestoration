@@ -24,12 +24,13 @@ def load_image() -> np.ndarray:
     return img
 
 
-def calculate_image_similarity(image1: np.ndarray, image2: np.ndarray) -> bool:
+def calculate_image_similarity(image1: np.ndarray, image2: np.ndarray, similarity: float = 0.85) -> bool:
     """
     calculate image similarity, check SR is correct
 
     :param image1: original image
     :param image2: upscale image
+    :param similarity: similarity threshold
     :return:
     """
     # Resize the two images to the same size
@@ -41,7 +42,7 @@ def calculate_image_similarity(image1: np.ndarray, image2: np.ndarray) -> bool:
     # Calculate the Structural Similarity Index (SSIM) between the two images
     (score, diff) = structural_similarity(grayscale_image1, grayscale_image2, full=True)
     print("SSIM: {}".format(score))
-    return score > 0.85
+    return score > similarity
 
 
 def compare_image_size(image1: np.ndarray, image2: np.ndarray, scale: int) -> bool:

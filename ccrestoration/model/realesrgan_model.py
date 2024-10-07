@@ -17,6 +17,9 @@ class RealESRGANModel(SRBaseModel):
             state_dict = state_dict["params_ema"]
         elif "params" in state_dict:
             state_dict = state_dict["params"]
+        elif "model_state_dict" in state_dict:
+            # For APISR's model
+            state_dict = state_dict["model_state_dict"]
 
         if cfg.arch == ArchType.RRDB:
             model = RRDBNet(
