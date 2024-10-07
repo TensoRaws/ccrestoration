@@ -1,4 +1,4 @@
-from ccrestoration.utils.registry import RegistryConfigInstance
+from ccrestoration.util.registry import RegistryConfigInstance
 
 CONFIG_REGISTRY: RegistryConfigInstance = RegistryConfigInstance("CONFIG")
 

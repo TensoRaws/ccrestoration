@@ -7,7 +7,7 @@ import numpy as np
 import torch
 from skimage.metrics import structural_similarity
 
-from ccrestoration.utils.device import DEFAULT_DEVICE
+from ccrestoration.util.device import DEFAULT_DEVICE
 
 ASSETS_PATH = Path(__file__).resolve().parent.parent.absolute() / "assets"
 TEST_IMG_PATH = ASSETS_PATH / "test.jpg"

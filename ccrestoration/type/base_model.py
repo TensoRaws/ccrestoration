@@ -1,10 +1,10 @@
 import sys
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
 import torch
 
-from ccrestoration.utils.device import DEFAULT_DEVICE
+from ccrestoration.util.device import DEFAULT_DEVICE
 
 
 class BaseModelInterface(ABC):
@@ -16,6 +16,9 @@ class BaseModelInterface(ABC):
     :param fp16: use fp16 or not
     :param compile: use torch.compile or not
     :param compile_backend: backend of torch.compile
+    :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable
+    :param tile_pad: The padding size for each tile
+    :param pad_img: The size for the padded image, pad[0] is width, pad[1] is height, None for auto calculate
     """
 
     def __init__(
@@ -25,12 +28,18 @@ class BaseModelInterface(ABC):
         fp16: bool = True,
         compile: bool = False,
         compile_backend: Optional[str] = None,
+        tile: Optional[Tuple[int, int]] = (64, 64),
+        tile_pad: int = 8,
+        pad_img: Optional[Tuple[int, int]] = None,
     ) -> None:
         self.config = config
         self.device: Optional[torch.device] = device
         self.fp16: bool = fp16
         self.compile: bool = compile
         self.compile_backend: Optional[str] = compile_backend
+        self.tile: Optional[Tuple[int, int]] = tile
+        self.tile_pad: int = tile_pad
+        self.pad_img: Optional[Tuple[int, int]] = pad_img
 
         if device is None:
             self.device = DEFAULT_DEVICE
