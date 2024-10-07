@@ -12,6 +12,8 @@ class ConfigType(str, Enum):
     RealESRGAN_AnimeJaNai_HD_V3_Compact_2x = "RealESRGAN_AnimeJaNai_HD_V3_Compact_2x.pth"
     RealESRGAN_AniScale_2_Compact_2x = "RealESRGAN_AniScale_2_Compact_2x.pth"
     RealESRGAN_Ani4Kv2_Compact_2x = "RealESRGAN_Ani4Kv2_Compact_2x.pth"
+    RealESRGAN_APISR_RRDB_GAN_generator_2x = "RealESRGAN_APISR_RRDB_GAN_generator_2x.pth"
+    RealESRGAN_APISR_RRDB_GAN_generator_4x = "RealESRGAN_APISR_RRDB_GAN_generator_4x.pth"
 
     # RealCUGAN
     RealCUGAN_Conservative_2x = "RealCUGAN_Conservative_2x.pth"
@@ -46,4 +48,5 @@ class ConfigType(str, Enum):
     SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x = "SwinIR_realSR_BSRGAN_DFOWMFC_s64w8_SwinIR_L_GAN_4x.pth"
     SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x = "SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_2x.pth"
     SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x = "SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x.pth"
+
     SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x = "SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x.pth"

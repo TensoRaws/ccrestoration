@@ -84,6 +84,22 @@ RealESRGANConfigs = [
         arch=ArchType.SRVGG,
         scale=2,
     ),
+    RealESRGANConfig(
+        name=ConfigType.RealESRGAN_APISR_RRDB_GAN_generator_2x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealESRGAN_APISR_RRDB_GAN_generator_2x.pth",
+        hash="3b0d2b3a3c0461ac17d00f4f32240666fb832b738ea5a48449b1acf07fbb07e5",
+        arch=ArchType.RRDB,
+        scale=2,
+        num_block=6,
+    ),
+    RealESRGANConfig(
+        name=ConfigType.RealESRGAN_APISR_RRDB_GAN_generator_4x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/RealESRGAN_APISR_RRDB_GAN_generator_4x.pth",
+        hash="6bd14a66224c90d4754011f378ac828b18e221f2d031026ec99cb5facdf40c19",
+        arch=ArchType.RRDB,
+        scale=4,
+        num_block=6,
+    ),
 ]
 
 for cfg in RealESRGANConfigs:
