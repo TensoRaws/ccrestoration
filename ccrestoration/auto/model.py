@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any, Optional, Tuple, Union
 
 import torch
 
@@ -15,15 +15,21 @@ class AutoModel:
         fp16: bool = True,
         compile: bool = False,
         compile_backend: Optional[str] = None,
+        tile: Optional[Tuple[int, int]] = (64, 64),
+        tile_pad: int = 8,
+        pad_img: Optional[Tuple[int, int]] = None,
     ) -> Any:
         """
         Get a model instance from a pretrained model name.
 
         :param pretrained_model_name: The name of the pretrained model. It should be registered in CONFIG_REGISTRY.
-        :param device: torch.device
-        :param fp16: Whether to use fp16 precision.
-        :param compile: Whether to compile the model.
-        :param compile_backend: The backend to use for compiling the model.
+        :param device: inference device
+        :param fp16: use fp16 precision or not
+        :param compile: use torch.compile or not
+        :param compile_backend: backend of torch.compile
+        :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable
+        :param tile_pad: The padding size for each tile
+        :param pad_img: The size for the padded image, pad[0] is width, pad[1] is height, None for auto calculate
         :return:
         """
 
@@ -34,6 +40,9 @@ class AutoModel:
             fp16=fp16,
             compile=compile,
             compile_backend=compile_backend,
+            tile=tile,
+            tile_pad=tile_pad,
+            pad_img=pad_img,
         )
 
     @staticmethod
@@ -43,15 +52,21 @@ class AutoModel:
         fp16: bool = True,
         compile: bool = False,
         compile_backend: Optional[str] = None,
+        tile: Optional[Tuple[int, int]] = (64, 64),
+        tile_pad: int = 8,
+        pad_img: Optional[Tuple[int, int]] = None,
     ) -> Any:
         """
         Get a model instance from a config.
 
         :param config: The config object. It should be registered in CONFIG_REGISTRY.
-        :param device: torch.device
-        :param fp16: Whether to use fp16 precision.
-        :param compile: Whether to compile the model.
-        :param compile_backend: The backend to use for compiling the model.
+        :param device: inference device
+        :param fp16: use fp16 precision or not
+        :param compile: use torch.compile or not
+        :param compile_backend: backend of torch.compile
+        :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable
+        :param tile_pad: The padding size for each tile
+        :param pad_img: The size for the padded image, pad[0] is width, pad[1] is height, None for auto calculate
         :return:
         """
 
@@ -62,6 +77,9 @@ class AutoModel:
             fp16=fp16,
             compile=compile,
             compile_backend=compile_backend,
+            tile=tile,
+            tile_pad=tile_pad,
+            pad_img=pad_img,
         )
 
         return model

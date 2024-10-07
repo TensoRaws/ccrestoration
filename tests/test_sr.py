@@ -27,7 +27,7 @@ def test_sr_fp16() -> None:
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
 
     cfg: BaseConfig = AutoConfig.from_pretrained(k)
-    model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=True, device=get_device())
+    model: SRBaseModel = AutoModel.from_config(config=cfg, fp16=True, device=get_device(), tile=None)
 
     img2 = model.inference_image(img1)
 
@@ -43,7 +43,7 @@ def test_sr_compile() -> None:
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
 
     model: SRBaseModel = AutoModel.from_pretrained(
-        pretrained_model_name=k, fp16=True, compile=True, device=get_device()
+        pretrained_model_name=k, fp16=True, compile=True, device=get_device(), tile=None
     )
 
     img2 = model.inference_image(img1)

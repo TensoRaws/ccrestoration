@@ -6,6 +6,7 @@ import torch
 from torchvision import transforms
 
 from ccrestoration.cache_models import load_file_from_url
+from ccrestoration.model.tile import tile_sr
 from ccrestoration.type import BaseConfig, BaseModelInterface
 
 
@@ -31,7 +32,18 @@ class SRBaseModel(BaseModelInterface):
 
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
-        return self.model(img)
+        if self.tile is None:
+            return self.model(img)
+
+        # tile processing
+        return tile_sr(
+            model=self.model,
+            scale=self.config.scale,
+            img=img,
+            tile=self.tile,
+            tile_pad=self.tile_pad,
+            pad_img=self.pad_img,
+        )
 
     @torch.inference_mode()  # type: ignore
     def inference_image(self, img: np.ndarray) -> np.ndarray:

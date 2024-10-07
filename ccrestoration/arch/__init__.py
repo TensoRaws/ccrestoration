@@ -1,4 +1,4 @@
-from ccrestoration.utils.registry import Registry
+from ccrestoration.util.registry import Registry
 
 ARCH_REGISTRY: Registry = Registry("ARCH")
 

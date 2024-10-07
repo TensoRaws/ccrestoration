@@ -39,7 +39,7 @@ license = "MIT"
 name = "ccrestoration"
 readme = "README.md"
 repository = "https://github.com/TensoRaws/ccrestoration"
-version = "0.0.4"
+version = "0.0.5"
 
 # Requirements
 [tool.poetry.dependencies]
