@@ -25,7 +25,7 @@ def tile_sr(
     model: torch.nn.Module,
     scale: int,
     img: torch.Tensor,
-    tile: Tuple[int, int] = (64, 64),
+    tile: Tuple[int, int] = (128, 128),
     tile_pad: int = 8,
     pad_img: Optional[Tuple[int, int]] = None,
 ) -> torch.Tensor:
