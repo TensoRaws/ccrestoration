@@ -1,6 +1,8 @@
+import os
 import sys
 
 import cv2
+import pytest
 import torch
 
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
@@ -11,6 +13,7 @@ from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, g
 DEVICE = get_device() if sys.platform != "darwin" else torch.device("cpu")
 
 
+@pytest.mark.skipif(os.environ.get("GITHUB_ACTIONS") != "true", reason="Skip on local test")
 class Test_IconVSR:
     def test_official(self) -> None:
         img = load_image()
