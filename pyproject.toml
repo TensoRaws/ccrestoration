@@ -13,7 +13,8 @@ exclude_also = [
 
 [tool.coverage.run]
 omit = [
-  "ccrestoration/arch/*"
+  "ccrestoration/arch/*",
+  "ccrestoration/vs/*"
 ]
 
 [tool.mypy]
