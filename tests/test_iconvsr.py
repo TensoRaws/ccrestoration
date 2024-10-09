@@ -13,8 +13,14 @@ from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, g
 DEVICE = get_device() if sys.platform != "darwin" else torch.device("cpu")
 
 
-@pytest.mark.skipif(os.environ.get("GITHUB_ACTIONS") != "true", reason="Skip on local test")
 class Test_IconVSR:
+    def test_load(self) -> None:
+        for k in [ConfigType.IconVSR_REDS_4x, ConfigType.IconVSR_Vimeo90K_BD_4x, ConfigType.IconVSR_Vimeo90K_BI_4x]:
+            cfg: BaseConfig = AutoConfig.from_pretrained(k)
+            model: VSRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=DEVICE)
+            assert model is not None
+
+    @pytest.mark.skipif(os.environ.get("GITHUB_ACTIONS") != "true", reason="Skip on local test")
     def test_official(self) -> None:
         img = load_image()
         imgList = [img, img, img, img, img, img, img]
