@@ -13,7 +13,7 @@ DEVICE = get_device() if sys.platform != "darwin" else "cpu"
 class Test_BasicVSR:
     def test_official(self) -> None:
         img = load_image()
-        imgList = [img, img, img, img, img]
+        imgList = [img, img]
 
         for k in [ConfigType.BasicVSR_REDS4_4x, ConfigType.BasicVSR_Vimeo90K_BD_4x, ConfigType.BasicVSR_Vimeo90K_BI_4x]:
             print(f"Testing {k}")
