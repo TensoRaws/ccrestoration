@@ -8,7 +8,7 @@ from ccrestoration.arch.arch_util import DCNv2Pack, ResidualBlockNoBN, make_laye
 from ccrestoration.type import ArchType
 
 
-@ARCH_REGISTRY.register(ArchType.EDVR)
+@ARCH_REGISTRY.register(name=ArchType.EDVR)
 class EDVR(nn.Module):
     """EDVR network structure for video super-resolution.
 
@@ -154,7 +154,7 @@ class EDVR(nn.Module):
         return out
 
 
-@ARCH_REGISTRY.register(ArchType.EDVRFEATUREEXTACTOR)
+@ARCH_REGISTRY.register(name=ArchType.EDVRFEATUREEXTACTOR)
 class EDVRFeatureExtractor(nn.Module):
     """EDVR feature extractor used in IconVSR.
 
@@ -163,7 +163,7 @@ class EDVRFeatureExtractor(nn.Module):
         num_feat (int): Number of feature channels
     """
 
-    def __init__(self, num_input_frame, num_feat):
+    def __init__(self, num_input_frame: int = 5, num_feat: int = 64):
         super(EDVRFeatureExtractor, self).__init__()
 
         self.center_frame_idx = num_input_frame // 2

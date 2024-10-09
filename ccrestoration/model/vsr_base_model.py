@@ -14,6 +14,14 @@ class VSRBaseModel(SRBaseModel):
         raise NotImplementedError("VSR model has no inference_image method")
 
     @torch.inference_mode()  # type: ignore
+    def inference(self, img: torch.Tensor) -> torch.Tensor:
+        b, n, c, h, w = img.shape
+        if b != 1:
+            raise ValueError("Batch size must be 1 when VSR inference")
+
+        return self.model(img)
+
+    @torch.inference_mode()  # type: ignore
     def inference_image_list(self, img_list: List[np.ndarray]) -> List[np.ndarray]:
         new_img_list = []
         for img in img_list:

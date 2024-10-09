@@ -53,3 +53,5 @@ class ConfigType(str, Enum):
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
     # ------------------------------------- Video Super-Resolution -----------------------------------------------------
+
+    EDVR_M_SR_REDS_official_4x = "EDVR_M_SR_REDS_official_4x.pth"

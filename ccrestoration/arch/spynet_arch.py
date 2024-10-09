@@ -7,9 +7,10 @@ from torch.nn import functional as F
 
 from ccrestoration.arch import ARCH_REGISTRY
 from ccrestoration.arch.arch_util import flow_warp
+from ccrestoration.type import ArchType
 
 
-@ARCH_REGISTRY.register()
+@ARCH_REGISTRY.register(name=ArchType.SPYNET)
 class SpyNet(nn.Module):
     """SpyNet architecture.
 

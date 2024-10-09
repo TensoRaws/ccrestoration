@@ -8,7 +8,7 @@ from ccrestoration.arch.arch_util import ResidualBlockNoBN, flow_warp, make_laye
 from ccrestoration.type import ArchType
 
 
-@ARCH_REGISTRY.register(ArchType.BASICVSR)
+@ARCH_REGISTRY.register(name=ArchType.BASICVSR)
 class BasicVSR(nn.Module):
     """A recurrent network for video SR. Now only x4 is supported.
 
