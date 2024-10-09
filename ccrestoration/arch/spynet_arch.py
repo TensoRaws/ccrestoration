@@ -12,10 +12,8 @@ from ccrestoration.type import ArchType
 
 @ARCH_REGISTRY.register(name=ArchType.SPYNET)
 class SpyNet(nn.Module):
-    """SpyNet architecture.
-
-    Args:
-        load_path (str): path for pretrained SpyNet. Default: None.
+    """
+    SpyNet architecture.
     """
 
     def __init__(self):

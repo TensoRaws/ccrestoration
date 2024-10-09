@@ -2,6 +2,7 @@ from enum import Enum
 
 
 # Enum for config type, {ModelType.model}_{config_name}_{scale}x.pth
+# For the Auxiliary Network, {ModelType.model}_{config_name}.pth
 class ConfigType(str, Enum):
     # ------------------------------------- Single Image Super-Resolution ----------------------------------------------
 
@@ -52,12 +53,14 @@ class ConfigType(str, Enum):
 
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
+    # SpyNet
+    SpyNet_spynet_sintel_final = "SpyNet_spynet_sintel_final.pth"
+
     # ------------------------------------- Video Super-Resolution -----------------------------------------------------
 
+    # EDVR
     EDVR_M_SR_REDS_official_4x = "EDVR_M_SR_REDS_official_4x.pth"
     EDVR_M_woTSA_SR_REDS_official_4x = "EDVR_M_woTSA_SR_REDS_official_4x.pth"
-    EDVR_L_SR_Vimeo90K_official_4x = "EDVR_L_SR_Vimeo90K_official_4x.pth"
-    EDVR_L_SR_REDS_official_4x = "EDVR_L_SR_REDS_official_4x.pth"
-    EDVR_L_SRblur_REDS_official_4x = "EDVR_L_SRblur_REDS_official_4x.pth"
-    EDVR_L_deblur_REDS_official_4x = "EDVR_L_deblur_REDS_official_4x.pth"
-    EDVR_L_deblurcomp_REDS_official_4x = "EDVR_L_deblurcomp_REDS_official_4x.pth"
+
+    # BasicVSR
+    BasicVSR_REDS4_4x = "BasicVSR_REDS4_4x.pth"
