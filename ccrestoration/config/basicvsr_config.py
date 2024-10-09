@@ -16,8 +16,8 @@ class BasicVSRConfig(BaseConfig):
 
 BasicVSRConfigs = [
     BasicVSRConfig(
-        name=ConfigType.BasicVSR_REDS4_4x,
-        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/BasicVSR_REDS4_4x.pth",
+        name=ConfigType.BasicVSR_REDS_4x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/BasicVSR_REDS_4x.pth",
         hash="543c826113a9efdc971572320a9e259833fc230f843d94f7ef7270c92b5ea4dc",
     ),
     BasicVSRConfig(

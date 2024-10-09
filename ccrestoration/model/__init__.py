@@ -9,8 +9,8 @@ from ccrestoration.model.realesrgan_model import RealESRGANModel  # noqa
 from ccrestoration.model.realcugan_model import RealCUGANModel  # noqa
 from ccrestoration.model.edsr_model import EDSRModel  # noqa
 from ccrestoration.model.swinir_model import SwinIRModel  # noqa
-from ccrestoration.model.edvr_model import EDVRModel  # noqa
+from ccrestoration.model.edvr_model import EDVRModel, EDVRFeatureExtractorModel  # noqa
 from ccrestoration.model.tile import tile_sr, tile_vsr  # noqa
 from ccrestoration.model.spynet_model import SpyNetModel  # noqa
 from ccrestoration.model.basicvsr_model import BasicVSRModel  # noqa
-from ccrestoration.model.edvr_feature_extractor_model import EDVRFeatureExtractorModel  # noqa
+from ccrestoration.model.iconvsr_model import IconVSRModel  # noqa

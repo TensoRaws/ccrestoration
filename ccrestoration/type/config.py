@@ -67,6 +67,11 @@ class ConfigType(str, Enum):
     EDVR_M_woTSA_SR_REDS_official_4x = "EDVR_M_woTSA_SR_REDS_official_4x.pth"
 
     # BasicVSR
-    BasicVSR_REDS4_4x = "BasicVSR_REDS4_4x.pth"
+    BasicVSR_REDS_4x = "BasicVSR_REDS_4x.pth"
     BasicVSR_Vimeo90K_BD_4x = "BasicVSR_Vimeo90K_BD_4x.pth"
     BasicVSR_Vimeo90K_BI_4x = "BasicVSR_Vimeo90K_BI_4x.pth"
+
+    # IconVSR
+    IconVSR_REDS_4x = "IconVSR_REDS_4x.pth"
+    IconVSR_Vimeo90K_BD_4x = "IconVSR_Vimeo90K_BD_4x.pth"
+    IconVSR_Vimeo90K_BI_4x = "IconVSR_Vimeo90K_BI_4x.pth"

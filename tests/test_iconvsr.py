@@ -11,12 +11,12 @@ from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, g
 DEVICE = get_device() if sys.platform != "darwin" else torch.device("cpu")
 
 
-class Test_BasicVSR:
+class Test_IconVSR:
     def test_official(self) -> None:
         img = load_image()
-        imgList = [img, img]
+        imgList = [img, img, img, img, img, img, img]
 
-        for k in [ConfigType.BasicVSR_REDS_4x, ConfigType.BasicVSR_Vimeo90K_BD_4x, ConfigType.BasicVSR_Vimeo90K_BI_4x]:
+        for k in [ConfigType.IconVSR_REDS_4x, ConfigType.IconVSR_Vimeo90K_BD_4x, ConfigType.IconVSR_Vimeo90K_BI_4x]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
             model: VSRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=DEVICE)
