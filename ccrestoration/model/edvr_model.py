@@ -24,7 +24,7 @@ class EDVRModel(VSRBaseModel):
             num_in_ch=cfg.num_in_ch,
             num_out_ch=cfg.num_out_ch,
             num_feat=cfg.num_feat,
-            num_frame=cfg.num_frame,
+            num_frame=cfg.length,
             deformable_groups=cfg.deformable_groups,
             num_extract_block=cfg.num_extract_block,
             num_reconstruct_block=cfg.num_reconstruct_block,

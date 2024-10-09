@@ -7,6 +7,7 @@ from torchvision import transforms
 
 from ccrestoration.model.sr_base_model import SRBaseModel
 from ccrestoration.model.tile import tile_vsr
+from ccrestoration.type import BaseConfig
 
 
 class VSRBaseModel(SRBaseModel):
@@ -16,13 +17,15 @@ class VSRBaseModel(SRBaseModel):
 
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
+        cfg: BaseConfig = self.config
+
         if self.tile is None:
             return self.model(img)
 
         # tile processing
         return tile_vsr(
             model=self.model,
-            scale=self.config.scale,
+            scale=cfg.scale,
             img=img,
             one_frame_out=self.one_frame_out,
             tile=self.tile,
@@ -75,11 +78,13 @@ class VSRBaseModel(SRBaseModel):
 
         from ccrestoration.vs import inference_vsr, inference_vsr_one_frame_out
 
+        cfg: BaseConfig = self.config
+
         if self.one_frame_out:
             return inference_vsr_one_frame_out(
-                inference=self.inference, clip=clip, scale=self.config.scale, length=7, device=self.device
+                inference=self.inference, clip=clip, scale=cfg.scale, length=cfg.length, device=self.device
             )
         else:
             return inference_vsr(
-                inference=self.inference, clip=clip, scale=self.config.scale, length=7, device=self.device
+                inference=self.inference, clip=clip, scale=cfg.scale, length=cfg.length, device=self.device
             )

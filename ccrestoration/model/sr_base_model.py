@@ -32,13 +32,15 @@ class SRBaseModel(BaseModelInterface):
 
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
+        cfg: BaseConfig = self.config
+
         if self.tile is None:
             return self.model(img)
 
         # tile processing
         return tile_sr(
             model=self.model,
-            scale=self.config.scale,
+            scale=cfg.scale,
             img=img,
             tile=self.tile,
             tile_pad=self.tile_pad,
@@ -74,7 +76,8 @@ class SRBaseModel(BaseModelInterface):
         :param clip: vs.VideoNode
         :return:
         """
+        cfg: BaseConfig = self.config
 
         from ccrestoration.vs import inference_sr
 
-        return inference_sr(inference=self.inference, clip=clip, scale=self.config.scale, device=self.device)
+        return inference_sr(inference=self.inference, clip=clip, scale=cfg.scale, device=self.device)

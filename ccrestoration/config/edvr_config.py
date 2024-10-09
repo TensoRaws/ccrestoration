@@ -8,10 +8,10 @@ class EDVRConfig(BaseConfig):
     arch: Union[ArchType, str] = ArchType.EDVR
     model: Union[ModelType, str] = ModelType.EDVR
     scale: int = 4
+    length: int = 5
     num_in_ch: int = 3
     num_out_ch: int = 3
     num_feat: int = 64
-    num_frame: int = 5
     deformable_groups: int = 8
     num_extract_block: int = 5
     num_reconstruct_block: int = 10
