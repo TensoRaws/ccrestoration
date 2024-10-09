@@ -64,3 +64,5 @@ class ConfigType(str, Enum):
 
     # BasicVSR
     BasicVSR_REDS4_4x = "BasicVSR_REDS4_4x.pth"
+    BasicVSR_Vimeo90K_BD_4x = "BasicVSR_Vimeo90K_BD_4x.pth"
+    BasicVSR_Vimeo90K_BI_4x = "BasicVSR_Vimeo90K_BI_4x.pth"

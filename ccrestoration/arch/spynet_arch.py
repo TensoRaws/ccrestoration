@@ -20,8 +20,8 @@ class SpyNet(nn.Module):
         super(SpyNet, self).__init__()
         self.basic_module = nn.ModuleList([BasicModule() for _ in range(6)])
 
-        self.register_buffer("mean", torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
-        self.register_buffer("std", torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
+        # self.register_buffer("mean", torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
+        # self.register_buffer("std", torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
 
     def preprocess(self, tensor_input):
         tensor_output = (tensor_input - self.mean) / self.std

@@ -14,4 +14,4 @@ class BaseConfig(BaseModel):
     arch: Union[ArchType, str]
     model: Union[ModelType, str]
     scale: int = 2
-    length: int = 5
+    length: int = 7
