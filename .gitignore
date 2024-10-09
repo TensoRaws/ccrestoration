@@ -165,7 +165,8 @@ cython_debug/
 /ccrestoration/cache_models/*.pt
 /ccrestoration/cache_models/*.pkl
 
-/assets/*_out.jpg
+*_out.jpg
+*_out.png
 
 *.mp4
 *.mkv

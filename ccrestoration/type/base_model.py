@@ -28,10 +28,14 @@ class BaseModelInterface(ABC):
         fp16: bool = True,
         compile: bool = False,
         compile_backend: Optional[str] = None,
-        tile: Optional[Tuple[int, int]] = (64, 64),
+        tile: Optional[Tuple[int, int]] = (128, 128),
         tile_pad: int = 8,
         pad_img: Optional[Tuple[int, int]] = None,
     ) -> None:
+        # extra config
+        self.one_frame_out: bool = False  # for vsr model type
+
+        # ---
         self.config = config
         self.device: Optional[torch.device] = device
         self.fp16: bool = fp16
