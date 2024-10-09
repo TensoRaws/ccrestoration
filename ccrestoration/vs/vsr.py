@@ -6,7 +6,7 @@ import vapoursynth as vs
 from ccrestoration.vs.convert import frame_to_tensor, tensor_to_frame
 
 
-def inference_vsr_multi_frame(
+def inference_vsr(
     inference: Callable[[torch.Tensor], torch.Tensor],
     clip: vs.VideoNode,
     scale: Union[float, int, Any],
@@ -67,7 +67,7 @@ def inference_vsr_multi_frame(
     return new_clip.std.ModifyFrame([clip, new_clip], _inference)
 
 
-def inference_vsr(
+def inference_vsr_one_frame_out(
     inference: Callable[[torch.Tensor], torch.Tensor],
     clip: vs.VideoNode,
     scale: Union[float, int, Any],

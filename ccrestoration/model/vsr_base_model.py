@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 import cv2
 import numpy as np
@@ -6,6 +6,7 @@ import torch
 from torchvision import transforms
 
 from ccrestoration.model.sr_base_model import SRBaseModel
+from ccrestoration.model.tile import tile_vsr
 
 
 class VSRBaseModel(SRBaseModel):
@@ -15,11 +16,19 @@ class VSRBaseModel(SRBaseModel):
 
     @torch.inference_mode()  # type: ignore
     def inference(self, img: torch.Tensor) -> torch.Tensor:
-        b, n, c, h, w = img.shape
-        if b != 1:
-            raise ValueError("Batch size must be 1 when VSR inference")
+        if self.tile is None:
+            return self.model(img)
 
-        return self.model(img)
+        # tile processing
+        return tile_vsr(
+            model=self.model,
+            scale=self.config.scale,
+            img=img,
+            one_frame_out=self.one_frame_out,
+            tile=self.tile,
+            tile_pad=self.tile_pad,
+            pad_img=self.pad_img,
+        )
 
     @torch.inference_mode()  # type: ignore
     def inference_image_list(self, img_list: List[np.ndarray]) -> List[np.ndarray]:
@@ -54,3 +63,23 @@ class VSRBaseModel(SRBaseModel):
             return [img]
         else:
             raise ValueError(f"Unexpected output shape: {out.shape}")
+
+    @torch.inference_mode()  # type: ignore
+    def inference_video(self, clip: Any) -> Any:
+        """
+        Inference the video with the model, the clip should be a vapoursynth clip
+
+        :param clip: vs.VideoNode
+        :return:
+        """
+
+        from ccrestoration.vs import inference_vsr, inference_vsr_one_frame_out
+
+        if self.one_frame_out:
+            return inference_vsr_one_frame_out(
+                inference=self.inference, clip=clip, scale=self.config.scale, length=7, device=self.device
+            )
+        else:
+            return inference_vsr(
+                inference=self.inference, clip=clip, scale=self.config.scale, length=7, device=self.device
+            )

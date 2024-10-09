@@ -67,6 +67,8 @@ class BaseModelInterface(ABC):
             except Exception as e:
                 print(f"Error: {e}, compile is not supported on this model.")
 
+        self.one_frame_out: bool = False  # for vsr model type
+
     def get_state_dict(self) -> Any:
         raise NotImplementedError
 

@@ -93,10 +93,13 @@ class EDVR(nn.Module):
     def forward(self, x):
         b, t, c, h, w = x.size()
         # auto padding
-        if self.hr_in:
-            assert h % 16 == 0 and w % 16 == 0, "The height and width must be multiple of 16."
-        else:
-            assert h % 4 == 0 and w % 4 == 0, "The height and width must be multiple of 4."
+        pad_h = 16 - h % 16 if h % 16 != 0 else 0
+        pad_w = 16 - w % 16 if w % 16 != 0 else 0
+        x = F.pad(x, (0, pad_w, 0, pad_h, 0, 0), "replicate")
+        # if self.hr_in:
+        #     assert h % 16 == 0 and w % 16 == 0, "The height and width must be multiple of 16."
+        # else:
+        #     assert h % 4 == 0 and w % 4 == 0, "The height and width must be multiple of 4."
 
         x_center = x[:, self.center_frame_idx, :, :, :].contiguous()
 
@@ -151,6 +154,9 @@ class EDVR(nn.Module):
         else:
             base = F.interpolate(x_center, scale_factor=4, mode="bilinear", align_corners=False)
         out += base
+
+        out = out.unsqueeze(0)
+        out = out[:, :, :, : h * 4, : w * 4]
         return out
 
 
