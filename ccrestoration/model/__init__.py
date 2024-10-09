@@ -10,3 +10,4 @@ from ccrestoration.model.realcugan_model import RealCUGANModel  # noqa
 from ccrestoration.model.edsr_model import EDSRModel  # noqa
 from ccrestoration.model.swinir_model import SwinIRModel  # noqa
 from ccrestoration.model.edvr_model import EDVRModel  # noqa
+from ccrestoration.model.tile import tile_sr, tile_vsr  # noqa
