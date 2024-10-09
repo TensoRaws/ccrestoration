@@ -9,3 +9,4 @@ from ccrestoration.config.swinir_config import SwinIRConfig  # noqa
 from ccrestoration.config.edvr_config import EDVRConfig  # noqa
 from ccrestoration.config.spynet_config import SpyNetConfig  # noqa
 from ccrestoration.config.basicvsr_config import BasicVSRConfig  # noqa
+from ccrestoration.config.edvr_feature_extractor_config import EDVRFeatureExtractorConfig  # noqa

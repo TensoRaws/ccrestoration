@@ -56,6 +56,10 @@ class ConfigType(str, Enum):
     # SpyNet
     SpyNet_spynet_sintel_final = "SpyNet_spynet_sintel_final.pth"
 
+    # EDVR Feature Extractor
+    EDVRFeatureExtractor_REDS_pretrained_for_IconVSR = "EDVRFeatureExtractor_REDS_pretrained_for_IconVSR.pth"
+    EDVRFeatureExtractor_Vimeo90K_pretrained_for_IconVSR = "EDVRFeatureExtractor_Vimeo90K_pretrained_for_IconVSR.pth"
+
     # ------------------------------------- Video Super-Resolution -----------------------------------------------------
 
     # EDVR

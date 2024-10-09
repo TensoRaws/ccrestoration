@@ -1,13 +1,14 @@
 import sys
 
 import cv2
+import torch
 
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.model import VSRBaseModel
 
 from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
 
-DEVICE = get_device() if sys.platform != "darwin" else "cpu"
+DEVICE = get_device() if sys.platform != "darwin" else torch.device("cpu")
 
 
 class Test_BasicVSR:
@@ -22,6 +23,8 @@ class Test_BasicVSR:
             print(model.device)
 
             imgOutList = model.inference_image_list(imgList)
+
+            assert len(imgOutList) == len(imgList)
 
             for i, v in enumerate(imgOutList):
                 cv2.imwrite(str(ASSETS_PATH / f"test_{k}_{i}_out.jpg"), v)

@@ -19,10 +19,8 @@ class BasicVSRModel(VSRBaseModel):
         elif "params" in state_dict:
             state_dict = state_dict["params"]
 
-        spynet_config = CONFIG_REGISTRY.get(cfg.spynet)
-
         spynet = SpyNetModel(
-            config=spynet_config,
+            config=CONFIG_REGISTRY.get(cfg.spynet),
             device=self.device,
             fp16=self.fp16,
             compile=self.compile,
