@@ -15,7 +15,7 @@ class Test_EDVR:
         img = load_image()
         imgList = [img, img, img, img, img]
 
-        for k in [ConfigType.EDVR_M_SR_REDS_official_4x]:
+        for k in [ConfigType.EDVR_M_SR_REDS_official_4x, ConfigType.EDVR_M_woTSA_SR_REDS_official_4x]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)
             model: VSRBaseModel = AutoModel.from_config(config=cfg, fp16=False, device=DEVICE)

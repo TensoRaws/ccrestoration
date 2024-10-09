@@ -1,7 +1,5 @@
 import sys
 
-import torch
-
 sys.path.append(".")
 
 import vapoursynth as vs
@@ -18,9 +16,7 @@ from ccrestoration import AutoModel, BaseModelInterface, ConfigType
 # clip = core.resize.Bicubic(clip=clip, matrix_in_s="709", format=vs.RGBS)
 
 model: BaseModelInterface = AutoModel.from_pretrained(
-    pretrained_model_name=ConfigType.EDVR_M_SR_REDS_official_4x,
-    fp16=False,
-    device=torch.device("cpu"),
+    pretrained_model_name=ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
 )
 
 clip = core.bs.VideoSource(source="s.mp4")

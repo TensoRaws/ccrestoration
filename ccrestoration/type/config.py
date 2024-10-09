@@ -55,3 +55,9 @@ class ConfigType(str, Enum):
     # ------------------------------------- Video Super-Resolution -----------------------------------------------------
 
     EDVR_M_SR_REDS_official_4x = "EDVR_M_SR_REDS_official_4x.pth"
+    EDVR_M_woTSA_SR_REDS_official_4x = "EDVR_M_woTSA_SR_REDS_official_4x.pth"
+    EDVR_L_SR_Vimeo90K_official_4x = "EDVR_L_SR_Vimeo90K_official_4x.pth"
+    EDVR_L_SR_REDS_official_4x = "EDVR_L_SR_REDS_official_4x.pth"
+    EDVR_L_SRblur_REDS_official_4x = "EDVR_L_SRblur_REDS_official_4x.pth"
+    EDVR_L_deblur_REDS_official_4x = "EDVR_L_deblur_REDS_official_4x.pth"
+    EDVR_L_deblurcomp_REDS_official_4x = "EDVR_L_deblurcomp_REDS_official_4x.pth"
