@@ -50,9 +50,12 @@ def inference_vsr(
 
             img = []
             for i in range(length):
-                if n + i >= clip.num_frames:
+                index = n + i
+                if index >= clip.num_frames:
                     img.append(frame_to_tensor(clip.get_frame(clip.num_frames - 1), device=device).unsqueeze(0))
-                img.append(frame_to_tensor(clip.get_frame(n + i), device=device).unsqueeze(0))
+
+                else:
+                    img.append(frame_to_tensor(clip.get_frame(n + i), device=device).unsqueeze(0))
 
             img = torch.stack(img, dim=1)
 
