@@ -34,6 +34,7 @@ EDVRConfigs = [
         url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/EDVR_M_woTSA_SR_REDS_official_4x.pth",
         hash="1edf645c117ba34ea1c7fcf5506079cf9dd361c2bd26b6f3cad9197a0ba7adbf",
         scale=4,
+        with_tsa=False,
     ),
 ]
 
