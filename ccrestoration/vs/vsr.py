@@ -59,7 +59,7 @@ def inference_vsr(
             output = inference(img)
 
             for i in range(output.shape[0]):
-                cache[n + i] = output[i, :, :, :]
+                cache[n + i] = output[0, i, :, :, :]
 
         return _tensor_to_frame(cache[n], f[1].copy())
 
