@@ -32,6 +32,10 @@ class BaseModelInterface(ABC):
         tile_pad: int = 8,
         pad_img: Optional[Tuple[int, int]] = None,
     ) -> None:
+        # extra config
+        self.one_frame_out: bool = False  # for vsr model type
+
+        # ---
         self.config = config
         self.device: Optional[torch.device] = device
         self.fp16: bool = fp16
@@ -66,8 +70,6 @@ class BaseModelInterface(ABC):
                 self.model = torch.compile(self.model, backend=self.compile_backend)
             except Exception as e:
                 print(f"Error: {e}, compile is not supported on this model.")
-
-        self.one_frame_out: bool = False  # for vsr model type
 
     def get_state_dict(self) -> Any:
         raise NotImplementedError

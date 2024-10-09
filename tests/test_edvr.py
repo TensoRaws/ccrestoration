@@ -24,5 +24,6 @@ class Test_EDVR:
             img2 = model.inference_image_list(imgList)
             cv2.imwrite(str(ASSETS_PATH / f"test_{k}_out.jpg"), img2[0])
 
+            assert len(img2) == 1
             assert calculate_image_similarity(img, img2[0])
             assert compare_image_size(img, img2[0], cfg.scale)
