@@ -51,7 +51,7 @@ class VSRBaseModel(SRBaseModel):
 
             for i in range(out.shape[1]):
                 img = out[0, i, :, :, :]
-                img = img.squeeze(0).permute(1, 2, 0).cpu().numpy()
+                img = img.permute(1, 2, 0).cpu().numpy()
                 img = (img * 255).clip(0, 255).astype("uint8")
                 img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
                 res_img_list.append(img)
