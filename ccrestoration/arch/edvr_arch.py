@@ -327,6 +327,7 @@ class EDVR(nn.Module):
 
     def forward(self, x):
         b, t, c, h, w = x.size()
+        # auto padding
         if self.hr_in:
             assert h % 16 == 0 and w % 16 == 0, "The height and width must be multiple of 16."
         else:
@@ -386,3 +387,51 @@ class EDVR(nn.Module):
             base = F.interpolate(x_center, scale_factor=4, mode="bilinear", align_corners=False)
         out += base
         return out
+
+
+if __name__ == "__main__":
+    # edvr
+    import cv2
+    from torchvision import transforms
+
+    from tests.util import load_image
+
+    device = torch.device("cpu")
+    model = EDVR()
+    state_dict = torch.load("/Users/tohru/Downloads/EDVR_M_x4_SR_REDS_official-32075921.pth", weights_only=True)
+    scale = 4
+
+    if "params_ema" in state_dict:
+        state_dict = state_dict["params_ema"]
+    elif "params" in state_dict:
+        state_dict = state_dict["params"]
+
+    model.load_state_dict(state_dict)
+    model = model.eval().to(device)
+
+    img = load_image()
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = transforms.ToTensor()(img).unsqueeze(0).to(device)
+    print(img.shape)
+    # padding to h % 16 == 0 and w % 16 == 0
+    _, _, h, w = img.size()
+    pad_h = 16 - h % 16 if h % 16 != 0 else 0
+    pad_w = 16 - w % 16 if w % 16 != 0 else 0
+    img = F.pad(img, (0, pad_w, 0, pad_h), mode="reflect")
+    print(img.shape)
+
+    # b, n, c, h, w
+    imgTensorStack = torch.stack([img, img, img, img, img], dim=1)
+
+    print(imgTensorStack.shape)
+    with torch.no_grad():
+        img = model(imgTensorStack)
+    print(img.shape)
+
+    # cut off padding
+    # out: 1, 3, 768, 1408; want 1, 3, 768, 1368
+    img = img[:, :, : h * scale, : w * scale]
+    img = img.squeeze(0).permute(1, 2, 0).cpu().numpy()
+    img = (img * 255).clip(0, 255).astype("uint8")
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    cv2.imwrite("edvr_frame_out.png", img)

@@ -326,6 +326,8 @@ class ModulatedDeformConv(nn.Module):
         if self.bias is not None:
             self.bias.data.zero_()
 
+    # def forward(self, x):
+
 
 class ModulatedDeformConvPack(ModulatedDeformConv):
     """A ModulatedDeformable Conv Encapsulation that acts as normal Conv layers.
@@ -364,6 +366,8 @@ class ModulatedDeformConvPack(ModulatedDeformConv):
         if hasattr(self, "conv_offset"):
             self.conv_offset.weight.data.zero_()
             self.conv_offset.bias.data.zero_()
+
+    # def forward(self, x):
 
 
 class DCNv2Pack(ModulatedDeformConvPack):
