@@ -3,7 +3,7 @@ from typing import Any
 from ccrestoration.arch import EDSR
 from ccrestoration.config import EDSRConfig
 from ccrestoration.model import MODEL_REGISTRY
-from ccrestoration.model.sr_model import SRBaseModel
+from ccrestoration.model.sr_base_model import SRBaseModel
 from ccrestoration.type import ModelType
 
 

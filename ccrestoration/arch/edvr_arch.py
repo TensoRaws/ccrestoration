@@ -5,6 +5,220 @@ from torch.nn import functional as F
 
 from ccrestoration.arch import ARCH_REGISTRY
 from ccrestoration.arch.arch_util import DCNv2Pack, ResidualBlockNoBN, make_layer
+from ccrestoration.type import ArchType
+
+
+@ARCH_REGISTRY.register(ArchType.EDVR)
+class EDVR(nn.Module):
+    """EDVR network structure for video super-resolution.
+
+    Now only support X4 upsampling factor.
+
+    ``Paper: EDVR: Video Restoration with Enhanced Deformable Convolutional Networks``
+
+    Args:
+        num_in_ch (int): Channel number of input image. Default: 3.
+        num_out_ch (int): Channel number of output image. Default: 3.
+        num_feat (int): Channel number of intermediate features. Default: 64.
+        num_frame (int): Number of input frames. Default: 5.
+        deformable_groups (int): Deformable groups. Defaults: 8.
+        num_extract_block (int): Number of blocks for feature extraction.
+            Default: 5.
+        num_reconstruct_block (int): Number of blocks for reconstruction.
+            Default: 10.
+        center_frame_idx (int): The index of center frame. Frame counting from
+            0. Default: Middle of input frames.
+        hr_in (bool): Whether the input has high resolution. Default: False.
+        with_predeblur (bool): Whether has predeblur module.
+            Default: False.
+        with_tsa (bool): Whether has TSA module. Default: True.
+    """
+
+    def __init__(
+        self,
+        num_in_ch=3,
+        num_out_ch=3,
+        num_feat=64,
+        num_frame=5,
+        deformable_groups=8,
+        num_extract_block=5,
+        num_reconstruct_block=10,
+        center_frame_idx=None,
+        hr_in=False,
+        with_predeblur=False,
+        with_tsa=True,
+    ):
+        super(EDVR, self).__init__()
+        if center_frame_idx is None:
+            self.center_frame_idx = num_frame // 2
+        else:
+            self.center_frame_idx = center_frame_idx
+        self.hr_in = hr_in
+        self.with_predeblur = with_predeblur
+        self.with_tsa = with_tsa
+
+        # extract features for each frame
+        if self.with_predeblur:
+            self.predeblur = PredeblurModule(num_feat=num_feat, hr_in=self.hr_in)
+            self.conv_1x1 = nn.Conv2d(num_feat, num_feat, 1, 1)
+        else:
+            self.conv_first = nn.Conv2d(num_in_ch, num_feat, 3, 1, 1)
+
+        # extract pyramid features
+        self.feature_extraction = make_layer(ResidualBlockNoBN, num_extract_block, num_feat=num_feat)
+        self.conv_l2_1 = nn.Conv2d(num_feat, num_feat, 3, 2, 1)
+        self.conv_l2_2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
+        self.conv_l3_1 = nn.Conv2d(num_feat, num_feat, 3, 2, 1)
+        self.conv_l3_2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
+
+        # pcd and tsa module
+        self.pcd_align = PCDAlignment(num_feat=num_feat, deformable_groups=deformable_groups)
+        if self.with_tsa:
+            self.fusion = TSAFusion(num_feat=num_feat, num_frame=num_frame, center_frame_idx=self.center_frame_idx)
+        else:
+            self.fusion = nn.Conv2d(num_frame * num_feat, num_feat, 1, 1)
+
+        # reconstruction
+        self.reconstruction = make_layer(ResidualBlockNoBN, num_reconstruct_block, num_feat=num_feat)
+        # upsample
+        self.upconv1 = nn.Conv2d(num_feat, num_feat * 4, 3, 1, 1)
+        self.upconv2 = nn.Conv2d(num_feat, 64 * 4, 3, 1, 1)
+        self.pixel_shuffle = nn.PixelShuffle(2)
+        self.conv_hr = nn.Conv2d(64, 64, 3, 1, 1)
+        self.conv_last = nn.Conv2d(64, 3, 3, 1, 1)
+
+        # activation function
+        self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
+
+    def forward(self, x):
+        b, t, c, h, w = x.size()
+        # auto padding
+        if self.hr_in:
+            assert h % 16 == 0 and w % 16 == 0, "The height and width must be multiple of 16."
+        else:
+            assert h % 4 == 0 and w % 4 == 0, "The height and width must be multiple of 4."
+
+        x_center = x[:, self.center_frame_idx, :, :, :].contiguous()
+
+        # extract features for each frame
+        # L1
+        if self.with_predeblur:
+            feat_l1 = self.conv_1x1(self.predeblur(x.view(-1, c, h, w)))
+            if self.hr_in:
+                h, w = h // 4, w // 4
+        else:
+            feat_l1 = self.lrelu(self.conv_first(x.view(-1, c, h, w)))
+
+        feat_l1 = self.feature_extraction(feat_l1)
+        # L2
+        feat_l2 = self.lrelu(self.conv_l2_1(feat_l1))
+        feat_l2 = self.lrelu(self.conv_l2_2(feat_l2))
+        # L3
+        feat_l3 = self.lrelu(self.conv_l3_1(feat_l2))
+        feat_l3 = self.lrelu(self.conv_l3_2(feat_l3))
+
+        feat_l1 = feat_l1.view(b, t, -1, h, w)
+        feat_l2 = feat_l2.view(b, t, -1, h // 2, w // 2)
+        feat_l3 = feat_l3.view(b, t, -1, h // 4, w // 4)
+
+        # PCD alignment
+        ref_feat_l = [  # reference feature list
+            feat_l1[:, self.center_frame_idx, :, :, :].clone(),
+            feat_l2[:, self.center_frame_idx, :, :, :].clone(),
+            feat_l3[:, self.center_frame_idx, :, :, :].clone(),
+        ]
+        aligned_feat = []
+        for i in range(t):
+            nbr_feat_l = [  # neighboring feature list
+                feat_l1[:, i, :, :, :].clone(),
+                feat_l2[:, i, :, :, :].clone(),
+                feat_l3[:, i, :, :, :].clone(),
+            ]
+            aligned_feat.append(self.pcd_align(nbr_feat_l, ref_feat_l))
+        aligned_feat = torch.stack(aligned_feat, dim=1)  # (b, t, c, h, w)
+
+        if not self.with_tsa:
+            aligned_feat = aligned_feat.view(b, -1, h, w)
+        feat = self.fusion(aligned_feat)
+
+        out = self.reconstruction(feat)
+        out = self.lrelu(self.pixel_shuffle(self.upconv1(out)))
+        out = self.lrelu(self.pixel_shuffle(self.upconv2(out)))
+        out = self.lrelu(self.conv_hr(out))
+        out = self.conv_last(out)
+        if self.hr_in:
+            base = x_center
+        else:
+            base = F.interpolate(x_center, scale_factor=4, mode="bilinear", align_corners=False)
+        out += base
+        return out
+
+
+@ARCH_REGISTRY.register(ArchType.EDVRFEATUREEXTACTOR)
+class EDVRFeatureExtractor(nn.Module):
+    """EDVR feature extractor used in IconVSR.
+
+    Args:
+        num_input_frame (int): Number of input frames.
+        num_feat (int): Number of feature channels
+    """
+
+    def __init__(self, num_input_frame, num_feat):
+        super(EDVRFeatureExtractor, self).__init__()
+
+        self.center_frame_idx = num_input_frame // 2
+
+        # extract pyramid features
+        self.conv_first = nn.Conv2d(3, num_feat, 3, 1, 1)
+        self.feature_extraction = make_layer(ResidualBlockNoBN, 5, num_feat=num_feat)
+        self.conv_l2_1 = nn.Conv2d(num_feat, num_feat, 3, 2, 1)
+        self.conv_l2_2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
+        self.conv_l3_1 = nn.Conv2d(num_feat, num_feat, 3, 2, 1)
+        self.conv_l3_2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
+
+        # pcd and tsa module
+        self.pcd_align = PCDAlignment(num_feat=num_feat, deformable_groups=8)
+        self.fusion = TSAFusion(num_feat=num_feat, num_frame=num_input_frame, center_frame_idx=self.center_frame_idx)
+
+        # activation function
+        self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
+
+    def forward(self, x):
+        b, n, c, h, w = x.size()
+
+        # extract features for each frame
+        # L1
+        feat_l1 = self.lrelu(self.conv_first(x.view(-1, c, h, w)))
+        feat_l1 = self.feature_extraction(feat_l1)
+        # L2
+        feat_l2 = self.lrelu(self.conv_l2_1(feat_l1))
+        feat_l2 = self.lrelu(self.conv_l2_2(feat_l2))
+        # L3
+        feat_l3 = self.lrelu(self.conv_l3_1(feat_l2))
+        feat_l3 = self.lrelu(self.conv_l3_2(feat_l3))
+
+        feat_l1 = feat_l1.view(b, n, -1, h, w)
+        feat_l2 = feat_l2.view(b, n, -1, h // 2, w // 2)
+        feat_l3 = feat_l3.view(b, n, -1, h // 4, w // 4)
+
+        # PCD alignment
+        ref_feat_l = [  # reference feature list
+            feat_l1[:, self.center_frame_idx, :, :, :].clone(),
+            feat_l2[:, self.center_frame_idx, :, :, :].clone(),
+            feat_l3[:, self.center_frame_idx, :, :, :].clone(),
+        ]
+        aligned_feat = []
+        for i in range(n):
+            nbr_feat_l = [  # neighboring feature list
+                feat_l1[:, i, :, :, :].clone(),
+                feat_l2[:, i, :, :, :].clone(),
+                feat_l3[:, i, :, :, :].clone(),
+            ]
+            aligned_feat.append(self.pcd_align(nbr_feat_l, ref_feat_l))
+        aligned_feat = torch.stack(aligned_feat, dim=1)  # (b, t, c, h, w)
+
+        # TSA fusion
+        return self.fusion(aligned_feat)
 
 
 class PCDAlignment(nn.Module):
@@ -243,152 +457,6 @@ class PredeblurModule(nn.Module):
         return feat_l1
 
 
-@ARCH_REGISTRY.register()
-class EDVR(nn.Module):
-    """EDVR network structure for video super-resolution.
-
-    Now only support X4 upsampling factor.
-
-    ``Paper: EDVR: Video Restoration with Enhanced Deformable Convolutional Networks``
-
-    Args:
-        num_in_ch (int): Channel number of input image. Default: 3.
-        num_out_ch (int): Channel number of output image. Default: 3.
-        num_feat (int): Channel number of intermediate features. Default: 64.
-        num_frame (int): Number of input frames. Default: 5.
-        deformable_groups (int): Deformable groups. Defaults: 8.
-        num_extract_block (int): Number of blocks for feature extraction.
-            Default: 5.
-        num_reconstruct_block (int): Number of blocks for reconstruction.
-            Default: 10.
-        center_frame_idx (int): The index of center frame. Frame counting from
-            0. Default: Middle of input frames.
-        hr_in (bool): Whether the input has high resolution. Default: False.
-        with_predeblur (bool): Whether has predeblur module.
-            Default: False.
-        with_tsa (bool): Whether has TSA module. Default: True.
-    """
-
-    def __init__(
-        self,
-        num_in_ch=3,
-        num_out_ch=3,
-        num_feat=64,
-        num_frame=5,
-        deformable_groups=8,
-        num_extract_block=5,
-        num_reconstruct_block=10,
-        center_frame_idx=None,
-        hr_in=False,
-        with_predeblur=False,
-        with_tsa=True,
-    ):
-        super(EDVR, self).__init__()
-        if center_frame_idx is None:
-            self.center_frame_idx = num_frame // 2
-        else:
-            self.center_frame_idx = center_frame_idx
-        self.hr_in = hr_in
-        self.with_predeblur = with_predeblur
-        self.with_tsa = with_tsa
-
-        # extract features for each frame
-        if self.with_predeblur:
-            self.predeblur = PredeblurModule(num_feat=num_feat, hr_in=self.hr_in)
-            self.conv_1x1 = nn.Conv2d(num_feat, num_feat, 1, 1)
-        else:
-            self.conv_first = nn.Conv2d(num_in_ch, num_feat, 3, 1, 1)
-
-        # extract pyramid features
-        self.feature_extraction = make_layer(ResidualBlockNoBN, num_extract_block, num_feat=num_feat)
-        self.conv_l2_1 = nn.Conv2d(num_feat, num_feat, 3, 2, 1)
-        self.conv_l2_2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
-        self.conv_l3_1 = nn.Conv2d(num_feat, num_feat, 3, 2, 1)
-        self.conv_l3_2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
-
-        # pcd and tsa module
-        self.pcd_align = PCDAlignment(num_feat=num_feat, deformable_groups=deformable_groups)
-        if self.with_tsa:
-            self.fusion = TSAFusion(num_feat=num_feat, num_frame=num_frame, center_frame_idx=self.center_frame_idx)
-        else:
-            self.fusion = nn.Conv2d(num_frame * num_feat, num_feat, 1, 1)
-
-        # reconstruction
-        self.reconstruction = make_layer(ResidualBlockNoBN, num_reconstruct_block, num_feat=num_feat)
-        # upsample
-        self.upconv1 = nn.Conv2d(num_feat, num_feat * 4, 3, 1, 1)
-        self.upconv2 = nn.Conv2d(num_feat, 64 * 4, 3, 1, 1)
-        self.pixel_shuffle = nn.PixelShuffle(2)
-        self.conv_hr = nn.Conv2d(64, 64, 3, 1, 1)
-        self.conv_last = nn.Conv2d(64, 3, 3, 1, 1)
-
-        # activation function
-        self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
-
-    def forward(self, x):
-        b, t, c, h, w = x.size()
-        # auto padding
-        if self.hr_in:
-            assert h % 16 == 0 and w % 16 == 0, "The height and width must be multiple of 16."
-        else:
-            assert h % 4 == 0 and w % 4 == 0, "The height and width must be multiple of 4."
-
-        x_center = x[:, self.center_frame_idx, :, :, :].contiguous()
-
-        # extract features for each frame
-        # L1
-        if self.with_predeblur:
-            feat_l1 = self.conv_1x1(self.predeblur(x.view(-1, c, h, w)))
-            if self.hr_in:
-                h, w = h // 4, w // 4
-        else:
-            feat_l1 = self.lrelu(self.conv_first(x.view(-1, c, h, w)))
-
-        feat_l1 = self.feature_extraction(feat_l1)
-        # L2
-        feat_l2 = self.lrelu(self.conv_l2_1(feat_l1))
-        feat_l2 = self.lrelu(self.conv_l2_2(feat_l2))
-        # L3
-        feat_l3 = self.lrelu(self.conv_l3_1(feat_l2))
-        feat_l3 = self.lrelu(self.conv_l3_2(feat_l3))
-
-        feat_l1 = feat_l1.view(b, t, -1, h, w)
-        feat_l2 = feat_l2.view(b, t, -1, h // 2, w // 2)
-        feat_l3 = feat_l3.view(b, t, -1, h // 4, w // 4)
-
-        # PCD alignment
-        ref_feat_l = [  # reference feature list
-            feat_l1[:, self.center_frame_idx, :, :, :].clone(),
-            feat_l2[:, self.center_frame_idx, :, :, :].clone(),
-            feat_l3[:, self.center_frame_idx, :, :, :].clone(),
-        ]
-        aligned_feat = []
-        for i in range(t):
-            nbr_feat_l = [  # neighboring feature list
-                feat_l1[:, i, :, :, :].clone(),
-                feat_l2[:, i, :, :, :].clone(),
-                feat_l3[:, i, :, :, :].clone(),
-            ]
-            aligned_feat.append(self.pcd_align(nbr_feat_l, ref_feat_l))
-        aligned_feat = torch.stack(aligned_feat, dim=1)  # (b, t, c, h, w)
-
-        if not self.with_tsa:
-            aligned_feat = aligned_feat.view(b, -1, h, w)
-        feat = self.fusion(aligned_feat)
-
-        out = self.reconstruction(feat)
-        out = self.lrelu(self.pixel_shuffle(self.upconv1(out)))
-        out = self.lrelu(self.pixel_shuffle(self.upconv2(out)))
-        out = self.lrelu(self.conv_hr(out))
-        out = self.conv_last(out)
-        if self.hr_in:
-            base = x_center
-        else:
-            base = F.interpolate(x_center, scale_factor=4, mode="bilinear", align_corners=False)
-        out += base
-        return out
-
-
 if __name__ == "__main__":
     # edvr
     import cv2
@@ -420,8 +488,11 @@ if __name__ == "__main__":
     img = F.pad(img, (0, pad_w, 0, pad_h), mode="reflect")
     print(img.shape)
 
+    # create a zero tensor with the same shape
+    img_zeros = torch.zeros_like(img)
+
     # b, n, c, h, w
-    imgTensorStack = torch.stack([img, img, img, img, img], dim=1)
+    imgTensorStack = torch.stack([img_zeros, img_zeros, img, img_zeros, img_zeros], dim=1)
 
     print(imgTensorStack.shape)
     with torch.no_grad():

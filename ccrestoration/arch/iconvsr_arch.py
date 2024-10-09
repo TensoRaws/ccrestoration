@@ -6,11 +6,10 @@ from torch.nn import functional as F
 from ccrestoration.arch import ARCH_REGISTRY
 from ccrestoration.arch.arch_util import flow_warp
 from ccrestoration.arch.basicvsr_arch import ConvResidualBlocks
-from ccrestoration.arch.edvrfeatureextractor_arch import EDVRFeatureExtractor
-from ccrestoration.arch.spynet_arch import SpyNet
+from ccrestoration.type import ArchType
 
 
-@ARCH_REGISTRY.register()
+@ARCH_REGISTRY.register(ArchType.ICONVSR)
 class IconVSR(nn.Module):
     """IconVSR, proposed also in the BasicVSR paper.
 
@@ -24,7 +23,13 @@ class IconVSR(nn.Module):
     """
 
     def __init__(
-        self, num_feat=64, num_block=15, keyframe_stride=5, temporal_padding=2, spynet_path=None, edvr_path=None
+        self,
+        num_feat: int = 64,
+        num_block: int = 15,
+        keyframe_stride: int = 5,
+        temporal_padding: int = 2,
+        spynet: nn.Module = None,
+        edvr_feature_extractor: nn.Module = None,
     ):
         super().__init__()
 
@@ -33,9 +38,9 @@ class IconVSR(nn.Module):
         self.keyframe_stride = keyframe_stride
 
         # keyframe_branch
-        self.edvr = EDVRFeatureExtractor(temporal_padding * 2 + 1, num_feat, edvr_path)
+        self.edvr = edvr_feature_extractor
         # alignment
-        self.spynet = SpyNet(spynet_path)
+        self.spynet = spynet
 
         # propagation
         self.backward_fusion = nn.Conv2d(2 * num_feat, num_feat, 3, 1, 1, bias=True)

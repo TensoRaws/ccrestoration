@@ -3,6 +3,8 @@ from enum import Enum
 
 # Enum for config type, {ModelType.model}_{config_name}_{scale}x.pth
 class ConfigType(str, Enum):
+    # ------------------------------------- Single Image Super-Resolution ----------------------------------------------
+
     # RealESRGAN
     RealESRGAN_RealESRGAN_x4plus_4x = "RealESRGAN_RealESRGAN_x4plus_4x.pth"
     RealESRGAN_RealESRGAN_x4plus_anime_6B_4x = "RealESRGAN_RealESRGAN_x4plus_anime_6B_4x.pth"
@@ -47,3 +49,7 @@ class ConfigType(str, Enum):
     SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x = "SwinIR_realSR_BSRGAN_DFO_s64w8_SwinIR_M_GAN_4x.pth"
 
     SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x = "SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x.pth"
+
+    # ------------------------------------- Auxiliary Network ----------------------------------------------------------
+
+    # ------------------------------------- Video Super-Resolution -----------------------------------------------------

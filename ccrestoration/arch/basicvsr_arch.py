@@ -5,25 +5,25 @@ from torch.nn import functional as F
 
 from ccrestoration.arch import ARCH_REGISTRY
 from ccrestoration.arch.arch_util import ResidualBlockNoBN, flow_warp, make_layer
-from ccrestoration.arch.spynet_arch import SpyNet
+from ccrestoration.type import ArchType
 
 
-@ARCH_REGISTRY.register()
+@ARCH_REGISTRY.register(ArchType.BASICVSR)
 class BasicVSR(nn.Module):
     """A recurrent network for video SR. Now only x4 is supported.
 
     Args:
         num_feat (int): Number of channels. Default: 64.
         num_block (int): Number of residual blocks for each branch. Default: 15
-        spynet_path (str): Path to the pretrained weights of SPyNet. Default: None.
+        spynet (nn.Module): Path to the pretrained weights of SPyNet. Default: None.
     """
 
-    def __init__(self, num_feat=64, num_block=15, spynet_path=None):
+    def __init__(self, num_feat: int = 64, num_block: int = 15, spynet: nn.Module = None):
         super().__init__()
         self.num_feat = num_feat
 
         # alignment
-        self.spynet = SpyNet(spynet_path)
+        self.spynet = spynet
 
         # propagation
         self.backward_trunk = ConvResidualBlocks(num_feat + 3, num_feat, num_block)

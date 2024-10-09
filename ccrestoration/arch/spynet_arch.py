@@ -9,28 +9,6 @@ from ccrestoration.arch import ARCH_REGISTRY
 from ccrestoration.arch.arch_util import flow_warp
 
 
-class BasicModule(nn.Module):
-    """Basic Module for SpyNet."""
-
-    def __init__(self):
-        super(BasicModule, self).__init__()
-
-        self.basic_module = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=32, kernel_size=7, stride=1, padding=3),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=7, stride=1, padding=3),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(in_channels=64, out_channels=32, kernel_size=7, stride=1, padding=3),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(in_channels=32, out_channels=16, kernel_size=7, stride=1, padding=3),
-            nn.ReLU(inplace=False),
-            nn.Conv2d(in_channels=16, out_channels=2, kernel_size=7, stride=1, padding=3),
-        )
-
-    def forward(self, tensor_input):
-        return self.basic_module(tensor_input)
-
-
 @ARCH_REGISTRY.register()
 class SpyNet(nn.Module):
     """SpyNet architecture.
@@ -39,11 +17,9 @@ class SpyNet(nn.Module):
         load_path (str): path for pretrained SpyNet. Default: None.
     """
 
-    def __init__(self, load_path=None):
+    def __init__(self):
         super(SpyNet, self).__init__()
         self.basic_module = nn.ModuleList([BasicModule() for _ in range(6)])
-        if load_path:
-            self.load_state_dict(torch.load(load_path, map_location=lambda storage, loc: storage)["params"])
 
         self.register_buffer("mean", torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
         self.register_buffer("std", torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
@@ -111,3 +87,25 @@ class SpyNet(nn.Module):
         flow[:, 1, :, :] *= float(h) / float(h_floor)
 
         return flow
+
+
+class BasicModule(nn.Module):
+    """Basic Module for SpyNet."""
+
+    def __init__(self):
+        super(BasicModule, self).__init__()
+
+        self.basic_module = nn.Sequential(
+            nn.Conv2d(in_channels=8, out_channels=32, kernel_size=7, stride=1, padding=3),
+            nn.ReLU(inplace=False),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=7, stride=1, padding=3),
+            nn.ReLU(inplace=False),
+            nn.Conv2d(in_channels=64, out_channels=32, kernel_size=7, stride=1, padding=3),
+            nn.ReLU(inplace=False),
+            nn.Conv2d(in_channels=32, out_channels=16, kernel_size=7, stride=1, padding=3),
+            nn.ReLU(inplace=False),
+            nn.Conv2d(in_channels=16, out_channels=2, kernel_size=7, stride=1, padding=3),
+        )
+
+    def forward(self, tensor_input):
+        return self.basic_module(tensor_input)
