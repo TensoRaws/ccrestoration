@@ -75,3 +75,7 @@ class ConfigType(str, Enum):
     IconVSR_REDS_4x = "IconVSR_REDS_4x.pth"
     IconVSR_Vimeo90K_BD_4x = "IconVSR_Vimeo90K_BD_4x.pth"
     IconVSR_Vimeo90K_BI_4x = "IconVSR_Vimeo90K_BI_4x.pth"
+
+    # AnimeSR
+    AnimeSR_v1_PaperModel_4x = "AnimeSR_v1_PaperModel_4x.pth"
+    AnimeSR_v2_4x = "AnimeSR_v2_4x.pth"

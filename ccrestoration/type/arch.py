@@ -21,3 +21,4 @@ class ArchType(str, Enum):
     EDVR = "EDVR"
     BASICVSR = "BASICVSR"
     ICONVSR = "ICONVSR"
+    MSRSWVSR = "MSRSWVSR"

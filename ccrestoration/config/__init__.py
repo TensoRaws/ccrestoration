@@ -10,3 +10,4 @@ from ccrestoration.config.edvr_config import EDVRConfig, EDVRFeatureExtractorCon
 from ccrestoration.config.spynet_config import SpyNetConfig  # noqa
 from ccrestoration.config.basicvsr_config import BasicVSRConfig  # noqa
 from ccrestoration.config.iconvsr_config import IconVSRConfig  # noqa
+from ccrestoration.config.animesr_config import AnimeSRConfig  # noqa

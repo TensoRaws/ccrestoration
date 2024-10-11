@@ -20,3 +20,4 @@ class ModelType(str, Enum):
     EDVR = "EDVR"
     BasicVSR = "BasicVSR"
     IconVSR = "IconVSR"
+    AnimeSR = "AnimeSR"

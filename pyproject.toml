@@ -40,10 +40,11 @@ license = "MIT"
 name = "ccrestoration"
 readme = "README.md"
 repository = "https://github.com/TensoRaws/ccrestoration"
-version = "0.0.8"
+version = "0.0.9"
 
 # Requirements
 [tool.poetry.dependencies]
+einops = "*"
 opencv-python = "*"
 pydantic = "*"
 python = "^3.9"
