@@ -11,3 +11,4 @@ from ccrestoration.arch.edvr_arch import EDVR, EDVRFeatureExtractor  # noqa
 from ccrestoration.arch.spynet_arch import SpyNet  # noqa
 from ccrestoration.arch.basicvsr_arch import BasicVSR  # noqa
 from ccrestoration.arch.iconvsr_arch import IconVSR  # noqa
+from ccrestoration.arch.msrswvsr_arch import MSRSWVSR  # noqa
