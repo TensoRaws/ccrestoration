@@ -26,7 +26,7 @@ AutoConfig.register(cfg)
 # extend from ccrestoration.SRBaseModel or ccrestoration.VSRBaseModel then implement your own model
 # self.one_frame_out: bool = False  for this kind of vsr model: f1, f2, f3, f4 -> f1', f2', f3', f4'
 # self.one_frame_out: bool = True  for this kind of vsr model: f-2, f-1, f0, f1, f2 -> f0'
-# overrode self.one_frame_out in self.load_model() if you want
+# override self.one_frame_out in self.load_model() if you want
 @AutoModel.register(name=model_name)
 class TESTMODEL(SRBaseModel):
     def load_model(self) -> Any:
