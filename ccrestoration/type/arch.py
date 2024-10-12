@@ -10,6 +10,7 @@ class ArchType(str, Enum):
     UPCUNET = "UPCUNET"
     EDSR = "EDSR"
     SWINIR = "SWINIR"
+    SCUNET = "SCUNET"
 
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 

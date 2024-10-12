@@ -9,6 +9,7 @@ class ModelType(str, Enum):
     RealCUGAN = "RealCUGAN"
     EDSR = "EDSR"
     SwinIR = "SwinIR"
+    SCUNet = "SCUNet"
 
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
