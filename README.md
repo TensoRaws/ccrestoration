@@ -16,6 +16,8 @@ Make sure you have Python >= 3.9 installed on your system
 pip install ccrestoration
 ```
 
+- Install VapourSynth (optional)
+
 ### Start
 
 #### cv2
