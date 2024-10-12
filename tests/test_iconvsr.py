@@ -8,11 +8,12 @@ import torch
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.model import VSRBaseModel
 
-from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
+from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image, torch_2_4
 
 DEVICE = get_device() if sys.platform != "darwin" else torch.device("cpu")
 
 
+@pytest.mark.skipif(not torch_2_4, reason="too slow in CPU mode")
 class Test_IconVSR:
     def test_load(self) -> None:
         for k in [ConfigType.IconVSR_REDS_4x, ConfigType.IconVSR_Vimeo90K_BD_4x, ConfigType.IconVSR_Vimeo90K_BI_4x]:

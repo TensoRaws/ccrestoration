@@ -7,10 +7,7 @@ import torch
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.model import SRBaseModel
 
-from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
-
-print(f"PyTorch version: {torch.__version__}")
-torch_2_4: bool = torch.__version__.startswith("2")
+from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image, torch_2_4
 
 
 def test_inference() -> None:
