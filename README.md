@@ -6,7 +6,7 @@
 [![PyPI version](https://badge.fury.io/py/ccrestoration.svg)](https://badge.fury.io/py/ccrestoration)
 ![GitHub](https://img.shields.io/github/license/TensoRaws/ccrestoration)
 
-an inference framework for image/video restoration with VapourSynth support
+an inference framework for image/video restoration with VapourSynth support, compatible with many community models
 
 ### Install
 
@@ -70,6 +70,7 @@ It still in development, the following models are supported:
 
 ### Reference
 
+- [PyTorch](https://github.com/pytorch/pytorch)
 - [BasicSR](https://github.com/XPixelGroup/BasicSR)
 - [mmcv](https://github.com/open-mmlab/mmcv)
 - [huggingface transformers](https://github.com/huggingface/transformers)
