@@ -7,7 +7,7 @@ import torch
 from ccrestoration import AutoConfig, AutoModel, BaseConfig, ConfigType
 from ccrestoration.model import SRBaseModel
 
-from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
+from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image, torch_2_4
 
 
 def test_inference() -> None:
@@ -22,6 +22,7 @@ def test_inference() -> None:
     assert t2.equal(t3)
 
 
+@pytest.mark.skipif(not torch_2_4, reason="Skip test if PyTorch version is not 2.4")
 def test_sr_fp16() -> None:
     img1 = load_image()
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
@@ -37,7 +38,9 @@ def test_sr_fp16() -> None:
     assert compare_image_size(img1, img2, cfg.scale)
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="Skip test torch.compile on Windows")
+@pytest.mark.skipif(
+    sys.platform == "win32" or not torch_2_4, reason="Skip test torch.compile on Windows or PyTorch version is not 2.4"
+)
 def test_sr_compile() -> None:
     img1 = load_image()
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x

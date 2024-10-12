@@ -35,6 +35,12 @@ class VSRBaseModel(SRBaseModel):
 
     @torch.inference_mode()  # type: ignore
     def inference_image_list(self, img_list: List[np.ndarray]) -> List[np.ndarray]:
+        """
+        Inference the image list with the VSR model
+
+        :param img_list: List[np.ndarray]
+        :return: List[np.ndarray]
+        """
         new_img_list = []
         for img in img_list:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
