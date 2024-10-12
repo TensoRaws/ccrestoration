@@ -45,7 +45,7 @@ jobs:
         run: |
           pip install numpy==1.26.4
           pip install pydantic tenacity opencv-python einops
-          pip install pre-commit torch torchvision scikit-image
+          pip install pre-commit scikit-image
           pip install pytest pytest-cov coverage
           pip install mypy ruff types-requests
 
