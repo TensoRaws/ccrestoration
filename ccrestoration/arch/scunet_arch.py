@@ -6,9 +6,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 from einops.layers.torch import Rearrange
+from torch.nn.init import trunc_normal_
 
 from ccrestoration.arch import ARCH_REGISTRY
-from ccrestoration.arch.arch_util import DropPath, trunc_normal_
+from ccrestoration.arch.arch_util import DropPath
 from ccrestoration.type import ArchType
 
 
