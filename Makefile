@@ -16,4 +16,4 @@ build:
 .PHONY: vs
 vs:
 	rm -f encoded.mkv
-	vspipe -c y4m vs.py - | ffmpeg -i - -vcodec libx265 -crf 16 encoded.mkv
+	vspipe -c y4m example/vapourSynth.py - | ffmpeg -i - -vcodec libx265 -crf 16 encoded.mkv
