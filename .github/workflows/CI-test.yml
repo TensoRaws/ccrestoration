@@ -25,6 +25,7 @@ jobs:
         os-version: ["ubuntu-20.04", "macos-14", "windows-latest"]
         python-version: ["3.9"]
         poetry-version: ["1.8.3"]
+        pytorch-version: ["2.4.0", "2.1.2", "2.0.0", "1.13.0", "1.12.0"]
 
     runs-on: ${{ matrix.os-version }}
     steps:
@@ -40,7 +41,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
 
-      - name: Test
+      - name: Install dependencies
         run: |
           pip install numpy==1.26.4
           pip install pydantic tenacity opencv-python einops
@@ -48,6 +49,33 @@ jobs:
           pip install pytest pytest-cov coverage
           pip install mypy ruff types-requests
 
+      - name: Install PyTorch 2.4.0
+        if: matrix.pytorch-version == '2.4.0'
+        run: |
+          pip install torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0
+
+      - name: Install PyTorch 2.1.2
+        if: matrix.pytorch-version == '2.1.2'
+        run: |
+          pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2
+
+      - name: Install PyTorch 2.0.0
+        if: matrix.pytorch-version == '2.0.0'
+        run: |
+          pip install torch==2.0.0 torchvision==0.15.1 torchaudio==2.0.1
+
+      - name: Install PyTorch 1.13.0
+        if: matrix.pytorch-version == '1.13.0'
+        run: |
+          pip install torch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0
+
+      - name: Install PyTorch 1.12.0
+        if: matrix.pytorch-version == '1.12.0'
+        run: |
+          pip install torch==1.12.0 torchvision==0.13.0 torchaudio==0.12.0
+
+      - name: Test
+        run: |
           make lint
           make test
 

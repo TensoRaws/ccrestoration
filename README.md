@@ -10,7 +10,7 @@ an inference framework for image/video restoration with VapourSynth support, com
 
 ### Install
 
-Make sure you have Python >= 3.9 installed on your system
+Make sure you have Python >= 3.9 and PyTorch installed
 
 ```bash
 pip install ccrestoration
