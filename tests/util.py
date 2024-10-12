@@ -10,7 +10,7 @@ from skimage.metrics import structural_similarity
 from ccrestoration.util.device import DEFAULT_DEVICE
 
 print(f"PyTorch version: {torch.__version__}")
-torch_2_4: bool = torch.__version__.startswith("2")
+torch_2_4: bool = torch.__version__.startswith("2.4")
 
 ASSETS_PATH = Path(__file__).resolve().parent.parent.absolute() / "assets"
 TEST_IMG_PATH = ASSETS_PATH / "test.jpg"
