@@ -51,6 +51,11 @@ class ConfigType(str, Enum):
 
     SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x = "SwinIR_Bubble_AnimeScale_SwinIR_Small_v1_2x.pth"
 
+    # SCUNet
+    SCUNet_color_50_1x = "SCUNet_color_50_1x.pth"
+    SCUNet_color_real_psnr_1x = "SCUNet_color_real_psnr_1x.pth"
+    SCUNet_color_real_gan_1x = "SCUNet_color_real_gan_1x.pth"
+
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
     # SpyNet
