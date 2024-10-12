@@ -10,7 +10,7 @@ from ccrestoration.model import SRBaseModel
 from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, get_device, load_image
 
 print(f"PyTorch version: {torch.__version__}")
-torch_2: bool = torch.__version__.startswith("2")
+torch_2_4: bool = torch.__version__.startswith("2")
 
 
 def test_inference() -> None:
@@ -25,7 +25,7 @@ def test_inference() -> None:
     assert t2.equal(t3)
 
 
-@pytest.mark.skipif(not torch_2, reason="Skip test if PyTorch version is under 2.0.0")
+@pytest.mark.skipif(not torch_2_4, reason="Skip test if PyTorch version is under 2.0.0")
 def test_sr_fp16() -> None:
     img1 = load_image()
     k = ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x
@@ -42,7 +42,7 @@ def test_sr_fp16() -> None:
 
 
 @pytest.mark.skipif(
-    sys.platform == "win32" or not torch_2, reason="Skip test torch.compile on Windows or PyTorch version under 2.0.0"
+    sys.platform == "win32" or not torch_2_4, reason="Skip test torch.compile on Windows or PyTorch version under 2.0.0"
 )
 def test_sr_compile() -> None:
     img1 = load_image()
