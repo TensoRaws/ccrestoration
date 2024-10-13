@@ -4,7 +4,7 @@ import numpy as np
 from ccrestoration import ArchType, AutoConfig, AutoModel, BaseConfig, ConfigType, SRBaseModel
 from ccrestoration.config import RealESRGANConfig
 
-example = 3
+example = 4
 
 if example == 0:
     # fast load a pre-trained model
@@ -28,6 +28,14 @@ elif example == 3:
         num_block=6,
     )
     model: SRBaseModel = AutoModel.from_config(config=config)
+elif example == 4:
+    # use custom model dir and gh proxy
+    model: SRBaseModel = AutoModel.from_pretrained(
+        pretrained_model_name=ConfigType.RealESRGAN_APISR_RRDB_GAN_generator_2x,
+        model_dir="./",
+        gh_proxy="https://github.abskoop.workers.dev/",
+    )
+
 
 else:
     raise ValueError("example not found")
