@@ -22,7 +22,7 @@ pip install ccrestoration
 
 #### cv2
 
-A simple example to use the sisr model (APISR) to process an image
+a simple example to use the SISR (Single Image Super-Resolution) model to process an image (APISR)
 
 ```python
 import cv2
@@ -39,7 +39,7 @@ cv2.imwrite("test_out.jpg", img)
 
 #### VapourSynth
 
-A simple example to use the vsr model (AnimeSR) to process a video
+a simple example to use the VSR (Video Super-Resolution) model to process a video (AnimeSR)
 
 ```python
 import vapoursynth as vs
