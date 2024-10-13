@@ -23,10 +23,14 @@ class SRBaseModel(BaseModelInterface):
             model_path = str(cfg.path)
         else:
             try:
-                model_path = load_file_from_url(cfg)
+                model_path = load_file_from_url(
+                    config=cfg, force_download=False, model_dir=self.model_dir, gh_proxy=self.gh_proxy
+                )
             except Exception as e:
                 print(f"Error: {e}, try force download the model...")
-                model_path = load_file_from_url(cfg, force_download=True)
+                model_path = load_file_from_url(
+                    config=cfg, force_download=True, model_dir=self.model_dir, gh_proxy=self.gh_proxy
+                )
 
         return torch.load(model_path, map_location=self.device, weights_only=True)
 

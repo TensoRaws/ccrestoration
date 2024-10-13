@@ -29,6 +29,8 @@ class IconVSRModel(VSRBaseModel):
             tile=self.tile,
             tile_pad=self.tile_pad,
             pad_img=self.pad_img,
+            model_dir=self.model_dir,
+            gh_proxy=self.gh_proxy,
         )
 
         edvr_feature_extractor = EDVRFeatureExtractorModel(
@@ -40,6 +42,8 @@ class IconVSRModel(VSRBaseModel):
             tile=self.tile,
             tile_pad=self.tile_pad,
             pad_img=self.pad_img,
+            model_dir=self.model_dir,
+            gh_proxy=self.gh_proxy,
         )
 
         model = IconVSR(
