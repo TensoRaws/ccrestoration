@@ -70,6 +70,12 @@ It still in development, the following models are supported:
 
 - [Weight(Config)](./ccrestoration/type/config.py)
 
+### Notice
+
+- All the architectures have been edited to normalize input and output, and automatic padding is applied. The input and output tensor shapes may differ from the original architectures. For SR models, the input and output are both 4D tensors in the shape of `(b, c, h, w)`. For VSR models, the input and output are both 5D tensors in the shape of `(b, l, c, h, w)`.
+
+- For VSR models with equal l in input and output `(f1, f2, f3, f4 -> f1', f2', f3', f4')`, you can directly extend from `class VSRBaseModel`. For VSR models that output only one frame `(f-2, f-1, f0, f1, f2 -> f0')`, you also need to set `self.one_frame_out = True`.
+
 ### Reference
 
 - [PyTorch](https://github.com/pytorch/pytorch)
