@@ -53,9 +53,10 @@ def load_file_from_url(
         if not _gh_proxy.endswith("/"):
             _gh_proxy += "/"
         _url = _gh_proxy + _url
-        print(f"Using github proxy: {_gh_proxy}")
 
     if not os.path.exists(cached_file_path) or force_download:
+        if _gh_proxy is not None:
+            print(f"Using github proxy: {_gh_proxy}")
         print(f"Downloading: {_url} to {cached_file_path}\n")
 
         @retry(wait=wait_random(min=3, max=5), stop=stop_after_delay(10) | stop_after_attempt(30))
