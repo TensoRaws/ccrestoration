@@ -19,6 +19,8 @@ class BaseModelInterface(ABC):
     :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable
     :param tile_pad: The padding size for each tile
     :param pad_img: The size for the padded image, pad[0] is width, pad[1] is height, None for auto calculate
+    :param model_dir: The path to cache the downloaded model. Should be a full path. If None, use default cache path.
+    :param gh_proxy: The proxy for downloading from github release. Example: https://github.abskoop.workers.dev/
     """
 
     def __init__(
@@ -31,6 +33,8 @@ class BaseModelInterface(ABC):
         tile: Optional[Tuple[int, int]] = (128, 128),
         tile_pad: int = 8,
         pad_img: Optional[Tuple[int, int]] = None,
+        model_dir: Optional[str] = None,
+        gh_proxy: Optional[str] = None,
     ) -> None:
         # extra config
         self.one_frame_out: bool = False  # for vsr model type
@@ -44,6 +48,8 @@ class BaseModelInterface(ABC):
         self.tile: Optional[Tuple[int, int]] = tile
         self.tile_pad: int = tile_pad
         self.pad_img: Optional[Tuple[int, int]] = pad_img
+        self.model_dir: Optional[str] = model_dir
+        self.gh_proxy: Optional[str] = gh_proxy
 
         if device is None:
             self.device = DEFAULT_DEVICE

@@ -18,6 +18,8 @@ class AutoModel:
         tile: Optional[Tuple[int, int]] = (128, 128),
         tile_pad: int = 8,
         pad_img: Optional[Tuple[int, int]] = None,
+        model_dir: Optional[str] = None,
+        gh_proxy: Optional[str] = None,
     ) -> Any:
         """
         Get a model instance from a pretrained model name.
@@ -30,6 +32,8 @@ class AutoModel:
         :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable
         :param tile_pad: The padding size for each tile
         :param pad_img: The size for the padded image, pad[0] is width, pad[1] is height, None for auto calculate
+        :param model_dir: The path to cache the downloaded model. Should be a full path. If None, use default cache path.
+        :param gh_proxy: The proxy for downloading from github release. Example: https://github.abskoop.workers.dev/
         :return:
         """
 
@@ -43,6 +47,8 @@ class AutoModel:
             tile=tile,
             tile_pad=tile_pad,
             pad_img=pad_img,
+            model_dir=model_dir,
+            gh_proxy=gh_proxy,
         )
 
     @staticmethod
@@ -55,6 +61,8 @@ class AutoModel:
         tile: Optional[Tuple[int, int]] = (128, 128),
         tile_pad: int = 8,
         pad_img: Optional[Tuple[int, int]] = None,
+        model_dir: Optional[str] = None,
+        gh_proxy: Optional[str] = None,
     ) -> Any:
         """
         Get a model instance from a config.
@@ -67,6 +75,8 @@ class AutoModel:
         :param tile: tile size for tile inference, tile[0] is width, tile[1] is height, None for disable
         :param tile_pad: The padding size for each tile
         :param pad_img: The size for the padded image, pad[0] is width, pad[1] is height, None for auto calculate
+        :param model_dir: The path to cache the downloaded model. Should be a full path. If None, use default cache path.
+        :param gh_proxy: The proxy for downloading from github release. Example: https://github.abskoop.workers.dev/
         :return:
         """
 
@@ -80,6 +90,8 @@ class AutoModel:
             tile=tile,
             tile_pad=tile_pad,
             pad_img=pad_img,
+            model_dir=model_dir,
+            gh_proxy=gh_proxy,
         )
 
         return model

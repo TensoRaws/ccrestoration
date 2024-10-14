@@ -161,9 +161,9 @@ cython_debug/
 .idea/
 /.ruff_cache/
 
-/ccrestoration/cache_models/*.pth
-/ccrestoration/cache_models/*.pt
-/ccrestoration/cache_models/*.pkl
+*.pth
+*.pt
+*.pkl
 
 *_out.jpg
 *_out.png

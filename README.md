@@ -22,7 +22,7 @@ pip install ccrestoration
 
 #### cv2
 
-A simple example to use the sisr model (APISR) to process an image
+a simple example to use the SISR (Single Image Super-Resolution) model to process an image (APISR)
 
 ```python
 import cv2
@@ -39,7 +39,7 @@ cv2.imwrite("test_out.jpg", img)
 
 #### VapourSynth
 
-A simple example to use the vsr model (AnimeSR) to process a video
+a simple example to use the VSR (Video Super-Resolution) model to process a video (AnimeSR)
 
 ```python
 import vapoursynth as vs
@@ -69,6 +69,12 @@ It still in development, the following models are supported:
 - [Model](./ccrestoration/type/model.py)
 
 - [Weight(Config)](./ccrestoration/type/config.py)
+
+### Notice
+
+- All the architectures have been edited to normalize input and output, and automatic padding is applied. The input and output tensor shapes may differ from the original architectures. For SR models, the input and output are both 4D tensors in the shape of `(b, c, h, w)`. For VSR models, the input and output are both 5D tensors in the shape of `(b, l, c, h, w)`.
+
+- For VSR models with equal l in input and output `(f1, f2, f3, f4 -> f1', f2', f3', f4')`, you can directly extend from `class VSRBaseModel`. For VSR models that output only one frame `(f-2, f-1, f0, f1, f2 -> f0')`, you also need to set `self.one_frame_out = True`.
 
 ### Reference
 
