@@ -6,7 +6,7 @@
 [![PyPI version](https://badge.fury.io/py/ccrestoration.svg)](https://badge.fury.io/py/ccrestoration)
 ![GitHub](https://img.shields.io/github/license/TensoRaws/ccrestoration)
 
-an inference framework for image/video restoration with VapourSynth support, compatible with [many community models](https://openmodeldb.info/)
+an inference lib for image/video restoration with VapourSynth support, compatible with [many community models](https://openmodeldb.info/)
 
 ### Install
 
