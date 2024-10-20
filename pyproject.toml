@@ -34,13 +34,13 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12"
 ]
-description = "an inference framework for image/video restoration with VapourSynth support"
+description = "an inference lib for image/video restoration with VapourSynth support"
 homepage = "https://github.com/TensoRaws/ccrestoration"
 license = "MIT"
 name = "ccrestoration"
 readme = "README.md"
 repository = "https://github.com/TensoRaws/ccrestoration"
-version = "0.0.12"
+version = "0.1.0"
 
 # Requirements
 [tool.poetry.dependencies]

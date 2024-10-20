@@ -1,10 +1,13 @@
-name: Release-pypi
+name: Release
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*"
 
 jobs:
-  Pypi:
+  Release:
     strategy:
       matrix:
         python-version: ["3.9"]
@@ -32,3 +35,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
