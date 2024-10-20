@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/TensoRaws/ccrestoration/graph/badge.svg?token=VK0BHDUXAI)](https://codecov.io/gh/TensoRaws/ccrestoration)
 [![CI-test](https://github.com/TensoRaws/ccrestoration/actions/workflows/CI-test.yml/badge.svg)](https://github.com/TensoRaws/ccrestoration/actions/workflows/CI-test.yml)
-[![Release-pypi](https://github.com/TensoRaws/ccrestoration/actions/workflows/Release-pypi.yml/badge.svg)](https://github.com/TensoRaws/ccrestoration/actions/workflows/Release-pypi.yml)
+[![Release-pypi](https://github.com/TensoRaws/ccrestoration/actions/workflows/Release.yml/badge.svg)](https://github.com/TensoRaws/ccrestoration/actions/workflows/Release.yml)
 [![PyPI version](https://badge.fury.io/py/ccrestoration.svg)](https://badge.fury.io/py/ccrestoration)
 ![GitHub](https://img.shields.io/github/license/TensoRaws/ccrestoration)
 
