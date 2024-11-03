@@ -1,5 +1,6 @@
 import hashlib
 import os
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -8,7 +9,16 @@ from torch.hub import download_url_to_file
 
 from ccrestoration.type import BaseConfig
 
-CACHE_PATH = Path(__file__).resolve().parent.absolute()
+if getattr(sys, "frozen", False):
+    # frozen
+    _IS_FROZEN_ = True
+    CACHE_PATH = Path(sys.executable).parent.absolute() / "cache_models"
+    if not CACHE_PATH.exists():
+        os.makedirs(CACHE_PATH)
+else:
+    # unfrozen
+    _IS_FROZEN_ = False
+    CACHE_PATH = Path(__file__).resolve().parent.absolute()
 
 
 def get_file_sha256(file_path: str, blocksize: int = 1 << 20) -> str:
