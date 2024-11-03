@@ -7,7 +7,7 @@ on:
       - "v*"
 
 jobs:
-  Release:
+  pypi:
     strategy:
       matrix:
         python-version: ["3.9"]
@@ -35,6 +35,14 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API }}
+
+  github:
+    needs: [pypi]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Release
         uses: softprops/action-gh-release@v2
