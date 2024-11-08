@@ -7,15 +7,22 @@ from .util import ASSETS_PATH, calculate_image_similarity, compare_image_size, g
 
 
 class Test_DAT:
-
     def test_custom(self) -> None:
         img1 = load_image()
 
         for k in [
-            ConfigType.DAT_S_2x, ConfigType.DAT_S_3x, ConfigType.DAT_S_4x,
-            ConfigType.DAT_2x, ConfigType.DAT_3x, ConfigType.DAT_4x,
-            ConfigType.DAT_2_2x, ConfigType.DAT_2_3x, ConfigType.DAT_2_4x,
-            ConfigType.DAT_light_2x, ConfigType.DAT_light_3x, ConfigType.DAT_light_4x
+            ConfigType.DAT_S_2x,
+            ConfigType.DAT_S_3x,
+            ConfigType.DAT_S_4x,
+            ConfigType.DAT_2x,
+            ConfigType.DAT_3x,
+            ConfigType.DAT_4x,
+            ConfigType.DAT_2_2x,
+            ConfigType.DAT_2_3x,
+            ConfigType.DAT_2_4x,
+            ConfigType.DAT_light_2x,
+            ConfigType.DAT_light_3x,
+            ConfigType.DAT_light_4x,
         ]:
             print(f"Testing {k}")
             cfg: BaseConfig = AutoConfig.from_pretrained(k)

@@ -9,7 +9,7 @@ from torch.nn.init import trunc_normal_
 from torch.utils import checkpoint
 
 from ccrestoration.arch import ARCH_REGISTRY
-from ccrestoration.arch.arch_util import Upsample, DropPath
+from ccrestoration.arch.arch_util import DropPath, Upsample
 from ccrestoration.type import ArchType
 
 
@@ -42,9 +42,9 @@ class DAT(nn.Module):
         img_size=64,
         in_chans=3,
         embed_dim=180,
-        split_size=[2, 4],
-        depth=[2, 2, 2, 2],
-        num_heads=[2, 2, 2, 2],
+        split_size=[2, 4],  # noqa
+        depth=[2, 2, 2, 2],  # noqa
+        num_heads=[2, 2, 2, 2],  # noqa
         expansion_factor=4.0,
         qkv_bias=True,
         qk_scale=None,
@@ -80,19 +80,13 @@ class DAT(nn.Module):
         # ------------------------- 2, Deep Feature Extraction ------------------------- #
         self.num_layers = len(depth)
         self.use_chk = use_chk
-        self.num_features = self.embed_dim = (
-            embed_dim  # num_features for consistency with other models
-        )
+        self.num_features = self.embed_dim = embed_dim  # num_features for consistency with other models
         heads = num_heads
 
-        self.before_RG = nn.Sequential(
-            Rearrange("b c h w -> b (h w) c"), nn.LayerNorm(embed_dim)
-        )
+        self.before_RG = nn.Sequential(Rearrange("b c h w -> b (h w) c"), nn.LayerNorm(embed_dim))
 
         curr_dim = embed_dim
-        dpr = [
-            x.item() for x in torch.linspace(0, drop_path_rate, np.sum(depth))
-        ]  # stochastic depth decay rule
+        dpr = [x.item() for x in torch.linspace(0, drop_path_rate, np.sum(depth))]  # stochastic depth decay rule
 
         self.layers = nn.ModuleList()
         for i in range(self.num_layers):
@@ -140,9 +134,7 @@ class DAT(nn.Module):
             self.conv_last = nn.Conv2d(num_feat, num_out_ch, 3, 1, 1)
         elif self.upsampler == "pixelshuffledirect":
             # for lightweight SR (to save parameters)
-            self.upsample = UpsampleOneStep(
-                upscale, embed_dim, num_out_ch, (img_size, img_size)
-            )
+            self.upsample = UpsampleOneStep(upscale, embed_dim, num_out_ch, (img_size, img_size))
 
         self.apply(self._init_weights)
 
@@ -151,9 +143,7 @@ class DAT(nn.Module):
             trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
-        elif isinstance(
-            m, (nn.LayerNorm, nn.BatchNorm2d, nn.GroupNorm, nn.InstanceNorm2d)
-        ):
+        elif isinstance(m, (nn.LayerNorm, nn.BatchNorm2d, nn.GroupNorm, nn.InstanceNorm2d)):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
@@ -188,15 +178,14 @@ class DAT(nn.Module):
         x = x / self.img_range + self.mean
         return x
 
+
 def img2windows(img, H_sp, W_sp):
     """Input: Image (B, C, H, W)
     Output: Window Partition (B', N, C)
     """
     B, C, H, W = img.shape
     img_reshape = img.view(B, C, H // H_sp, H_sp, W // W_sp, W_sp)
-    img_perm = (
-        img_reshape.permute(0, 2, 4, 3, 5, 1).contiguous().reshape(-1, H_sp * W_sp, C)
-    )
+    img_perm = img_reshape.permute(0, 2, 4, 3, 5, 1).contiguous().reshape(-1, H_sp * W_sp, C)
     return img_perm
 
 
@@ -223,9 +212,7 @@ class SpatialGate(nn.Module):
     def __init__(self, dim):
         super().__init__()
         self.norm = nn.LayerNorm(dim)
-        self.conv = nn.Conv2d(
-            dim, dim, kernel_size=3, stride=1, padding=1, groups=dim
-        )  # DW Conv
+        self.conv = nn.Conv2d(dim, dim, kernel_size=3, stride=1, padding=1, groups=dim)  # DW Conv
 
     def forward(self, x, H, W):
         # Split
@@ -355,7 +342,7 @@ class Spatial_Attention(nn.Module):
         self,
         dim,
         idx,
-        split_size=[8, 8],
+        split_size=[8, 8],  # noqa
         dim_out=None,
         num_heads=6,
         attn_drop=0.0,
@@ -389,9 +376,7 @@ class Spatial_Attention(nn.Module):
             # generate mother-set
             position_bias_h = torch.arange(1 - self.H_sp, self.H_sp)
             position_bias_w = torch.arange(1 - self.W_sp, self.W_sp)
-            biases = torch.stack(
-                torch.meshgrid([position_bias_h, position_bias_w], indexing="ij")
-            )
+            biases = torch.stack(torch.meshgrid([position_bias_h, position_bias_w], indexing="ij"))
             biases = biases.flatten(1).transpose(0, 1).contiguous().float()
             self.register_buffer("rpe_biases", biases)
 
@@ -414,11 +399,7 @@ class Spatial_Attention(nn.Module):
         B, N, C = x.shape
         x = x.transpose(-2, -1).contiguous().view(B, C, H, W)
         x = img2windows(x, self.H_sp, self.W_sp)
-        x = (
-            x.reshape(-1, self.H_sp * self.W_sp, self.num_heads, C // self.num_heads)
-            .permute(0, 2, 1, 3)
-            .contiguous()
-        )
+        x = x.reshape(-1, self.H_sp * self.W_sp, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3).contiguous()
         return x
 
     def forward(self, qkv, H, W, mask=None):
@@ -445,9 +426,7 @@ class Spatial_Attention(nn.Module):
             relative_position_bias = pos[self.relative_position_index.view(-1)].view(
                 self.H_sp * self.W_sp, self.H_sp * self.W_sp, -1
             )
-            relative_position_bias = relative_position_bias.permute(
-                2, 0, 1
-            ).contiguous()
+            relative_position_bias = relative_position_bias.permute(2, 0, 1).contiguous()
             attn = attn + relative_position_bias.unsqueeze(0)
 
         N = attn.shape[3]
@@ -455,18 +434,14 @@ class Spatial_Attention(nn.Module):
         # use mask for shift window
         if mask is not None:
             nW = mask.shape[0]
-            attn = attn.view(B, nW, self.num_heads, N, N) + mask.unsqueeze(1).unsqueeze(
-                0
-            )
+            attn = attn.view(B, nW, self.num_heads, N, N) + mask.unsqueeze(1).unsqueeze(0)
             attn = attn.view(-1, self.num_heads, N, N)
 
         attn = nn.functional.softmax(attn, dim=-1, dtype=attn.dtype)
         attn = self.attn_drop(attn)
 
         x = attn @ v
-        x = x.transpose(1, 2).reshape(
-            -1, self.H_sp * self.W_sp, C
-        )  # B head N N @ B head N C
+        x = x.transpose(1, 2).reshape(-1, self.H_sp * self.W_sp, C)  # B head N N @ B head N C
 
         # merge the window, window to image
         x = windows2img(x, self.H_sp, self.W_sp, H, W)  # B H' W' C
@@ -494,8 +469,8 @@ class Axial_Spatial_Attention(nn.Module):
         dim,
         num_heads,
         reso=64,
-        split_size=[8, 8],
-        shift_size=[1, 2],
+        split_size=[8, 8],  # noqa
+        shift_size=[1, 2],  # noqa
         qkv_bias=False,
         qk_scale=None,
         drop=0.0,
@@ -513,39 +488,35 @@ class Axial_Spatial_Attention(nn.Module):
         self.patches_resolution = reso
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
 
-        assert (
-            0 <= self.shift_size[0] < self.split_size[0]
-        ), "shift_size must in 0-split_size0"
-        assert (
-            0 <= self.shift_size[1] < self.split_size[1]
-        ), "shift_size must in 0-split_size1"
+        assert 0 <= self.shift_size[0] < self.split_size[0], "shift_size must in 0-split_size0"
+        assert 0 <= self.shift_size[1] < self.split_size[1], "shift_size must in 0-split_size1"
 
         self.branch_num = 2
 
         self.proj = nn.Linear(dim, dim)
         self.proj_drop = nn.Dropout(drop)
 
-        self.attns = nn.ModuleList([
-            Spatial_Attention(
-                dim // 2,
-                idx=i,
-                split_size=split_size,
-                num_heads=num_heads // 2,
-                dim_out=dim // 2,
-                qk_scale=qk_scale,
-                attn_drop=attn_drop,
-                proj_drop=drop,
-                position_bias=True,
-            )
-            for i in range(self.branch_num)
-        ])
+        self.attns = nn.ModuleList(
+            [
+                Spatial_Attention(
+                    dim // 2,
+                    idx=i,
+                    split_size=split_size,
+                    num_heads=num_heads // 2,
+                    dim_out=dim // 2,
+                    qk_scale=qk_scale,
+                    attn_drop=attn_drop,
+                    proj_drop=drop,
+                    position_bias=True,
+                )
+                for i in range(self.branch_num)
+            ]
+        )
 
         if (self.rg_idx % 2 == 0 and self.b_idx > 0 and (self.b_idx - 2) % 4 == 0) or (
             self.rg_idx % 2 != 0 and self.b_idx % 4 == 0
         ):
-            attn_mask = self.calculate_mask(
-                self.patches_resolution, self.patches_resolution
-            )
+            attn_mask = self.calculate_mask(self.patches_resolution, self.patches_resolution)
             self.register_buffer("attn_mask_0", attn_mask[0])
             self.register_buffer("attn_mask_1", attn_mask[1])
         else:
@@ -619,15 +590,11 @@ class Axial_Spatial_Attention(nn.Module):
             1,
         )
         img_mask_0 = (
-            img_mask_0.permute(0, 1, 3, 2, 4, 5)
-            .contiguous()
-            .view(-1, self.split_size[0], self.split_size[1], 1)
+            img_mask_0.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, self.split_size[0], self.split_size[1], 1)
         )  # nW, sw[0], sw[1], 1
         mask_windows_0 = img_mask_0.view(-1, self.split_size[0] * self.split_size[1])
         attn_mask_0 = mask_windows_0.unsqueeze(1) - mask_windows_0.unsqueeze(2)
-        attn_mask_0 = attn_mask_0.masked_fill(attn_mask_0 != 0, -100.0).masked_fill(
-            attn_mask_0 == 0, 0.0
-        )
+        attn_mask_0 = attn_mask_0.masked_fill(attn_mask_0 != 0, -100.0).masked_fill(attn_mask_0 == 0, 0.0)
 
         # calculate mask for window-1
         img_mask_1 = img_mask_1.view(
@@ -639,15 +606,11 @@ class Axial_Spatial_Attention(nn.Module):
             1,
         )
         img_mask_1 = (
-            img_mask_1.permute(0, 1, 3, 2, 4, 5)
-            .contiguous()
-            .view(-1, self.split_size[1], self.split_size[0], 1)
+            img_mask_1.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, self.split_size[1], self.split_size[0], 1)
         )  # nW, sw[1], sw[0], 1
         mask_windows_1 = img_mask_1.view(-1, self.split_size[1] * self.split_size[0])
         attn_mask_1 = mask_windows_1.unsqueeze(1) - mask_windows_1.unsqueeze(2)
-        attn_mask_1 = attn_mask_1.masked_fill(attn_mask_1 != 0, -100.0).masked_fill(
-            attn_mask_1 == 0, 0.0
-        )
+        attn_mask_1 = attn_mask_1.masked_fill(attn_mask_1 != 0, -100.0).masked_fill(attn_mask_1 == 0, 0.0)
 
         return attn_mask_0, attn_mask_1
 
@@ -669,11 +632,7 @@ class Axial_Spatial_Attention(nn.Module):
         pad_b = (max_split_size - H % max_split_size) % max_split_size
 
         qkv = qkv.reshape(3 * B, H, W, C).permute(0, 3, 1, 2)  # 3B C H W
-        qkv = (
-            F.pad(qkv, (pad_l, pad_r, pad_t, pad_b))
-            .reshape(3, B, C, -1)
-            .transpose(-2, -1)
-        )  # l r t b
+        qkv = F.pad(qkv, (pad_l, pad_r, pad_t, pad_b)).reshape(3, B, C, -1).transpose(-2, -1)  # l r t b
         _H = pad_b + H
         _W = pad_r + W
         _L = _H * _W
@@ -705,24 +664,16 @@ class Axial_Spatial_Attention(nn.Module):
                 x1_shift = self.attns[0](qkv_0, _H, _W, mask=self.attn_mask_0)
                 x2_shift = self.attns[1](qkv_1, _H, _W, mask=self.attn_mask_1)
 
-            x1 = torch.roll(
-                x1_shift, shifts=(self.shift_size[0], self.shift_size[1]), dims=(1, 2)
-            )
-            x2 = torch.roll(
-                x2_shift, shifts=(self.shift_size[1], self.shift_size[0]), dims=(1, 2)
-            )
+            x1 = torch.roll(x1_shift, shifts=(self.shift_size[0], self.shift_size[1]), dims=(1, 2))
+            x2 = torch.roll(x2_shift, shifts=(self.shift_size[1], self.shift_size[0]), dims=(1, 2))
             x1 = x1[:, :H, :W, :].reshape(B, L, C // 2)
             x2 = x2[:, :H, :W, :].reshape(B, L, C // 2)
             # attention output
             attened_x = torch.cat([x1, x2], dim=2)
 
         else:
-            x1 = self.attns[0](qkv[:, :, :, : C // 2], _H, _W)[:, :H, :W, :].reshape(
-                B, L, C // 2
-            )
-            x2 = self.attns[1](qkv[:, :, :, C // 2 :], _H, _W)[:, :H, :W, :].reshape(
-                B, L, C // 2
-            )
+            x1 = self.attns[0](qkv[:, :, :, : C // 2], _H, _W)[:, :H, :W, :].reshape(B, L, C // 2)
+            x2 = self.attns[1](qkv[:, :, :, C // 2 :], _H, _W)[:, :H, :W, :].reshape(B, L, C // 2)
             # attention output
             attened_x = torch.cat([x1, x2], dim=2)
 
@@ -731,12 +682,7 @@ class Axial_Spatial_Attention(nn.Module):
 
         # Adaptive Interaction Module (AIM)
         # C-Map (before sigmoid)
-        channel_map = (
-            self.channel_interaction(conv_x)
-            .permute(0, 2, 3, 1)
-            .contiguous()
-            .view(B, 1, C)
-        )
+        channel_map = self.channel_interaction(conv_x).permute(0, 2, 3, 1).contiguous().view(B, 1, C)
         # S-Map (before sigmoid)
         attention_reshape = attened_x.transpose(-2, -1).contiguous().view(B, C, H, W)
         spatial_map = self.spatial_interaction(attention_reshape)
@@ -838,12 +784,7 @@ class Axial_Channel_Attention(nn.Module):
         attention_reshape = attened_x.transpose(-2, -1).contiguous().view(B, C, H, W)
         channel_map = self.channel_interaction(attention_reshape)
         # S-Map (before sigmoid)
-        spatial_map = (
-            self.spatial_interaction(conv_x)
-            .permute(0, 2, 3, 1)
-            .contiguous()
-            .view(B, N, 1)
-        )
+        spatial_map = self.spatial_interaction(conv_x).permute(0, 2, 3, 1).contiguous().view(B, N, 1)
 
         # S-I
         attened_x = attened_x * torch.sigmoid(spatial_map)
@@ -865,8 +806,8 @@ class DATB(nn.Module):
         dim,
         num_heads,
         reso=64,
-        split_size=[2, 4],
-        shift_size=[1, 2],
+        split_size=[2, 4],  # noqa
+        shift_size=[1, 2],  # noqa
         expansion_factor=4.0,
         qkv_bias=False,
         qk_scale=None,
@@ -954,7 +895,7 @@ class ResidualGroup(nn.Module):
         dim,
         reso,
         num_heads,
-        split_size=[2, 4],
+        split_size=[2, 4],  # noqa
         expansion_factor=4.0,
         qkv_bias=False,
         qk_scale=None,
@@ -972,26 +913,28 @@ class ResidualGroup(nn.Module):
         self.use_chk = use_chk
         self.reso = reso
 
-        self.blocks = nn.ModuleList([
-            DATB(
-                dim=dim,
-                num_heads=num_heads,
-                reso=reso,
-                split_size=split_size,
-                shift_size=[split_size[0] // 2, split_size[1] // 2],
-                expansion_factor=expansion_factor,
-                qkv_bias=qkv_bias,
-                qk_scale=qk_scale,
-                drop=drop,
-                attn_drop=attn_drop,
-                drop_path=drop_paths[i],
-                act_layer=act_layer,
-                norm_layer=norm_layer,
-                rg_idx=rg_idx,
-                b_idx=i,
-            )
-            for i in range(depth)
-        ])
+        self.blocks = nn.ModuleList(
+            [
+                DATB(
+                    dim=dim,
+                    num_heads=num_heads,
+                    reso=reso,
+                    split_size=split_size,
+                    shift_size=[split_size[0] // 2, split_size[1] // 2],
+                    expansion_factor=expansion_factor,
+                    qkv_bias=qkv_bias,
+                    qk_scale=qk_scale,
+                    drop=drop,
+                    attn_drop=attn_drop,
+                    drop_path=drop_paths[i],
+                    act_layer=act_layer,
+                    norm_layer=norm_layer,
+                    rg_idx=rg_idx,
+                    b_idx=i,
+                )
+                for i in range(depth)
+            ]
+        )
 
         if resi_connection == "1conv":
             self.conv = nn.Conv2d(dim, dim, 3, 1, 1)
@@ -1046,4 +989,3 @@ class UpsampleOneStep(nn.Sequential):
         h, w = self.input_resolution
         flops = h * w * self.num_feat * 3 * 9
         return flops
-

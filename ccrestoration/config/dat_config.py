@@ -6,6 +6,7 @@ from torch import nn
 from ccrestoration.config import CONFIG_REGISTRY
 from ccrestoration.type import ArchType, BaseConfig, ConfigType, ModelType
 
+
 class DATConfig(BaseConfig):
     arch: Union[ArchType, str] = ArchType.DAT
     model: Union[ModelType, str] = ModelType.DAT
@@ -16,7 +17,7 @@ class DATConfig(BaseConfig):
     split_size: Union[List[int], Tuple[int, ...]] = [2, 4]  # noqa
     depth: Union[List[int], Tuple[int, ...]] = [6, 6, 6, 6, 6, 6]  # noqa
     embed_dim: int = 180
-    num_heads: Union[List[int], Tuple[int, ...]] = [6, 6, 6, 6, 6, 6] # noqa
+    num_heads: Union[List[int], Tuple[int, ...]] = [6, 6, 6, 6, 6, 6]  # noqa
     expansion_factor: float = 4.0
     resi_connection: str = "1conv"
 
@@ -126,7 +127,7 @@ DATConfigs = [
         split_size=[8, 32],
         expansion_factor=2,
     ),
-    #dat_light
+    # dat_light
     DATConfig(
         name=ConfigType.DAT_light_2x,
         url="https://github.com/routineLife1/save_weights/releases/download/weights/DAT_light_x2.pth",
@@ -137,8 +138,8 @@ DATConfigs = [
         depth=[18],
         embed_dim=60,
         num_heads=[6],
-        resi_connection='3conv',
-        upsampler='pixelshuffledirect'
+        resi_connection="3conv",
+        upsampler="pixelshuffledirect",
     ),
     DATConfig(
         name=ConfigType.DAT_light_3x,
@@ -150,8 +151,8 @@ DATConfigs = [
         depth=[18],
         embed_dim=60,
         num_heads=[6],
-        resi_connection='3conv',
-        upsampler='pixelshuffledirect'
+        resi_connection="3conv",
+        upsampler="pixelshuffledirect",
     ),
     DATConfig(
         name=ConfigType.DAT_light_4x,
@@ -163,9 +164,9 @@ DATConfigs = [
         depth=[18],
         embed_dim=60,
         num_heads=[6],
-        resi_connection='3conv',
-        upsampler='pixelshuffledirect'
-    )
+        resi_connection="3conv",
+        upsampler="pixelshuffledirect",
+    ),
 ]
 
 for cfg in DATConfigs:

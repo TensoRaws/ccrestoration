@@ -37,7 +37,7 @@ class DATModel(SRBaseModel):
             img_range=cfg.img_range,
             upsampler=cfg.upsampler,
             resi_connection=cfg.resi_connection,
-            expansion_factor=cfg.expansion_factor
+            expansion_factor=cfg.expansion_factor,
         )
 
         model.load_state_dict(state_dict)
