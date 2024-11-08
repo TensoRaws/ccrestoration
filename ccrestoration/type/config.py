@@ -56,6 +56,20 @@ class ConfigType(str, Enum):
     SCUNet_color_real_psnr_1x = "SCUNet_color_real_psnr_1x.pth"
     SCUNet_color_real_gan_1x = "SCUNet_color_real_gan_1x.pth"
 
+    # DAT
+    DAT_S_2x = "DAT_S_x2.pth"
+    DAT_S_3x = "DAT_S_x3.pth"
+    DAT_S_4x = "DAT_S_x4.pth"
+    DAT_2x = "DAT_x2.pth"
+    DAT_3x = "DAT_x3.pth"
+    DAT_4x = "DAT_x4.pth"
+    DAT_2_2x = "DAT_2_x2.pth"
+    DAT_2_3x = "DAT_2_x3.pth"
+    DAT_2_4x = "DAT_2_x4.pth"
+    DAT_light_2x = "DAT_light_x2.pth"
+    DAT_light_3x = "DAT_light_x3.pth"
+    DAT_light_4x = "DAT_light_x4.pth"
+
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
     # SpyNet
