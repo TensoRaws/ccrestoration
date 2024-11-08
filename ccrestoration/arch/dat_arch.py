@@ -42,9 +42,9 @@ class DAT(nn.Module):
         img_size=64,
         in_chans=3,
         embed_dim=180,
-        split_size=[2, 4],
-        depth=[2, 2, 2, 2],
-        num_heads=[2, 2, 2, 2],
+        split_size=[2, 4], # noqa
+        depth=[2, 2, 2, 2], # noqa
+        num_heads=[2, 2, 2, 2], # noqa
         expansion_factor=4.0,
         qkv_bias=True,
         qk_scale=None,
@@ -355,7 +355,7 @@ class Spatial_Attention(nn.Module):
         self,
         dim,
         idx,
-        split_size=[8, 8],
+        split_size=[8, 8],  # noqa
         dim_out=None,
         num_heads=6,
         attn_drop=0.0,
@@ -494,8 +494,8 @@ class Axial_Spatial_Attention(nn.Module):
         dim,
         num_heads,
         reso=64,
-        split_size=[8, 8],
-        shift_size=[1, 2],
+        split_size=[8, 8], # noqa
+        shift_size=[1, 2], # noqa
         qkv_bias=False,
         qk_scale=None,
         drop=0.0,
@@ -865,8 +865,8 @@ class DATB(nn.Module):
         dim,
         num_heads,
         reso=64,
-        split_size=[2, 4],
-        shift_size=[1, 2],
+        split_size=[2, 4], # noqa
+        shift_size=[1, 2], # noqa
         expansion_factor=4.0,
         qkv_bias=False,
         qk_scale=None,
@@ -954,7 +954,7 @@ class ResidualGroup(nn.Module):
         dim,
         reso,
         num_heads,
-        split_size=[2, 4],
+        split_size=[2, 4], # noqa
         expansion_factor=4.0,
         qkv_bias=False,
         qk_scale=None,
