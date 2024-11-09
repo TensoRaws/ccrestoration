@@ -70,6 +70,8 @@ class ConfigType(str, Enum):
     DAT_light_3x = "DAT_light_3x.pth"
     DAT_light_4x = "DAT_light_4x.pth"
 
+    DAT_APISR_GAN_generator_4x = "DAT_APISR_GAN_generator_4x.pth"
+
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
     # SpyNet

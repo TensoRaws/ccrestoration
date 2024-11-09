@@ -166,6 +166,16 @@ DATConfigs = [
         resi_connection="3conv",
         upsampler="pixelshuffledirect",
     ),
+    # community models
+    DATConfig(
+        name=ConfigType.DAT_APISR_GAN_generator_4x,
+        url="https://github.com/TensoRaws/ccrestoration/releases/download/model_zoo/DAT_APISR_GAN_generator_4x.pth",
+        hash="cc625c4ec5242a57e46f0941a3c36e3a731dcd859750c5f72a5251045b1e6d72",
+        scale=4,
+        split_size=[8, 16],
+        expansion_factor=2,
+        upsampler="pixelshuffledirect",
+    ),
 ]
 
 for cfg in DATConfigs:
