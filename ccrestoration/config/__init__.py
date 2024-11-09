@@ -12,3 +12,4 @@ from ccrestoration.config.basicvsr_config import BasicVSRConfig  # noqa
 from ccrestoration.config.iconvsr_config import IconVSRConfig  # noqa
 from ccrestoration.config.animesr_config import AnimeSRConfig  # noqa
 from ccrestoration.config.scunet_config import SCUNetConfig  # noqa
+from ccrestoration.config.dat_config import DATConfig  # noqa

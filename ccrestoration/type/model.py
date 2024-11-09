@@ -10,6 +10,7 @@ class ModelType(str, Enum):
     EDSR = "EDSR"
     SwinIR = "SwinIR"
     SCUNet = "SCUNet"
+    DAT = "DAT"
 
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
