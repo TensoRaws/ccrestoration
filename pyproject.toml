@@ -14,7 +14,8 @@ exclude_also = [
 [tool.coverage.run]
 omit = [
   "ccrestoration/arch/*",
-  "ccrestoration/vs/*"
+  "ccrestoration/vs/*",
+  "ccrestoration/util/device.py"
 ]
 
 [tool.mypy]
