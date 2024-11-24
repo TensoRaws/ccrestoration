@@ -17,3 +17,4 @@ from ccrestoration.model.iconvsr_model import IconVSRModel  # noqa
 from ccrestoration.model.animesr_model import AnimeSRModel  # noqa
 from ccrestoration.model.scunet_model import SCUNetModel  # noqa
 from ccrestoration.model.dat_model import DATModel  # noqa
+from ccrestoration.model.srcnn_model import SRCNNModel  # noqa

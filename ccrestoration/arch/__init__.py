@@ -14,3 +14,4 @@ from ccrestoration.arch.iconvsr_arch import IconVSR  # noqa
 from ccrestoration.arch.msrswvsr_arch import MSRSWVSR  # noqa
 from ccrestoration.arch.scunet_arch import SCUNet  # noqa
 from ccrestoration.arch.dat_arch import DAT  # noqa
+from ccrestoration.arch.srcnn_arch import SRCNN  # noqa

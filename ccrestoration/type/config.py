@@ -72,6 +72,11 @@ class ConfigType(str, Enum):
 
     DAT_APISR_GAN_generator_4x = "DAT_APISR_GAN_generator_4x.pth"
 
+    # SRCNN
+    SRCNN_2x = "SRCNN_2x.pth"
+    SRCNN_3x = "SRCNN_3x.pth"
+    SRCNN_4x = "SRCNN_4x.pth"
+
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
     # SpyNet
