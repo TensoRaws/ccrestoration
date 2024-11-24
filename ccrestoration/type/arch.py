@@ -12,6 +12,7 @@ class ArchType(str, Enum):
     SWINIR = "SWINIR"
     SCUNET = "SCUNET"
     DAT = "DAT"
+    SRCNN = "SRCNN"
 
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
