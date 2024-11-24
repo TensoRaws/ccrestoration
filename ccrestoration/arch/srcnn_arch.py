@@ -21,7 +21,7 @@ class SRCNN(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = F.interpolate(x, scale_factor=self.scale, mode="bilinear")
 
-        if self.num_channels == 1:
+        if self.num_channels == 1 and x.size(1) == 3:
             # RGB -> YUV
             x = rgb_to_yuv(x)
             y, u, v = x[:, 0:1, ...], x[:, 1:2, ...], x[:, 2:3, ...]
