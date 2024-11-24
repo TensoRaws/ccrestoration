@@ -15,19 +15,27 @@ class SRCNN(nn.Module):
         self.conv2 = nn.Conv2d(64, 32, kernel_size=5, padding=5 // 2)
         self.conv3 = nn.Conv2d(32, num_channels, kernel_size=5, padding=5 // 2)
         self.relu = nn.ReLU(inplace=True)
+        self.num_channels = num_channels
         self.scale = scale
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = F.interpolate(x, scale_factor=self.scale, mode="bilinear")
-        # RGB -> YUV
-        x = rgb_to_yuv(x)
-        y, u, v = x[:, 0:1, ...], x[:, 1:2, ...], x[:, 2:3, ...]
 
-        y = self.relu(self.conv1(y))
-        y = self.relu(self.conv2(y))
-        y = self.conv3(y)
+        if self.num_channels == 1:
+            # RGB -> YUV
+            x = rgb_to_yuv(x)
+            y, u, v = x[:, 0:1, ...], x[:, 1:2, ...], x[:, 2:3, ...]
 
-        x = torch.cat([y, u, v], dim=1)
-        # YUV -> RGB
-        x = yuv_to_rgb(x)
+            y = self.relu(self.conv1(y))
+            y = self.relu(self.conv2(y))
+            y = self.conv3(y)
+
+            x = torch.cat([y, u, v], dim=1)
+            # YUV -> RGB
+            x = yuv_to_rgb(x)
+        else:
+            x = self.relu(self.conv1(x))
+            x = self.relu(self.conv2(x))
+            x = self.conv3(x)
+
         return x
