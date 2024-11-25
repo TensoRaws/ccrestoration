@@ -14,7 +14,8 @@ exclude_also = [
 [tool.coverage.run]
 omit = [
   "ccrestoration/arch/*",
-  "ccrestoration/vs/*"
+  "ccrestoration/vs/*",
+  "ccrestoration/util/device.py"
 ]
 
 [tool.mypy]
@@ -40,7 +41,7 @@ license = "MIT"
 name = "ccrestoration"
 readme = "README.md"
 repository = "https://github.com/TensoRaws/ccrestoration"
-version = "0.1.1"
+version = "0.1.2"
 
 # Requirements
 [tool.poetry.dependencies]
