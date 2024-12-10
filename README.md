@@ -30,7 +30,9 @@ import numpy as np
 
 from ccrestoration import AutoModel, ConfigType, SRBaseModel
 
-model: SRBaseModel = AutoModel.from_pretrained(ConfigType.RealESRGAN_APISR_RRDB_GAN_generator_2x)
+model: SRBaseModel = AutoModel.from_pretrained(
+    pretrained_model_name=ConfigType.RealESRGAN_APISR_RRDB_GAN_generator_2x,
+)
 
 img = cv2.imdecode(np.fromfile("test.jpg", dtype=np.uint8), cv2.IMREAD_COLOR)
 img = model.inference_image(img)
@@ -48,7 +50,8 @@ from vapoursynth import core
 from ccrestoration import AutoModel, BaseModelInterface, ConfigType
 
 model: BaseModelInterface = AutoModel.from_pretrained(
-    pretrained_model_name=ConfigType.AnimeSR_v2_4x
+    pretrained_model_name=ConfigType.RealESRGAN_AnimeJaNai_HD_V3_Compact_2x,
+    tile=None
 )
 
 clip = core.bs.VideoSource(source="s.mp4")
