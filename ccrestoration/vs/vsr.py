@@ -12,11 +12,43 @@ def inference_vsr(
     scale: Union[float, int, Any],
     length: int,
     device: torch.device,
-    _frame_to_tensor: Callable[[vs.VideoFrame, torch.device], torch.Tensor] = frame_to_tensor,
-    _tensor_to_frame: Callable[[torch.Tensor, vs.VideoFrame], vs.VideoFrame] = tensor_to_frame,
+    one_frame_out: bool = False,
 ) -> vs.VideoNode:
     """
     Inference the video with the model, the clip should be a vapoursynth clip
+
+    :param inference: The inference function
+    :param clip: vs.VideoNode
+    :param scale: The scale factor
+    :param length: The length of the input frames
+    :param device: The device
+    :param one_frame_out: Whether the model is one frame output model
+    :return:
+    """
+    if clip.format.id not in [vs.RGBH, vs.RGBS]:
+        raise vs.Error("Only vs.RGBH and vs.RGBS formats are supported")
+
+    if length > clip.num_frames:
+        raise ValueError("The length of the input frames should be less than the number of frames in the clip")
+
+    if length < 2:
+        raise ValueError("The length of the input frames should be greater than 1")
+
+    if not one_frame_out:
+        return inference_vsr_multi_frame_out(inference, clip, scale, length, device)
+    else:
+        return inference_vsr_one_frame_out(inference, clip, scale, length, device)
+
+
+def inference_vsr_multi_frame_out(
+    inference: Callable[[torch.Tensor], torch.Tensor],
+    clip: vs.VideoNode,
+    scale: Union[float, int, Any],
+    length: int,
+    device: torch.device,
+) -> vs.VideoNode:
+    """
+    VSR for multi frame output models
 
     f1, f2, f3, f4 -> f1', f2', f3', f4'
 
@@ -28,19 +60,8 @@ def inference_vsr(
     :param scale: The scale factor
     :param length: The length of the input frames
     :param device: The device
-    :param _frame_to_tensor: The function to convert the frame to tensor
-    :param _tensor_to_frame: The function to convert the tensor to frame
     :return:
     """
-
-    if clip.format.id not in [vs.RGBH, vs.RGBS]:
-        raise vs.Error("Only vs.RGBH and vs.RGBS formats are supported")
-
-    if length > clip.num_frames:
-        raise ValueError("The length of the input frames should be less than the number of frames in the clip")
-
-    if length < 2:
-        raise ValueError("The length of the input frames should be greater than 1")
 
     cache: Dict[int, torch.Tensor] = {}
 
@@ -64,7 +85,7 @@ def inference_vsr(
             for i in range(output.shape[0]):
                 cache[n + i] = output[0, i, :, :, :]
 
-        return _tensor_to_frame(cache[n], f[1].copy())
+        return tensor_to_frame(cache[n], f[1].copy())
 
     new_clip = clip.std.BlankClip(width=clip.width * scale, height=clip.height * scale, keep=True)
     return new_clip.std.ModifyFrame([clip, new_clip], _inference)
@@ -76,11 +97,9 @@ def inference_vsr_one_frame_out(
     scale: Union[float, int, Any],
     length: int,
     device: torch.device,
-    _frame_to_tensor: Callable[[vs.VideoFrame, torch.device], torch.Tensor] = frame_to_tensor,
-    _tensor_to_frame: Callable[[torch.Tensor, vs.VideoFrame], vs.VideoFrame] = tensor_to_frame,
 ) -> vs.VideoNode:
     """
-    Inference the video with the model, the clip should be a vapoursynth clip
+    VSR for one frame output models
 
     f-2, f-1, f0, f1, f2 -> f0'
 
@@ -92,22 +111,11 @@ def inference_vsr_one_frame_out(
     :param scale: The scale factor
     :param length: The length of the input frames, should be odd
     :param device: The device
-    :param _frame_to_tensor: The function to convert the frame to tensor
-    :param _tensor_to_frame: The function to convert the tensor to frame
     :return:
     """
 
-    if clip.format.id not in [vs.RGBH, vs.RGBS]:
-        raise vs.Error("Only vs.RGBH and vs.RGBS formats are supported")
-
-    if length > clip.num_frames:
-        raise ValueError("The length of the input frames should be less than the number of frames in the clip")
-
     if length % 2 == 0:
         raise ValueError("The length of the input frames should be odd")
-
-    if length < 2:
-        raise ValueError("The length of the input frames should be greater than 1")
 
     def _inference(n: int, f: list[vs.VideoFrame]) -> vs.VideoFrame:
         img = []

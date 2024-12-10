@@ -82,15 +82,15 @@ class VSRBaseModel(SRBaseModel):
         :return:
         """
 
-        from ccrestoration.vs import inference_vsr, inference_vsr_one_frame_out
+        from ccrestoration.vs import inference_vsr
 
         cfg: BaseConfig = self.config
 
-        if self.one_frame_out:
-            return inference_vsr_one_frame_out(
-                inference=self.inference, clip=clip, scale=cfg.scale, length=cfg.length, device=self.device
-            )
-        else:
-            return inference_vsr(
-                inference=self.inference, clip=clip, scale=cfg.scale, length=cfg.length, device=self.device
-            )
+        return inference_vsr(
+            inference=self.inference,
+            clip=clip,
+            scale=cfg.scale,
+            length=cfg.length,
+            device=self.device,
+            one_frame_out=self.one_frame_out,
+        )
