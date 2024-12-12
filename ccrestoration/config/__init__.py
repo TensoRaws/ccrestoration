@@ -14,3 +14,4 @@ from ccrestoration.config.animesr_config import AnimeSRConfig  # noqa
 from ccrestoration.config.scunet_config import SCUNetConfig  # noqa
 from ccrestoration.config.dat_config import DATConfig  # noqa
 from ccrestoration.config.srcnn_config import SRCNNConfig  # noqa
+from ccrestoration.config.hat_config import HATConfig  # noqa
