@@ -12,6 +12,7 @@ class ModelType(str, Enum):
     SCUNet = "SCUNet"
     DAT = "DAT"
     SRCNN = "SRCNN"
+    HAT = "HAT"
 
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 

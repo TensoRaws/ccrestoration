@@ -77,6 +77,22 @@ class ConfigType(str, Enum):
     SRCNN_3x = "SRCNN_3x.pth"
     SRCNN_4x = "SRCNN_4x.pth"
 
+    # HAT
+    HAT_S_2x = "HAT_S_2x.pth"
+    HAT_S_3x = "HAT_S_3x.pth"
+    HAT_S_4x = "HAT_S_4x.pth"
+    HAT_2x = "HAT_2x.pth"
+    HAT_3x = "HAT_3x.pth"
+    HAT_4x = "HAT_4x.pth"
+    HAT_Real_GAN_sharper_4x = "HAT_Real_GAN_sharper_4x.pth"
+    HAT_Real_GAN_4x = "HAT_Real_GAN_4x.pth"
+    HAT_ImageNet_pretrain_2x = "HAT_ImageNet_pretrain_2x.pth"
+    HAT_ImageNet_pretrain_3x = "HAT_ImageNet_pretrain_3x.pth"
+    HAT_ImageNet_pretrain_4x = "HAT_ImageNet_pretrain_4x.pth"
+    HAT_L_ImageNet_pretrain_2x = "HAT_L_ImageNet_pretrain_2x.pth"
+    HAT_L_ImageNet_pretrain_3x = "HAT_L_ImageNet_pretrain_3x.pth"
+    HAT_L_ImageNet_pretrain_4x = "HAT_L_ImageNet_pretrain_4x.pth"
+
     # ------------------------------------- Auxiliary Network ----------------------------------------------------------
 
     # SpyNet
